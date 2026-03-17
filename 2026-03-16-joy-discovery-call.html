@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joy Discovery Call | Mar 16, 2026</title>
+<style>
+  :root {
+    --bg: #f8f7f4; --surface: #ffffff; --surface-2: #f0efec; --surface-3: #e8e7e3;
+    --border: #d8d6d0; --border-light: #eae8e4;
+    --text: #1a1a1a; --text-2: #5c5c5c; --text-3: #8a8a8a;
+    --accent: #2c5282; --accent-bg: #ebf2fa;
+    --red: #c53030; --red-bg: #fff5f5; --red-border: #fcc;
+    --amber: #b7791f; --amber-bg: #fefcf3; --amber-border: #f0e0a0;
+    --green: #276749; --green-bg: #f0fff4; --green-border: #b2e0c0;
+    --purple: #553c9a; --purple-bg: #f3f0ff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',system-ui,sans-serif; font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+  a:hover { color:#1a3a5c; }
+  .wrap { max-width:860px; margin:0 auto; padding:0 24px 80px; }
+
+  /* HEADER */
+  .hdr { position:sticky; top:0; z-index:100; background:var(--bg); border-bottom:2px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,.06); }
+  .hdr-in { max-width:860px; margin:0 auto; padding:16px 24px 12px; }
+  .hdr-row { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+  .hdr-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--text-3); }
+  .hdr h1 { font-size:22px; font-weight:700; letter-spacing:-.4px; margin-top:2px; }
+  .hdr-sub { font-size:13px; color:var(--text-2); margin-top:2px; }
+  .hdr-meta { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
+  .date-badge { background:var(--surface); border:1px solid var(--border); padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600; color:var(--text-2); }
+  .status-pill { font-size:10px; font-weight:700; padding:3px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:.5px; }
+  .status-waiting { background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-border); }
+  .att-bar { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; padding-top:10px; border-top:1px solid var(--border-light); }
+  .att { font-size:11px; font-weight:600; padding:3px 9px; border-radius:14px; background:var(--surface); border:1px solid var(--border-light); color:var(--text-2); }
+  .att-joy { border-left:3px solid var(--purple); }
+  .att-tsk { border-left:3px solid var(--accent); }
+
+  /* JUMP NAV */
+  .jump-nav { display:flex; gap:6px; flex-wrap:wrap; margin:16px 0; }
+  .jump-link { font-size:11px; font-weight:600; padding:4px 10px; border-radius:4px; background:var(--surface); border:1px solid var(--border-light); color:var(--accent); text-decoration:none; transition:background .15s; }
+  .jump-link:hover { background:var(--accent-bg); text-decoration:none; }
+
+  /* TRACKING BANNER */
+  .track-banner { background:var(--amber-bg); border:1px solid var(--amber-border); border-radius:8px; padding:12px 16px; margin-bottom:16px; display:flex; align-items:center; gap:12px; }
+  .track-icon { font-size:18px; }
+  .track-text { font-size:13px; line-height:1.5; }
+  .track-text strong { color:var(--amber); }
+
+  /* CARDS */
+  .card { background:var(--surface); border:1px solid var(--border-light); border-radius:10px; margin-bottom:16px; overflow:hidden; }
+  .card-hdr { padding:14px 18px; border-bottom:1px solid var(--border-light); cursor:pointer; user-select:none; display:flex; justify-content:space-between; align-items:center; }
+  .card-hdr:hover { background:var(--surface-2); }
+  .card-hdr h2 { font-size:15px; font-weight:700; }
+  .card-toggle { font-size:16px; color:var(--text-3); transition:transform .2s; }
+  .card.collapsed .card-body { display:none; }
+  .card.collapsed .card-toggle { transform:rotate(-90deg); }
+  .card-body { padding:14px 18px 18px; }
+
+  /* EXEC SUMMARY */
+  .exec-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .exec-item { background:var(--surface-2); border-radius:8px; padding:12px 14px; }
+  .exec-item h4 { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--text-3); margin-bottom:4px; }
+  .exec-item p { font-size:13px; line-height:1.5; }
+  .exec-full { grid-column:1/-1; }
+
+  /* DATA TABLE */
+  .cmp-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .cmp-table th { text-align:left; padding:6px 10px; background:var(--surface-2); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-3); border-bottom:2px solid var(--border); }
+  .cmp-table td { padding:8px 10px; border-bottom:1px solid var(--border-light); vertical-align:top; }
+  .cmp-table tr:last-child td { border-bottom:none; }
+  .src-tag { font-size:9px; font-weight:700; padding:1px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.3px; white-space:nowrap; }
+  .src-call { background:var(--purple-bg); color:var(--purple); }
+  .src-research { background:var(--accent-bg); color:var(--accent); }
+  .src-gap { background:var(--amber-bg); color:var(--amber); }
+
+  /* RISK TABLE */
+  .risk-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .risk-table th { text-align:left; padding:6px 10px; background:var(--surface-2); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-3); border-bottom:2px solid var(--border); }
+  .risk-table td { padding:10px; border-bottom:1px solid var(--border-light); vertical-align:top; }
+  .risk-table tr:last-child td { border-bottom:none; }
+  .risk-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+  .dot-h { background:var(--red); }
+  .dot-m { background:var(--amber); }
+
+  /* ACTION ITEMS */
+  .act-list { list-style:none; }
+  .act-item { display:flex; gap:10px; padding:10px 0; border-bottom:1px solid var(--border-light); font-size:13px; }
+  .act-item:last-child { border-bottom:none; }
+  .act-check { width:18px; height:18px; border:2px solid var(--border); border-radius:3px; flex-shrink:0; margin-top:1px; cursor:pointer; transition:all .15s; }
+  .act-check:hover { border-color:var(--green); }
+  .act-check.checked { background:var(--green-bg); border-color:var(--green); }
+  .act-check.checked::after { content:'\2713'; color:var(--green); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; height:100%; }
+  .act-item.done .act-text { text-decoration:line-through; color:var(--text-3); }
+  .act-text { font-weight:500; }
+  .act-meta { font-size:11px; color:var(--text-2); margin-top:2px; }
+  .act-owner { font-size:10px; font-weight:700; padding:1px 7px; border-radius:3px; background:var(--accent-bg); color:var(--accent); }
+  .act-due { font-size:10px; font-weight:700; padding:1px 7px; border-radius:3px; background:var(--amber-bg); color:var(--amber); margin-left:3px; }
+  .act-overdue { background:var(--red-bg); color:var(--red); }
+
+  /* DETAIL BLOCKS */
+  .detail-block { background:var(--surface-2); border-radius:8px; padding:14px 16px; margin-bottom:10px; }
+  .detail-block h4 { font-size:13px; font-weight:700; margin-bottom:6px; }
+  .detail-block p, .detail-block li { font-size:13px; line-height:1.5; }
+  .detail-block ul { padding-left:16px; }
+  .detail-block li { margin-bottom:3px; }
+
+  /* OPTIONS TABLE */
+  .opt-table { width:100%; border-collapse:collapse; font-size:12px; margin-top:8px; }
+  .opt-table th { text-align:left; padding:6px 8px; background:var(--surface-2); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-3); border-bottom:2px solid var(--border); }
+  .opt-table td { padding:8px; border-bottom:1px solid var(--border-light); vertical-align:top; }
+  .rec-tag { font-size:9px; font-weight:700; padding:1px 6px; border-radius:3px; background:var(--green-bg); color:var(--green); text-transform:uppercase; }
+
+  /* NOTES */
+  .notes-area { width:100%; min-height:100px; border:1px dashed var(--border); border-radius:8px; padding:12px; font-size:13px; font-family:inherit; line-height:1.6; color:var(--text); background:var(--surface-2); resize:vertical; }
+  .notes-area:focus { outline:none; border-color:var(--accent); background:var(--surface); }
+
+  /* EDITABLE */
+  [data-editable] { outline:none; border-bottom:1px solid transparent; border-radius:2px; }
+  body.edit-mode [data-editable] { border-bottom-color:var(--border-light); cursor:text; }
+  body.edit-mode [data-editable]:hover { border-bottom-color:var(--border); background:rgba(44,82,130,.02); }
+  body.edit-mode [data-editable]:focus { border-bottom-color:var(--accent); background:rgba(44,82,130,.04); }
+
+  /* TOOLBAR */
+  .toolbar { position:fixed; top:12px; right:16px; z-index:200; display:flex; gap:5px; opacity:.45; transition:opacity .2s; }
+  .toolbar:hover { opacity:1; }
+  .tb { border:none; border-radius:12px; padding:4px 10px; font-size:10px; font-weight:600; font-family:inherit; cursor:pointer; }
+  .tb:hover { transform:scale(1.05); }
+  .tb-edit { background:#d4a574; color:#fff; }
+  .tb-edit.active { background:var(--green); }
+  .tb-copy { background:#c4b5d8; color:#fff; }
+  .tb-copy.copied { background:var(--green); }
+  .tb-pdf { background:#8b6bb5; color:#fff; }
+
+  .footer { margin-top:32px; padding-top:12px; border-top:1px solid var(--border); font-size:11px; color:var(--text-3); text-align:center; }
+
+  @media (max-width:700px) {
+    .hdr-row { flex-direction:column; }
+    .exec-grid { grid-template-columns:1fr; }
+    .toolbar { top:auto; bottom:12px; right:12px; }
+  }
+  @media print {
+    body { background:#fff; } .hdr { position:static; box-shadow:none; }
+    .toolbar, .jump-nav { display:none; } .card { break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="tb tb-edit" id="btn-edit">Edit</button>
+  <button class="tb tb-copy" id="btn-copy">Copy</button>
+  <button class="tb tb-pdf" onclick="window.print()">PDF</button>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-in">
+    <div class="hdr-row">
+      <div>
+        <div class="hdr-label">Meeting Notes</div>
+        <h1>Joy (<a href="https://withjoy.com" target="_blank" rel="noopener noreferrer">withjoy.com</a>) &mdash; Discovery Call</h1>
+        <div class="hdr-sub">Exploring AI partnership + distribution opportunities</div>
+      </div>
+      <div class="hdr-meta">
+        <span class="status-pill status-waiting">Awaiting Agreement</span>
+        <div class="date-badge">March 16, 2026</div>
+      </div>
+    </div>
+    <div class="att-bar">
+      <span class="att att-joy">Richie Mathews &middot; Joy, Head of Travel</span>
+      <span class="att att-tsk">Steve Cooper &middot; TSK, COO</span>
+      <span class="att att-tsk">K. Derhem &middot; TSK, CEO</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- TRACKING BANNER -->
+<div class="track-banner">
+  <span class="track-icon">&#9888;</span>
+  <div class="track-text">
+    <strong>Pending deliverable:</strong> Richie committed to sending the distribution agreement by March 15-16. As of today (March 17), it has not been received. Follow up if not received by end of day March 17.
+  </div>
+</div>
+
+<!-- JUMP NAV -->
+<div class="jump-nav">
+  <a class="jump-link" href="#exec">Summary</a>
+  <a class="jump-link" href="#data">Verified Data</a>
+  <a class="jump-link" href="#unverified">Unverified Claims</a>
+  <a class="jump-link" href="#deal">Potential Deal</a>
+  <a class="jump-link" href="#risks">Risks &amp; Validation</a>
+  <a class="jump-link" href="#actions">Next Steps</a>
+  <a class="jump-link" href="#ref-zentrum">ZentrumHub</a>
+  <a class="jump-link" href="#ref-fin">Fin AI</a>
+  <a class="jump-link" href="#ref-joyai">Joy AI</a>
+  <a class="jump-link" href="#ref-models">AI Models</a>
+</div>
+
+
+<!-- ====================================================== -->
+<!-- EXEC SUMMARY                                            -->
+<!-- ====================================================== -->
+<div class="card" id="exec">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Executive Summary</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="exec-grid">
+      <div class="exec-item">
+        <h4>Who Joy Is</h4>
+        <p data-editable>Event planning platform (weddings, corporate events). Claims 55M users across 150+ countries. YC W16 alumni. Their <a href="https://withjoy.com/hotel-room-blocks/" target="_blank" rel="noopener noreferrer">hotel product</a> auto-surfaces accommodations near event venues and earns commission on bookings. Claims ~$400K/day in booking volume.</p>
+      </div>
+      <div class="exec-item">
+        <h4>What They Proposed</h4>
+        <p data-editable>Explore an AI partnership where TSK could leverage Joy's event planning AI and data layer for a luxury guest concierge experience. Separately, list TSK properties on their accommodation platform as a distribution channel.</p>
+      </div>
+      <div class="exec-item">
+        <h4>What We Could Want</h4>
+        <p data-editable>Access to Joy's event data layer and AI capabilities to power a TSK-branded luxury concierge. Joy's real value may be in their proprietary data (6K+ events, 55M claimed users, booking history, supplier network) rather than the AI models themselves. Distribution is a secondary benefit.</p>
+      </div>
+      <div class="exec-item">
+        <h4>Where It Stands</h4>
+        <p data-editable>Richie committed to sending the distribution agreement by March 15-16. <strong>Not yet received.</strong> The AI partnership has not been discussed in detail yet and is the higher-priority conversation. Next step is reviewing the distribution agreement once received and scheduling a follow-up focused on the AI opportunity.</p>
+      </div>
+      <div class="exec-item exec-full" style="background:var(--amber-bg);border:1px solid var(--amber-border)">
+        <h4 style="color:var(--amber)">Key Observations</h4>
+        <p data-editable>The <strong>AI partnership is the primary opportunity</strong>. Joy's potential value is in their proprietary event data layer (booking patterns, supplier relationships, event logistics) rather than the AI models themselves, which appear to be off-the-shelf (<a href="https://fin.ai" target="_blank" rel="noopener noreferrer">Intercom Fin</a>, OpenAI). Understanding exactly what Joy owns vs. licenses is the key question for the next conversation. The distribution side is straightforward and could serve as an entry point to the broader relationship. Several data points shared on the call could not be independently verified (see <a href="#unverified">unverified claims</a>). The typical Joy customer budget ($35-45K) may also be <strong>below TSK's property floor</strong> for top-tier listings, though the high-end segment ($500K+) could align.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ====================================================== -->
+<!-- DATA COMPARISON                                         -->
+<!-- ====================================================== -->
+<div class="card" id="data">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Verified Company Data</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <p style="font-size:12px;color:var(--text-2);margin-bottom:10px">Key data points confirmed through independent research with source links.</p>
+    <table class="cmp-table">
+      <tr><th style="width:25%">Data Point</th><th style="width:45%">Detail</th><th style="width:30%">Source</th></tr>
+      <tr>
+        <td><strong>Company</strong></td>
+        <td>Joy (withjoy.com). Event planning platform. Founded 2015, San Francisco. Y Combinator W16.</td>
+        <td><a href="https://withjoy.com" target="_blank" rel="noopener noreferrer">withjoy.com</a></td>
+      </tr>
+      <tr>
+        <td><strong>Total funding</strong></td>
+        <td>~$106.5M across Seed ($4.5M), Series A ($20M), Series B ($60M, Nov 2022)</td>
+        <td><a href="https://techcrunch.com/2023/03/16/wedding-platform-joy-will-let-you-outsource-your-vows-to-openai/" target="_blank" rel="noopener noreferrer">TechCrunch</a></td>
+      </tr>
+      <tr>
+        <td><strong>Key investors</strong></td>
+        <td>General Catalyst (lead Series B), Sierra Ventures, Valor Equity Partners, Sound Ventures (Ashton Kutcher/Guy Oseary)</td>
+        <td><a href="https://techcrunch.com/2023/03/16/wedding-platform-joy-will-let-you-outsource-your-vows-to-openai/" target="_blank" rel="noopener noreferrer">TechCrunch</a></td>
+      </tr>
+      <tr>
+        <td><strong>Revenue (2023)</strong></td>
+        <td>$64.9M reported. ~356 employees at that time.</td>
+        <td>GetLatka</td>
+      </tr>
+      <tr>
+        <td><strong>Hotel product</strong></td>
+        <td>Room block negotiation (15-40% savings) + CUG rate comparison for event guests. Commission-based model.</td>
+        <td><a href="https://withjoy.com/hotel-room-blocks/" target="_blank" rel="noopener noreferrer">Joy Hotel Blocks</a></td>
+      </tr>
+      <tr>
+        <td><strong>Known partnerships</strong></td>
+        <td>Airbnb is listed as an accommodation partner on their platform. Logicbroker powers their registry e-commerce supplier network.</td>
+        <td><a href="https://withjoy.com/hotel-room-blocks/" target="_blank" rel="noopener noreferrer">Joy Hotels</a></td>
+      </tr>
+      <tr>
+        <td><strong>AI stack</strong></td>
+        <td>Customer support: <a href="https://fin.ai" target="_blank" rel="noopener noreferrer">Intercom Fin</a> ($0.99/resolution, off-the-shelf). Product AI: <a href="https://techcrunch.com/2023/03/16/wedding-platform-joy-will-let-you-outsource-your-vows-to-openai/" target="_blank" rel="noopener noreferrer">OpenAI</a> (vow writer, content gen). Neither appears proprietary.</td>
+        <td><a href="https://fin.ai" target="_blank" rel="noopener noreferrer">fin.ai</a> / <a href="https://techcrunch.com/2023/03/16/wedding-platform-joy-will-let-you-outsource-your-vows-to-openai/" target="_blank" rel="noopener noreferrer">TechCrunch</a></td>
+      </tr>
+      <tr>
+        <td><strong>Key contact</strong></td>
+        <td>Richie Mathews, Head of Travel / Small Businesses / Customer Operations. Previously VP Partnerships at JOBOX.ai.</td>
+        <td>ZoomInfo / LinkedIn</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="card" id="unverified">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Claims from Richie (Need Validation)</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <p style="font-size:12px;color:var(--text-2);margin-bottom:10px">Data points shared by Richie on the call that could not be independently confirmed. These should be validated before structuring any agreement.</p>
+    <table class="cmp-table">
+      <tr><th style="width:25%">Claim</th><th style="width:35%">What Richie Said</th><th style="width:40%">What We Found</th></tr>
+      <tr>
+        <td><strong>Users</strong></td>
+        <td>55M+ users</td>
+        <td>Not confirmed. Joy's Series B announcement references "3x YoY growth" but no absolute user count published.</td>
+      </tr>
+      <tr>
+        <td><strong>Countries</strong></td>
+        <td>150+ countries</td>
+        <td>Not confirmed. Joy has employees across 6 continents. Global presence plausible but count not published.</td>
+      </tr>
+      <tr>
+        <td><strong>Events supported</strong></td>
+        <td>6,000+ events</td>
+        <td>Not independently reported anywhere.</td>
+      </tr>
+      <tr>
+        <td><strong>Daily bookings</strong></td>
+        <td>~57 bookings/day, scaling to 800. ~$400K/day in booking volume.</td>
+        <td>Booking volume not publicly disclosed. $400K/day (~$146M/year) would be significant. Needs verification.</td>
+      </tr>
+      <tr>
+        <td><strong>Airbnb investor</strong></td>
+        <td>Airbnb has invested in Joy</td>
+        <td>Not found in any published investor list. Published investors: General Catalyst, Sierra Ventures, Valor Equity, Sound Ventures.</td>
+      </tr>
+      <tr>
+        <td><strong>Supplier integration</strong></td>
+        <td>"Zentrum Hub" is their SaaS for supplier connections</td>
+        <td><a href="https://www.zentrumhub.com" target="_blank" rel="noopener noreferrer">ZentrumHub</a> is a real travel API aggregator, but no connection to Joy found. Joy uses Logicbroker for registry e-commerce (different product category).</td>
+      </tr>
+      <tr>
+        <td><strong>AI resolution rate</strong></td>
+        <td>"Finn" handles 65% of customer inquiries</td>
+        <td>Likely <a href="https://fin.ai" target="_blank" rel="noopener noreferrer">Intercom Fin</a> (commercially available, $0.99/resolution). 66% is Intercom's reported average across all customers. Consistent but not proprietary to Joy.</td>
+      </tr>
+      <tr>
+        <td><strong>Customer budget</strong></td>
+        <td>$35-45K typical, up to $500K-$1M</td>
+        <td style="color:var(--green)">Plausible. Consistent with wedding industry norms. $500K+ weddings are a small fraction of overall market.</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- ====================================================== -->
+<!-- POTENTIAL DEAL STRUCTURE                                 -->
+<!-- ====================================================== -->
+<div class="card" id="deal">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Potential Deal Structure</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:12px">Two potential layers discussed. The AI partnership is the higher-priority opportunity for TSK. Distribution could serve as the entry point to the relationship.</p>
+
+    <div class="detail-block" style="border-left:3px solid var(--green)">
+      <h4>Layer 1: Distribution (Accommodation Listings)</h4>
+      <ul>
+        <li>TSK properties would appear when a Joy user's event is near a TSK location</li>
+        <li>Users book directly through Joy's platform</li>
+        <li>Integration path: Richie referenced "Zentrum Hub" as the connector. This could not be verified (see <a href="#unverified">unverified claims</a>). Needs clarification.</li>
+        <li>Revenue model: Richie asked whether we prefer commission-based or net rate. Both options are on the table.</li>
+        <li><strong>Agreement status:</strong> Richie committed to sending the agreement by March 15-16 for our review. Not yet received.</li>
+      </ul>
+      <div style="margin-top:10px;padding:10px 12px;background:var(--surface);border-radius:6px;border:1px solid var(--border-light)">
+        <h4 style="font-size:12px;color:var(--text-3);margin-bottom:4px">Types of Terms to Consider</h4>
+        <ul style="font-size:12px;color:var(--text-2)">
+          <li>Revenue model (commission vs. net rate vs. rev-share)</li>
+          <li>Exclusivity and territorial scope</li>
+          <li>Minimum booking thresholds or performance commitments</li>
+          <li>Brand guidelines and listing presentation standards</li>
+          <li>Data sharing and reporting obligations</li>
+          <li>Term length and termination provisions</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="detail-block" style="border-left:3px solid var(--purple)">
+      <h4>Layer 2: AI Partnership (Exploratory)</h4>
+      <ul>
+        <li>Concept: TSK could leverage Joy's AI and event data for a luxury guest concierge</li>
+        <li>Richie described an upcoming product where users prompt an event vision and AI builds the full plan</li>
+        <li>Research finding: Joy's support AI appears to be <a href="https://fin.ai" target="_blank" rel="noopener noreferrer">Intercom Fin</a> (off-the-shelf). Product AI appears to use <a href="https://techcrunch.com/2023/03/16/wedding-platform-joy-will-let-you-outsource-your-vows-to-openai/" target="_blank" rel="noopener noreferrer">OpenAI</a>. The potential differentiator is Joy's proprietary event data layer, not the AI models themselves.</li>
+        <li>No terms, pricing, or timeline were discussed. See <a href="#ref-models">AI partnership models</a> for potential structure types.</li>
+      </ul>
+      <div style="margin-top:10px;padding:10px 12px;background:var(--surface);border-radius:6px;border:1px solid var(--border-light)">
+        <h4 style="font-size:12px;color:var(--text-3);margin-bottom:4px">Types of Terms to Consider</h4>
+        <ul style="font-size:12px;color:var(--text-2)">
+          <li>Partnership model (licensing, white-label, API access, rev-share, co-development)</li>
+          <li>IP ownership and data rights</li>
+          <li>Scope of AI capabilities provided</li>
+          <li>Pricing structure (fixed fee, per-use, revenue-based)</li>
+          <li>Exclusivity in the luxury travel vertical</li>
+          <li>Integration requirements and technical dependencies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ====================================================== -->
+<!-- POTENTIAL RISKS & VALIDATION                            -->
+<!-- ====================================================== -->
+<div class="card" id="risks">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Potential Risks &amp; Validation Steps</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <p style="font-size:12px;color:var(--text-2);margin-bottom:10px">Risks identified from the call and subsequent research. Each includes a specific validation step.</p>
+    <table class="risk-table">
+      <tr><th style="width:5%"></th><th style="width:25%">Risk</th><th style="width:35%">From the Call</th><th style="width:35%">Potential Validation Steps</th></tr>
+      <tr>
+        <td><span class="risk-dot dot-h"></span></td>
+        <td><strong>Customer budget may be below TSK floor</strong></td>
+        <td>Richie stated typical Joy customer spends $35-45K on the entire event. TSK's ultra-luxury properties may price above this range for accommodation alone.</td>
+        <td>Ask Richie: What percentage of Joy users have event budgets above $200K? Request anonymized booking data by price tier if available.</td>
+      </tr>
+      <tr>
+        <td><span class="risk-dot dot-h"></span></td>
+        <td><strong>Multiple data points not independently verified</strong></td>
+        <td>55M users, 150+ countries, 6K events, $400K daily bookings, and Airbnb investment were all stated on the call but could not be confirmed through published sources.</td>
+        <td>Run SimilarWeb analysis on withjoy.com for traffic validation. Request Richie provide documentation on investor list and booking volume data before we move forward.</td>
+      </tr>
+      <tr>
+        <td><span class="risk-dot dot-m"></span></td>
+        <td><strong>Supplier integration path unclear</strong></td>
+        <td>Richie said TSK would connect via "Zentrum Hub." Research found no relationship between <a href="https://www.zentrumhub.com" target="_blank" rel="noopener noreferrer">ZentrumHub</a> and Joy. Joy uses Logicbroker for e-commerce, not hotel inventory.</td>
+        <td>Ask Richie on next call: What system does Joy actually use for hotel/accommodation supplier integration? Request technical documentation for the integration path.</td>
+      </tr>
+      <tr>
+        <td><span class="risk-dot dot-m"></span></td>
+        <td><strong>AI may not be proprietary</strong></td>
+        <td>Richie referenced "Finn" as handling 65% of customer inquiries. Research suggests this is <a href="https://fin.ai" target="_blank" rel="noopener noreferrer">Intercom's Fin</a>, a commercially available product. Joy's creative AI uses <a href="https://techcrunch.com/2023/03/16/wedding-platform-joy-will-let-you-outsource-your-vows-to-openai/" target="_blank" rel="noopener noreferrer">OpenAI</a>.</td>
+        <td>Ask Richie: What AI technology does Joy own vs. license? What specifically would TSK get in an AI partnership that we couldn't license directly from Intercom or OpenAI?</td>
+      </tr>
+      <tr>
+        <td><span class="risk-dot dot-m"></span></td>
+        <td><strong>Agreement delivery is late</strong></td>
+        <td>Richie committed to sending the distribution agreement by March 15-16. It has not arrived as of March 17.</td>
+        <td>Follow up with Richie by end of day March 17. If not received by March 19, reassess engagement priority.</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- ====================================================== -->
+<!-- NEXT STEPS                                              -->
+<!-- ====================================================== -->
+<div class="card" id="actions">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Next Steps</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <ul class="act-list" id="act-list">
+      <li class="act-item">
+        <div class="act-check" data-a="1"></div>
+        <div>
+          <div class="act-text" data-editable>Follow up on agreement</div>
+          <div class="act-meta"><span class="act-owner">K</span><span class="act-due">By Mar 19</span> &middot; <span style="font-size:10px;color:var(--amber)">Pending</span></div>
+          <ul style="font-size:12px;color:var(--text-2);margin-top:6px;padding-left:16px;line-height:1.6">
+            <li>Richie committed to sending the distribution agreement by Mar 15-16. Not yet received.</li>
+            <li>Confirm timeline and whether there are any internal approvals on Joy's side causing delay</li>
+            <li>Ask whether the agreement covers distribution only or includes AI partnership terms</li>
+          </ul>
+        </div>
+      </li>
+      <li class="act-item">
+        <div class="act-check" data-a="2"></div>
+        <div>
+          <div class="act-text" data-editable>Review and redline agreement</div>
+          <div class="act-meta"><span class="act-owner">K + Steve</span><span class="act-due">Within 5 days of receipt</span> &middot; <span style="font-size:10px;color:var(--text-3)">Waiting on agreement</span></div>
+          <ul style="font-size:12px;color:var(--text-2);margin-top:6px;padding-left:16px;line-height:1.6">
+            <li>Evaluate revenue model (commission vs. net rate vs. rev-share) and what makes sense for TSK's pricing structure</li>
+            <li>Check exclusivity provisions, territorial scope, and how TSK properties are presented on Joy's platform</li>
+            <li>Flag any data sharing, reporting, or integration requirements that depend on engineering resources TSK doesn't currently have</li>
+          </ul>
+        </div>
+      </li>
+      <li class="act-item">
+        <div class="act-check" data-a="3"></div>
+        <div>
+          <div class="act-text" data-editable>Schedule follow-up call with Richie</div>
+          <div class="act-meta"><span class="act-owner">K / Allison</span><span class="act-due">After agreement reviewed</span> &middot; <span style="font-size:10px;color:var(--text-3)">Not yet scheduled</span></div>
+          <ul style="font-size:12px;color:var(--text-2);margin-top:6px;padding-left:16px;line-height:1.6">
+            <li>Discuss the AI partnership in depth: what Joy owns vs. licenses, what proprietary data or capabilities TSK would actually receive</li>
+            <li>Explore potential structures for the AI layer (licensing, white-label, API access, co-development). See <a href="#ref-models">reference models</a>.</li>
+            <li>Clarify the supplier integration path for distribution (Zentrum Hub reference could not be verified) and Joy's customer budget breakdown by tier</li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ====================================================== -->
+<!-- REFERENCE SECTIONS                                      -->
+<!-- ====================================================== -->
+<div class="card" id="ref-zentrum">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Reference: ZentrumHub</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="detail-block">
+      <h4><a href="https://www.zentrumhub.com" target="_blank" rel="noopener noreferrer">zentrumhub.com</a> &middot; Travel API Aggregator</h4>
+      <ul>
+        <li>Single API connecting to 100+ hotel suppliers, GDSs, and bedbanks (<a href="https://www.zentrumhub.com/zentrum-connect/" target="_blank" rel="noopener noreferrer">Zentrum Connect product</a>)</li>
+        <li>Founded 2021. Named <a href="https://vocal.media/01/zentrum-hub-got-recognised-as-hot-25-travel-startups-for-2025" target="_blank" rel="noopener noreferrer">"Hot 25 Travel Startup 2025"</a></li>
+        <li>Used by Expedia, Booking.com, <a href="https://www.pymnts.com/api/2023/hotelplanner-taps-zentrumhub-for-travel-api-platform/" target="_blank" rel="noopener noreferrer">HotelPlanner</a>. 500K+ properties. 30M+ daily API requests.</li>
+        <li>Pricing: SaaS + usage-based. <a href="https://zentrumhub.com/blog/hotel-api-integration-pricing/" target="_blank" rel="noopener noreferrer">Pricing details</a></li>
+        <li><strong>Note:</strong> No evidence of a Joy-ZentrumHub relationship was found. This operates in the mass-market OTA layer, which may not align with ultra-luxury positioning.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="ref-fin">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Reference: Fin AI (Intercom)</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="detail-block">
+      <h4><a href="https://fin.ai" target="_blank" rel="noopener noreferrer">fin.ai</a> &middot; AI Customer Service Agent by Intercom</h4>
+      <ul>
+        <li>Commercially available. Not exclusive to Joy or any single company.</li>
+        <li>Average resolution rate: 66% across all customers (<a href="https://www.intercom.com/help/en/articles/7120684-fin-ai-agent-explained" target="_blank" rel="noopener noreferrer">source</a>)</li>
+        <li>Channels: chat, email, voice, social, WhatsApp</li>
+        <li>Pricing: <a href="https://fin.ai/pricing" target="_blank" rel="noopener noreferrer">$0.99 per resolution</a> + $29/seat/mo base</li>
+        <li><strong>Implication:</strong> If Joy's "Finn" is Intercom's Fin, TSK could license this directly. The value of an AI partnership with Joy would need to come from their data and workflows, not from this tool.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="ref-joyai">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Reference: Joy AI Product (In Development)</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="detail-block">
+      <h4>Prompt-to-Event Planner</h4>
+      <ul>
+        <li>Richie described this as Joy's "big ticket" new product</li>
+        <li>User provides a prompt describing their event vision. AI designs the full plan: venue, accommodation, activities, logistics.</li>
+        <li>Target: events, trade shows, group travel, destination weddings</li>
+        <li>Joy confirmed using <a href="https://techcrunch.com/2023/03/16/wedding-platform-joy-will-let-you-outsource-your-vows-to-openai/" target="_blank" rel="noopener noreferrer">OpenAI for product features</a>. Proprietary elements appear to be the event data layer (booking history, supplier network, pricing data), not the AI models.</li>
+        <li><strong>Note:</strong> No demo was shown. No launch timeline was shared. Product readiness is unknown.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="ref-models">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Reference: Potential AI Partnership Models</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <p style="font-size:12px;color:var(--text-2);margin-bottom:8px">Industry context: <a href="https://appinventiv.com/blog/ai-in-hospitality/" target="_blank" rel="noopener noreferrer">AI in hospitality is a $20.5B market at 30% CAGR</a>. <a href="https://www.idc.com/resource-center/blog/agentic-ai-will-redefine-travel-and-hospitality-in-2026/" target="_blank" rel="noopener noreferrer">IDC projects agentic AI will redefine travel in 2026</a>. <a href="https://www.prnewswire.com/news-releases/canary-technologies-launches-first-of-its-kind-hospitality-ai-agent-studio-302702665.html" target="_blank" rel="noopener noreferrer">Canary Technologies</a> just launched the first hospitality AI agent builder. Alternatives to Joy exist.</p>
+    <table class="opt-table">
+      <tr><th>Model</th><th>How It Could Work</th><th>Considerations</th></tr>
+      <tr>
+        <td><strong>Licensing</strong></td>
+        <td>TSK licenses Joy's AI + data layer. TSK owns the guest interface.</td>
+        <td>Offers control. Requires clear data rights agreement.</td>
+      </tr>
+      <tr>
+        <td><strong>White-Label</strong></td>
+        <td>Joy provides a branded AI assistant. TSK applies its own branding.</td>
+        <td>Fastest path. Less control over the experience.</td>
+      </tr>
+      <tr>
+        <td><strong>Pay-Per-Use</strong></td>
+        <td>API calls per guest interaction. No upfront commitment.</td>
+        <td>Low risk for testing. May not scale efficiently.</td>
+      </tr>
+      <tr>
+        <td><strong>Rev-Share</strong></td>
+        <td>AI drives bookings or upsells. Joy receives a percentage of AI-attributed value.</td>
+        <td>Aligns incentives. Requires attribution tracking.</td>
+      </tr>
+      <tr>
+        <td><strong>Co-Development</strong></td>
+        <td>Build a luxury-specific AI together. Shared or split IP.</td>
+        <td>Highest potential value. Most complex. IP boundaries need careful definition.</td>
+      </tr>
+    </table>
+    <p style="font-size:12px;color:var(--text-2);margin-top:10px">Other players in this space: <a href="https://ai-concierge.com/en/pricing-model/" target="_blank" rel="noopener noreferrer">AI-Concierge</a>, <a href="https://www.prnewswire.com/news-releases/canary-technologies-launches-first-of-its-kind-hospitality-ai-agent-studio-302702665.html" target="_blank" rel="noopener noreferrer">Canary Technologies AI Agent Studio</a>, and <a href="https://fin.ai" target="_blank" rel="noopener noreferrer">Intercom Fin</a> (direct).</p>
+  </div>
+</div>
+
+
+<!-- NOTES -->
+<div class="card" id="notes">
+  <div class="card-hdr" onclick="toggle(this)">
+    <h2>Notes</h2>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <textarea class="notes-area" id="open-notes" placeholder="Add follow-up notes, questions, or items discovered after the meeting..."></textarea>
+  </div>
+</div>
+
+<div class="footer">
+  TSK &middot; Confidential &middot; March 16, 2026<br>
+  <span style="font-size:10px">Editable document. Click "Edit" for inline changes. Checkboxes and notes persist in your browser.</span>
+</div>
+
+</div>
+
+<script>
+function toggle(h){h.closest('.card').classList.toggle('collapsed');var s={};document.querySelectorAll('.card[id]').forEach(function(c){s[c.id]=c.classList.contains('collapsed')});try{localStorage.setItem('tsk:joy2:s',JSON.stringify(s))}catch(e){}}
+(function(){try{var s=JSON.parse(localStorage.getItem('tsk:joy2:s')||'{}');Object.keys(s).forEach(function(id){var el=document.getElementById(id);if(el&&s[id])el.classList.add('collapsed')})}catch(e){}})();
+
+(function(){var saved={};try{saved=JSON.parse(localStorage.getItem('tsk:joy2:a')||'{}')}catch(e){}
+document.querySelectorAll('.act-check').forEach(function(c){var id=c.dataset.a;
+if(saved[id]){c.classList.add('checked');c.closest('.act-item').classList.add('done')}
+c.addEventListener('click',function(){var d=c.classList.toggle('checked');var i=c.closest('.act-item');
+if(d)i.classList.add('done');else i.classList.remove('done');
+var st={};try{st=JSON.parse(localStorage.getItem('tsk:joy2:a')||'{}')}catch(e){}
+if(d)st[id]=true;else delete st[id];
+try{localStorage.setItem('tsk:joy2:a',JSON.stringify(st))}catch(e){}})})})();
+
+var editOn=false;document.getElementById('btn-edit').addEventListener('click',function(){editOn=!editOn;document.body.classList.toggle('edit-mode',editOn);this.textContent=editOn?'Done':'Edit';this.classList.toggle('active',editOn);document.querySelectorAll('[data-editable]').forEach(function(el){el.contentEditable=editOn})});
+document.addEventListener('focusout',function(e){if(e.target&&e.target.hasAttribute&&e.target.hasAttribute('data-editable')){var ed={};document.querySelectorAll('[data-editable]').forEach(function(el,i){ed[i]=el.innerHTML});try{localStorage.setItem('tsk:joy2:ed',JSON.stringify(ed))}catch(e){}}});
+(function(){try{var s=JSON.parse(localStorage.getItem('tsk:joy2:ed')||'null');if(s)document.querySelectorAll('[data-editable]').forEach(function(el,i){if(s[i]!==undefined)el.innerHTML=s[i]})}catch(e){}})();
+
+var notes=document.getElementById('open-notes');try{var sn=localStorage.getItem('tsk:joy2:n');if(sn)notes.value=JSON.parse(sn)}catch(e){}
+notes.addEventListener('input',function(){try{localStorage.setItem('tsk:joy2:n',JSON.stringify(notes.value))}catch(e){}});
+
+document.getElementById('btn-copy').addEventListener('click',function(){var b=this;try{var h=document.querySelector('.wrap').innerHTML,t=document.querySelector('.wrap').innerText;navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([h],{type:'text/html'}),'text/plain':new Blob([t],{type:'text/plain'})})])}catch(e){navigator.clipboard.writeText(document.querySelector('.wrap').innerText)}b.textContent='Copied!';b.classList.add('copied');setTimeout(function(){b.textContent='Copy';b.classList.remove('copied')},1500)});
+
+document.querySelectorAll('a[href]').forEach(function(a){if(!a.getAttribute('href').startsWith('#')){a.target='_blank';a.rel='noopener noreferrer'}});
+</script>
+</body>
+</html>
