@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COO Vertical Briefing: What Nathan Left Behind</title>
+<style>
+  :root { --bg:#f8f7f4;--surface:#fff;--surface-2:#f0efec;--border:#d8d6d0;--border-light:#eae8e4;--text:#1a1a1a;--text-muted:#5c5c5c;--text-dim:#8a8a8a;--accent:#2c5282;--accent-light:#ebf2fa;--red:#c53030;--red-bg:#fff5f5;--red-border:#fcc;--amber:#b7791f;--amber-bg:#fefcf3;--amber-border:#f0e0a0;--green:#276749;--green-bg:#f0fff4;--green-border:#b2e0c0 }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .container{max-width:760px;margin:0 auto;padding:24px 24px 80px}
+  .header{border-bottom:2px solid var(--border);padding-bottom:24px;margin-bottom:32px}
+  .header h1{font-size:26px;font-weight:700;letter-spacing:-0.5px}
+  .header-sub{font-size:14px;color:var(--text-muted);margin-top:4px}
+  .header-source{font-size:12px;color:var(--text-dim);margin-top:8px;background:var(--surface-2);display:inline-block;padding:4px 12px;border-radius:4px}
+  .toc{background:var(--surface);border:1px solid var(--border-light);border-radius:10px;padding:18px 24px;margin-bottom:32px}
+  .toc h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px}
+  .toc a{display:block;padding:4px 0;font-size:14px;font-weight:500}
+  .section{margin-bottom:36px}
+  .section>h2{font-size:18px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border-light)}
+  .section>h3{font-size:15px;font-weight:700;margin:20px 0 10px}
+  .card{background:var(--surface);border:1px solid var(--border-light);border-radius:10px;padding:18px 22px;margin-bottom:16px}
+  .card-red{border-left:4px solid var(--red)} .card-amber{border-left:4px solid var(--amber)} .card-green{border-left:4px solid var(--green)} .card-blue{border-left:4px solid var(--accent)}
+  .card h3{font-size:16px;font-weight:700;margin-bottom:6px}
+  .card h4{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin:12px 0 6px}
+  .card p,.card li{font-size:14px} .card ul{padding-left:18px;margin-top:4px} .card li{margin-bottom:4px}
+  .badge{display:inline-block;padding:2px 10px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+  .badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+  .badge-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+  .badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+  .badge-blue{background:var(--accent-light);color:var(--accent);border:1px solid #bee3f8}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:12px}
+  th{text-align:left;padding:10px 12px;background:var(--surface-2);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:1px solid var(--border)}
+  td{padding:10px 12px;border-bottom:1px solid var(--border-light);vertical-align:top}
+  .doc-link{font-size:12px;color:var(--text-dim);margin-top:8px}
+  .callout{border-radius:8px;padding:14px 18px;margin-bottom:14px;font-size:14px}
+  .callout-red{background:var(--red-bg);border:1px solid var(--red-border)}
+  .callout-blue{background:var(--accent-light);border:1px solid #bee3f8}
+  .footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-dim);text-align:center}
+  @media print{body{background:#fff}.card{break-inside:avoid}#doc-toolbar{display:none!important}}
+  @media(max-width:600px){.container{padding:16px 16px 60px}table{font-size:13px}th,td{padding:8px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>COO Vertical Briefing: What Nathan Left Behind</h1>
+  <div class="header-sub">Prepared for Steve Cooper | 1:1 with K | Tuesday, March 17, 2026</div>
+  <div class="header-source">Source: Nathan's operational logs, Jun 2025 to Jan 2026 | 8 C-suite folders | <a href="https://drive.google.com/drive/u/0/folders/199W1QXIKSpqkMSxC3CiCjyG-speXs085" target="_blank" rel="noopener noreferrer">Drive folder</a></div>
+</div>
+
+<div class="toc">
+  <h2>Contents</h2>
+  <a href="#exec-summary">1. Executive Summary</a>
+  <a href="#dashboard">2. Operational Health Dashboard</a>
+  <a href="#verticals">3. Vertical Deep Dives</a>
+  <a href="#patterns">4. Pattern Analysis</a>
+  <a href="#k-expects">5. What K Expects You to Know</a>
+  <a href="#questions">6. Questions for K on Tuesday</a>
+  <a href="#inheritance">7. COO Inheritance Tracker</a>
+</div>
+
+<div class="section" id="exec-summary">
+  <h2>1. Executive Summary</h2>
+  <div class="card card-blue">
+    <p>You're inheriting a COO role where Nathan managed weekly and bi-weekly 1:1s with every C-suite member and K for seven months. These logs reveal the real operational tempo. The picture is sobering.</p>
+    <p style="margin-top:10px"><strong>The core finding:</strong> most initiatives stalled due to capital constraints, accountability gaps, and action items that went incomplete for months. The raise has been the singular bottleneck since mid-2025. Three key people (Sam, John, Jalyn) went dark without explanation. The data room was never populated. The revenue model is still unresolved. The platform does not exist.</p>
+    <p style="margin-top:10px">K expects the COO to track all of this, chase completion, and keep the machine running. Nathan tracked it but couldn't enforce it. That's the gap you're inheriting.</p>
+  </div>
+</div>
+
+<div class="section" id="dashboard">
+  <h2>2. Operational Health Dashboard</h2>
+  <table>
+    <tr><th>Vertical</th><th>Then / Now</th><th>Status</th><th>Top Risk</th></tr>
+    <tr><td><strong>CEO</strong></td><td>K (ongoing)</td><td><span class="badge badge-amber">Watch</span></td><td>Revenue model unresolved. CEO replacement in flux.</td></tr>
+    <tr><td><strong>CFO</strong></td><td>Axel (ongoing)</td><td><span class="badge badge-amber">Watch</span></td><td>Data room empty. Budget inputs chronically late.</td></tr>
+    <tr><td><strong>CTO</strong></td><td>Taiwo (ongoing)</td><td><span class="badge badge-amber">Watch</span></td><td>No platform. Won't code. Intern may lack skills.</td></tr>
+    <tr><td><strong>CRO</strong></td><td>Sam &rarr; Robert</td><td><span class="badge badge-green">Improving</span></td><td>Sam left nothing. Robert starting from zero.</td></tr>
+    <tr><td><strong>CMO</strong></td><td>Jake &rarr; <em>Open</em></td><td><span class="badge badge-red">Critical</span></td><td>DealMaker materials due Apr 7. No CMO.</td></tr>
+    <tr><td><strong>CCO</strong></td><td>Kamrul &rarr; <em>Open</em></td><td><span class="badge badge-red">Critical</span></td><td>Email bounces. Policies in draft limbo.</td></tr>
+    <tr><td><strong>GC</strong></td><td>John &rarr; <em>Open</em></td><td><span class="badge badge-red">Critical</span></td><td>Went dark. Multiple legal workstreams abandoned.</td></tr>
+    <tr><td><strong>IP Counsel</strong></td><td>Jalyn &rarr; Sergei</td><td><span class="badge badge-amber">Watch</span></td><td>Three IP counsels in one year. TTAB continuity.</td></tr>
+  </table>
+</div>
+
+<div class="section" id="verticals">
+  <h2>3. Vertical Deep Dives</h2>
+
+  <div class="card card-amber">
+    <h3>CEO (K)</h3>
+    <p class="doc-link"><a href="https://docs.google.com/document/d/1L3-KT6gJso4PCTzwx5zRIO5H1uK9956P8WE55cx_3Rc/edit" target="_blank" rel="noopener noreferrer">Source document</a></p>
+    <h4>What the log reveals</h4>
+    <p>This is the master log. K met with Nathan weekly or bi-weekly covering all verticals. It reveals her priorities and operating style.</p>
+    <ul>
+      <li><strong>CEO replacement:</strong> Chad mentioned Oct 2025. By Jan 2026, still backfilling multiple roles. Joel is the current candidate.</li>
+      <li><strong>DealMaker timeline:</strong> First mentioned Oct 14 ("start end of this week"). Minimum $140K ($100K marketing + $40K fees). Steven pledged $100K. Agreement not signed until Dec 2025. Still onboarding Mar 2026. 5+ months of drift.</li>
+      <li><strong>Revenue model debate (CRITICAL):</strong> On 10/28/25, two paths discussed:<br>
+        <strong>Option 1:</strong> Lead gen/OTA (licensing). Connect UHNW travelers to existing operators.<br>
+        <strong>Option 2:</strong> Property operator/manager. Directly manage luxury properties.<br>
+        Nathan's note: "trying to be the best in the industry at both will be extremely tough." Not resolved.</li>
+      <li><strong>M&amp;A opportunity:</strong> Portugal competitor (likely Tripwix). Term sheet in negotiation Oct/Nov 2025.</li>
+      <li><strong>Steven's investment:</strong> $100K for 10% undiluted. Final terms Dec 2025: $20K in 2025, $100K tranche in 2026.</li>
+    </ul>
+    <h4>K's operating style</h4>
+    <ul>
+      <li>Gives direction, expects execution. Doesn't micromanage.</li>
+      <li>Expects COO to track every action item and report status.</li>
+      <li>Manages investor/board relationships directly with Axel.</li>
+      <li>Controls information flow: "wants to get conversations progressing further before looping in more team members."</li>
+    </ul>
+  </div>
+
+  <div class="card card-amber">
+    <h3>CFO (Axel)</h3>
+    <p class="doc-link"><a href="https://docs.google.com/document/d/1K_UJUJPuZncyzYraYtKUjuS7F1V_FxNUzasewa6lfW4/edit" target="_blank" rel="noopener noreferrer">Source document</a></p>
+    <h4>Key workstreams</h4>
+    <ul>
+      <li><strong>Placement agencies:</strong> Ongoing since Jun 2025. Success-fee-only. Consistent (negative) feedback.</li>
+      <li><strong>Pitch deck financials:</strong> 5+ versions. Jake waited months for numbers.</li>
+      <li><strong>Backend accounting:</strong> Selection started Jun 2025. No firm chosen.</li>
+      <li><strong>Data room:</strong> Axel created folders. Empty as of Aug 2025. K was supposed to populate. "Axel is unable to move forward until this information is available."</li>
+      <li><strong>Budget consolidation:</strong> Templates sent Jul 12. CRO (Sam) and GC (John) never submitted.</li>
+      <li><strong>VC meeting:</strong> Good meeting. VC closing their 2nd fund first. Follow-up set Jan 2026.</li>
+      <li><strong>M&amp;A Portugal:</strong> Term sheet in negotiation. Waiting on competitor financials. Debt broker form completed.</li>
+    </ul>
+    <h4>Assessment</h4>
+    <p>Axel is responsive but dependent on inputs from others. Can't build pro forma without budgets. Can't populate data room without K's documents. Does the work when he has what he needs.</p>
+  </div>
+
+  <div class="card card-amber">
+    <h3>CTO (Taiwo)</h3>
+    <p class="doc-link"><a href="https://docs.google.com/document/d/1zFMelGET_Kp0zsVWLO-SbhKeCx3zZADHOEjgv86lo3o/edit" target="_blank" rel="noopener noreferrer">Source document</a></p>
+    <h4>Key workstreams</h4>
+    <ul>
+      <li><strong>Platform:</strong> Transitioned from Lance. Website on Magento (outdated). Migration planned post-funding.</li>
+      <li><strong>Apple account:</strong> Under Lance's control. Legal letters required. Apple agreed to transfer. Stalled in GC bottleneck.</li>
+      <li><strong>Google Play:</strong> Form submitted Sep 1. Google asked follow-ups. Stalled when John went dark.</li>
+      <li><strong>Prototypes:</strong> Fivvr quotes obtained Aug 2025. K decided to use Lance's PDFs instead. Abandoned.</li>
+      <li><strong>DealMaker pages:</strong> Taiwo won't build them. Will manage intern (Aiperi). Recommended $1K+ design budget.</li>
+      <li><strong>Budget:</strong> $250K remote / $1M stateside. 8-9 months dev. MVP in 6 months post-funding.</li>
+    </ul>
+    <h4>Assessment</h4>
+    <p>Taiwo manages projects, does not code. Platform is vaporware until capital funds a dev team. DealMaker pages depend on an intern with unclear skills.</p>
+  </div>
+
+  <div class="card card-green">
+    <h3>CRO (Sam Shah &rarr; Robert Fitzgerald)</h3>
+    <p class="doc-link"><a href="https://docs.google.com/document/d/1m2hKPhWVlcE4nC8AvY42NP-ZuClNRSqEr2yOpNP-Da4/edit" target="_blank" rel="noopener noreferrer">Source document</a></p>
+    <h4>Sam Shah (Jun - Aug 2025)</h4>
+    <ul>
+      <li>Assigned: market mapping, revenue modeling, budget, Marriott licensing analysis.</li>
+      <li>Delivered: some outbound research, a few contacts, one PE partner conversation.</li>
+      <li>Missing: budget (never submitted), revenue model, market strategy. Log goes silent Jul 23.</li>
+    </ul>
+    <h4>Robert Fitzgerald (Feb 2026 - present)</h4>
+    <p>Fundamentally different CRO. Produced Pre-Raise Commercial Strategy, Property Criteria Standards, and Tripwix Analysis in two weeks. See <a href="cro-summary-2026-03-05.html" target="_blank" rel="noopener noreferrer">CRO summary</a>.</p>
+    <h4>Gap</h4>
+    <p>Robert needs K's Oct 28 expectations. Sam left nothing. K's two revenue options differ from Robert's intermediary-led framing. Needs alignment.</p>
+  </div>
+
+  <div class="card card-red">
+    <h3>CMO (Jake &rarr; <em>Open</em>)</h3>
+    <p class="doc-link"><a href="https://docs.google.com/document/d/1qY2Nt0HE04TRLv_ioNOHcxGY-rbx_Z99zAvExYLA3Vc/edit" target="_blank" rel="noopener noreferrer">Source document</a></p>
+    <ul>
+      <li><strong>Pitch deck:</strong> Jake's primary deliverable. Multiple versions. Blocked by Axel's financials.</li>
+      <li><strong>DealMaker page:</strong> Willing to repurpose a template. Needed kickoff first.</li>
+      <li><strong>Direction gap:</strong> Repeatedly asked what marketing should deliver. "Unclear about what is needed from him."</li>
+    </ul>
+    <p style="margin-top:8px"><strong>CMO seat is open. DealMaker materials due ~Apr 7. Who is doing this work?</strong></p>
+  </div>
+
+  <div class="card card-red">
+    <h3>CCO (Kamrul &rarr; <em>Open</em>)</h3>
+    <p class="doc-link"><a href="https://docs.google.com/document/d/156lAikf3vy1xXFZg-la92_VqgNdh6mIyn5drBUjBEZI/edit" target="_blank" rel="noopener noreferrer">Source document</a></p>
+    <ul>
+      <li><strong>Policies:</strong> Handbook, code of conduct, compliance drafted. Sent to John for legal review. Code of Conduct completed Sep 2025.</li>
+      <li><strong>Investor outreach:</strong> Built AirTable list. Sent to K and Allison Sep 18.</li>
+      <li><strong>DealMaker:</strong> Researched platform. Attended calls. Sending emails on DM's behalf Jan 2026.</li>
+    </ul>
+    <p style="margin-top:8px">Kam was reliable. Departure unexplained. cco@ bounces. Are policies in use? Who owns compliance?</p>
+  </div>
+
+  <div class="card card-red">
+    <h3>GC (John &rarr; <em>Open</em>)</h3>
+    <p class="doc-link"><a href="https://docs.google.com/document/d/15MUxiarIybhxWpIeyK96BFwO6hyZn8isYNaNNUXthzw/edit" target="_blank" rel="noopener noreferrer">Source document</a></p>
+    <div class="callout callout-red" style="margin-top:10px">
+      <strong>Red flag: John went dark.</strong> No-shows Sep 9, Nov 4, Dec 2. Stopped responding to texts and emails.
+    </div>
+    <h4>Open workstreams (all stalled)</h4>
+    <ul>
+      <li>Apple account transfer (started, incomplete)</li>
+      <li>Google Play access (stalled at follow-ups)</li>
+      <li>Cap table with Axel (dropped)</li>
+      <li>LLC-to-Corp conversion (deferred)</li>
+      <li>Steven/Kathi paperwork (multiple delays)</li>
+      <li>HESS Law Firm review for DealMaker (unaddressed)</li>
+      <li>Deer Aisle contract redlines (ignored)</li>
+      <li>Kam's policy legal reviews (pending)</li>
+      <li>Airbnb Notice of Appearance (undecided)</li>
+      <li>Finders Agreement (completed, the one success)</li>
+    </ul>
+    <p style="margin-top:8px"><strong>Most concerning vertical.</strong> GC going dark leaves the company legally exposed. Sergei covers IP, not general counsel.</p>
+  </div>
+
+  <div class="card card-amber">
+    <h3>IP Counsel (Jalyn &rarr; Sergei Orel)</h3>
+    <p class="doc-link"><a href="https://docs.google.com/document/d/1CYeGfUlA_IyC0HM2bzrKJRWjV5lUC3qm9Vc6EVa8gLA/edit" target="_blank" rel="noopener noreferrer">Source document</a></p>
+    <ul>
+      <li><strong>Delphine:</strong> Original counsel. Retiring. Handled Airbnb TTAB case.</li>
+      <li><strong>Jalyn:</strong> On Jul 7, off Jul 22. Two weeks.</li>
+      <li><strong>Gap:</strong> Jul 2025 to Feb 2026. No IP counsel for ~7 months.</li>
+      <li><strong>Sergei:</strong> Announced Feb 25, 2026. Status unclear.</li>
+    </ul>
+    <p style="margin-top:8px">Three IP counsels in under a year. Is the Airbnb TTAB case being actively managed?</p>
+  </div>
+</div>
+
+<div class="section" id="patterns">
+  <h2>4. Pattern Analysis</h2>
+  <div class="card card-red">
+    <h3>1. The Accountability Gap</h3>
+    <p>Action items assigned in every meeting. Most reappear unfinished the next time. Same tasks show up 2, 3, 4 times. Nathan tracked them but had no authority to enforce. K gave direction but didn't hold individuals accountable between meetings.</p>
+  </div>
+  <div class="card card-red">
+    <h3>2. Capital as Universal Blocker</h3>
+    <p>Nearly every initiative stalls at "waiting for budget" or "after the raise." This has been true since June 2025. Nine months of stall. The DealMaker process itself required external capital ($100K from Steven) just to start.</p>
+  </div>
+  <div class="card card-red">
+    <h3>3. Data Room Never Built</h3>
+    <p>Discussed July 2025. Folders created. K was supposed to populate. Still empty. A fundamental investor readiness failure.</p>
+  </div>
+  <div class="card card-amber">
+    <h3>4. DealMaker Timeline Slippage</h3>
+    <p>Oct 14: "start end of this week." Dec 9: signing by Dec 11. Jan 6: "start in early Feb." Mar 2026: still onboarding. Five months of drift.</p>
+  </div>
+  <div class="card card-amber">
+    <h3>5. Key People Going Dark</h3>
+    <p>Sam (CRO): stopped engaging Aug 2025. John (GC): no-shows from Sep 2025. Jalyn (IP): left after two weeks. No exit explanations for any. K's approach: replace, don't investigate.</p>
+  </div>
+  <div class="card card-amber">
+    <h3>6. Revenue Model Unresolved</h3>
+    <p>Oct 28 notes lay out two options (lead gen vs operator). Nathan flagged both are hard. Can't build financial model, sales strategy, or platform without answering it. Robert's strategy introduces a third framing (intermediary-led proof). Needs resolution before the raise.</p>
+  </div>
+</div>
+
+<div class="section" id="k-expects">
+  <h2>5. What K Expects You to Know</h2>
+  <div class="card card-blue">
+    <ul>
+      <li><strong>Track every action item</strong> across every vertical and chase completion.</li>
+      <li><strong>Run 1:1s</strong> with each C-suite member weekly or bi-weekly.</li>
+      <li><strong>Be the operational bridge</strong> between K's strategy and team execution.</li>
+      <li><strong>Know DealMaker status cold.</strong> Timeline, deliverables, blockers.</li>
+      <li><strong>Know the raise pipeline.</strong> Who's investing, where conversations stand.</li>
+      <li><strong>Manage the CEO search.</strong> Joel evaluation, background diligence.</li>
+      <li><strong>Keep M&amp;A warm</strong> through Axel. Portugal competitor status.</li>
+      <li><strong>Not need hand-holding.</strong> K gives direction, expects results.</li>
+      <li><strong>Control information flow.</strong> K limits who gets looped in and when.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="questions">
+  <h2>6. Questions for K on Tuesday</h2>
+  <div class="callout callout-blue" style="margin-bottom:16px">
+    <strong>Framing note:</strong> You've read the logs. K knows you have access. Don't pretend otherwise. Frame as "getting up to speed so I can pick up where things left off."
+  </div>
+  <table>
+    <tr><th style="width:5%">#</th><th style="width:55%">Question</th><th>Why It Matters</th></tr>
+    <tr><td>1</td><td><strong>What happened with Nathan?</strong> The logs stop in January.</td><td>Understand the departure to avoid repeating it.</td></tr>
+    <tr><td>2</td><td><strong>Revenue model:</strong> Option 1 (lead gen) vs Option 2 (operator). Decided?</td><td>Everything downstream depends on this.</td></tr>
+    <tr><td>3</td><td><strong>Data room:</strong> Current status?</td><td>Can't run a credible raise without it.</td></tr>
+    <tr><td>4</td><td><strong>GC coverage:</strong> John went dark. Who handles legal now?</td><td>Multiple workstreams orphaned.</td></tr>
+    <tr><td>5</td><td><strong>DealMaker marketing:</strong> Due ~Apr 7. Who owns it?</td><td>Most time-sensitive gap. 26 days.</td></tr>
+    <tr><td>6</td><td><strong>M&amp;A Portugal:</strong> Still active?</td><td>Robert's analysis is relevant.</td></tr>
+    <tr><td>7</td><td><strong>Apple/Google accounts:</strong> Fully transferred?</td><td>Platform dev blocked without them.</td></tr>
+    <tr><td>8</td><td><strong>Operating budget:</strong> Anything available now?</td><td>Determines possible vs aspirational.</td></tr>
+    <tr><td>9</td><td><strong>Kam (CCO):</strong> What happened?</td><td>Policies may be lost. Zero compliance.</td></tr>
+    <tr><td>10</td><td><strong>Sam (CRO):</strong> What happened?</td><td>Departures reveal patterns.</td></tr>
+  </table>
+</div>
+
+<div class="section" id="inheritance">
+  <h2>7. COO Inheritance Tracker</h2>
+  <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px">Every unresolved item from Nathan's logs, grouped by urgency.</p>
+
+  <h3><span class="badge badge-red">Critical</span> Blocks the raise</h3>
+  <table>
+    <tr><th style="width:50%">Item</th><th>Vertical</th><th>Last Status</th></tr>
+    <tr><td>Data room population</td><td>CFO</td><td>Folders empty. K owns this.</td></tr>
+    <tr><td>DealMaker marketing materials</td><td>CMO</td><td>No CMO. Due ~Apr 7.</td></tr>
+    <tr><td>DealMaker landing pages + payment</td><td>CTO</td><td>Intern-dependent. Design budget TBD.</td></tr>
+    <tr><td>Revenue model decision</td><td>CEO</td><td>Debated Oct 28. Not resolved.</td></tr>
+    <tr><td>Cap table for LLC</td><td>GC/CFO</td><td>John + Axel were building. John gone.</td></tr>
+    <tr><td>Corporate structure (LLC vs Corp)</td><td>GC</td><td>Deferred. Investors told "open to changing."</td></tr>
+    <tr><td>DealMaker legal review (HESS)</td><td>GC</td><td>John was supposed to review. No update.</td></tr>
+  </table>
+
+  <h3 style="margin-top:20px"><span class="badge badge-amber">High</span> Blocks operations</h3>
+  <table>
+    <tr><th style="width:50%">Item</th><th>Vertical</th><th>Last Status</th></tr>
+    <tr><td>GC replacement</td><td>GC</td><td>Seat open. No candidates.</td></tr>
+    <tr><td>CMO replacement</td><td>CMO</td><td>Seat open. No candidates.</td></tr>
+    <tr><td>CCO replacement</td><td>CCO</td><td>Seat open. cco@ bounces.</td></tr>
+    <tr><td>Apple developer account transfer</td><td>CTO/GC</td><td>Apple agreed. Transfer stalled.</td></tr>
+    <tr><td>Google Play account access</td><td>CTO/GC</td><td>Google asked follow-ups. Stalled.</td></tr>
+    <tr><td>Airbnb TTAB case</td><td>IP</td><td>Three counsels. Current: Sergei (unconfirmed).</td></tr>
+    <tr><td>Backend accounting firm</td><td>CFO</td><td>Started Jun 2025. No selection.</td></tr>
+    <tr><td>Budget consolidation</td><td>CFO</td><td>CRO + GC budgets never received.</td></tr>
+  </table>
+
+  <h3 style="margin-top:20px"><span class="badge badge-green">Medium</span> Should be addressed</h3>
+  <table>
+    <tr><th style="width:50%">Item</th><th>Vertical</th><th>Last Status</th></tr>
+    <tr><td>Compliance policies finalization</td><td>CCO/GC</td><td>Drafted. Legal review incomplete.</td></tr>
+    <tr><td>Deer Aisle contract redlines</td><td>GC</td><td>Multiple reminders. Ignored.</td></tr>
+    <tr><td>Executive webpage</td><td>CTO</td><td>Magento blocker. Template workaround.</td></tr>
+    <tr><td>Pitch deck final version</td><td>CMO/CFO</td><td>Jake waiting on numbers.</td></tr>
+    <tr><td>VC follow-up (Jan 2026)</td><td>CFO</td><td>Scheduled. Did it happen?</td></tr>
+    <tr><td>M&amp;A Portugal term sheet</td><td>CFO</td><td>Axel reviewing. Waiting on financials.</td></tr>
+    <tr><td>Steven $100K tranche 2</td><td>CEO/GC</td><td>$20K paid 2025. $100K due 2026.</td></tr>
+  </table>
+</div>
+
+<div class="footer">
+  <p>Confidential. Steve Cooper only.</p>
+  <p style="margin-top:4px"><a href="https://drive.google.com/drive/u/0/folders/199W1QXIKSpqkMSxC3CiCjyG-speXs085" target="_blank" rel="noopener noreferrer">Source Drive Folder</a></p>
+</div>
+
+</div>
+
+<!-- Doc Toolbar -->
+<div id="doc-toolbar" style="position:fixed;top:16px;right:16px;z-index:9999;display:flex;gap:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;opacity:0.45;transition:opacity 0.2s" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.45'">
+  <button onclick="navigator.clipboard.writeText(document.body.innerText).then(function(){var b=event.target;b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Copy</button>
+  <button onclick="window.print()" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Save PDF</button>
+  <button onclick="window.print()" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Print</button>
+</div>
+<style media="print">#doc-toolbar{display:none!important}</style>
+
+</body>
+</html>

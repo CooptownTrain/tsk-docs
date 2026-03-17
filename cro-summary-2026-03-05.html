@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRO Summary: Robert Fitzgerald | Mar 5, 2026</title>
+<style>
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --surface-2: #f0efec;
+    --border: #d8d6d0;
+    --border-light: #eae8e4;
+    --text: #1a1a1a;
+    --text-muted: #5c5c5c;
+    --text-dim: #8a8a8a;
+    --accent: #2c5282;
+    --accent-light: #ebf2fa;
+    --red: #c53030;
+    --red-bg: #fff5f5;
+    --red-border: #fcc;
+    --amber: #b7791f;
+    --amber-bg: #fefcf3;
+    --amber-border: #f0e0a0;
+    --green: #276749;
+    --green-bg: #f0fff4;
+    --purple: #553c9a;
+    --purple-light: #f3f0ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .back-link {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+  .back-link:hover { color: var(--accent); text-decoration: none; }
+
+  .container { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+
+  .header {
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+    padding-top: 24px;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .header-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .date-badge {
+    background: var(--purple-light);
+    color: var(--purple);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .profile-bar {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+  }
+  .profile-initials {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .profile-info { flex: 1; }
+  .profile-name { font-size: 18px; font-weight: 700; }
+  .profile-role { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .profile-detail { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+
+  .section { margin-bottom: 28px; }
+  .section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+  }
+  .insight-card p { font-size: 14px; }
+  .insight-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  .callout-title { font-weight: 700; margin-bottom: 6px; }
+  .callout-amber { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+  .callout-amber .callout-title { color: var(--amber); }
+  .callout-red { background: var(--red-bg); border: 1px solid var(--red-border); }
+  .callout-red .callout-title { color: var(--red); }
+  .callout-green { background: var(--green-bg); border: 1px solid #b2e0c0; }
+  .callout-green .callout-title { color: var(--green); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    background: var(--surface-2);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+  }
+
+  ul { padding-left: 20px; }
+  li { margin-bottom: 6px; font-size: 14px; }
+
+  .verdict-box {
+    background: var(--accent-light);
+    border: 1px solid #bee3f8;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-top: 24px;
+  }
+  .verdict-box h3 {
+    color: var(--accent);
+    margin-top: 0;
+    font-size: 15px;
+  }
+  .verdict-box p {
+    font-size: 14px;
+    margin-top: 8px;
+  }
+
+  .footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .header-top { flex-direction: column; }
+    .profile-bar { flex-direction: column; text-align: center; }
+  }
+  @media print { .back-link { display: none !important; } #doc-toolbar { display: none !important; } }
+</style>
+</head>
+<body>
+
+<a href="meeting-notes-2026-03-05-cro-1on1.html" class="back-link">&larr; Full Meeting Notes</a>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>CRO Assessment: Robert Fitzgerald</h1>
+      <div class="header-sub">Summary of Robert's contributions, positions, and open questions from the Mar 5 bi-weekly 1:1</div>
+    </div>
+    <div class="date-badge">Mar 5, 2026</div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="profile-bar">
+  <div class="profile-initials">RF</div>
+  <div class="profile-info">
+    <div class="profile-name">Robert Fitzgerald</div>
+    <div class="profile-role">Chief Revenue Officer, The Sovereign Kingdom</div>
+    <div class="profile-detail">Based in Los Angeles. Previously lived in NYC (Chelsea area, left 2004). Replaced Sam Shah.</div>
+  </div>
+</div>
+
+<!-- ROBERT'S POSITIONS -->
+<div class="section">
+  <h2>Robert's Key Positions</h2>
+
+  <h3>On Joel (CEO Replacement)</h3>
+  <div class="insight-card">
+    <div class="insight-label">Assessment</div>
+    <p>Joel's credentials are "tailor-made" for the position. Six or seven roles in his background align directly with TSK's work, particularly in hotel operations and finance. Robert is meeting Joel the morning of Mar 6 to evaluate personality and fit.</p>
+  </div>
+
+  <h3>On the Sales Strategy</h3>
+  <div class="insight-card">
+    <div class="insight-label">Core Belief</div>
+    <p><strong>Relationship building drives revenue in the UHNWI space. Digital marketing does not.</strong> Online awareness generates impressions but does not move the sales needle for this clientele. Robert wants direct access to whatever agency handles local-market relationship building. He views this as the most important revenue lever.</p>
+  </div>
+
+  <h3>On the 2021 Effort</h3>
+  <div class="insight-card">
+    <div class="insight-label">Concern Raised</div>
+    <p>Robert directly questioned the "10,000 visitors a day" claim in the investor deck. He asked: What was the 2021 effort? Are the numbers real? Why did it stop? Did it generate any revenue or conversions? He noted that investors will ask the same questions and these numbers need context or they become a liability.</p>
+  </div>
+
+  <h3>On DealMaker</h3>
+  <div class="insight-card">
+    <div class="insight-label">Concern Raised</div>
+    <p>Robert flagged that Riley appears to be an account executive, not a decision-maker. He wants engagement with more senior people at DealMaker who can speak to investor expectations, criteria, and what actually works. He also noted the April 7 marketing materials deadline is tight given current delays.</p>
+  </div>
+
+  <h3>On the Property Portfolio</h3>
+  <div class="insight-card">
+    <div class="insight-label">Research Finding</div>
+    <p>Robert conducted his own analysis of top properties meeting TSK's criteria. His finding: <strong>the majority are located in Mexico</strong>, which he views as a problematic market due to political instability and violence. He questioned whether Tripwix is a good fit given their Caribbean focus. His recommendation: start with high-level travel agents to form local allegiances rather than relying on a single partnership.</p>
+  </div>
+</div>
+
+<!-- ROBERT'S OPEN QUESTIONS -->
+<div class="section">
+  <h2>Questions Robert Raised (Unanswered)</h2>
+  <table>
+    <tr><th style="width:55%">Question</th><th>Status</th></tr>
+    <tr>
+      <td>What was the 2021 effort and are the reported metrics accurate?</td>
+      <td>Partially answered by K: brand-fit test, not revenue attempt. Numbers still unverified.</td>
+    </tr>
+    <tr>
+      <td>Who is the agency responsible for relationship building in local markets?</td>
+      <td>K deferred: operational tunnel comes after investment tunnel.</td>
+    </tr>
+    <tr>
+      <td>Is the investor deck TSK's or DealMaker's?</td>
+      <td>Unanswered.</td>
+    </tr>
+    <tr>
+      <td>Who above Riley is driving the DealMaker process?</td>
+      <td>Unanswered. K told them to contact Riley directly.</td>
+    </tr>
+    <tr>
+      <td>Are we targeting many small investors or a few large ones?</td>
+      <td>Steve's view: volume play, many smaller checks. Not formally confirmed by K.</td>
+    </tr>
+    <tr>
+      <td>Is Tripwix a good fit given property market concentration?</td>
+      <td>Not discussed with K.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ROBERT'S COMMITMENTS -->
+<div class="section">
+  <h2>Robert's Commitments from This Call</h2>
+  <table>
+    <tr><th style="width:70%">Action</th><th>Deadline</th></tr>
+    <tr>
+      <td>Ask K how to contact the relationship-building agency. Loop Steve in.</td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td>Send Steve the three documents he previously sent to Riley.</td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td>Reach out to Riley at DealMaker with Steve to discuss deliverables.</td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td>Meet Joel (Mar 6 morning) and report back on personality/fit.</td>
+      <td>Mar 6</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ROBERT'S DOCUMENTS -->
+<div class="section">
+  <h2>Robert's Work Product (Shared Mar 5)</h2>
+  <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px">Robert sent three documents after the call. He noted the Tripwix doc was <strong>not shared with Riley</strong> but believes it sheds light on a potential partnership.</p>
+
+  <h3>1. Pre-Raise Commercial Strategy (Feb 26, 2026)</h3>
+  <div class="callout callout-green">
+    <div class="callout-title">Strong CRO Framework</div>
+    <p style="margin-bottom:8px"><strong>Core thesis:</strong> Pre-raise is about proving revenue credibility and delivery capability, not scale. Success is defined by evidence, not volume.</p>
+    <ul>
+      <li><strong>Target customer:</strong> Trusted intermediaries to UHNWIs (family offices, private wealth managers, ultra-luxury travel advisors, concierge medicine networks, premium membership ecosystems). Not UHNWIs directly. "TSK's fastest path to revenue credibility is borrowing trust, not manufacturing it."</li>
+      <li><strong>Product scope:</strong> 3-5 hero destinations, limited vetted residences, white-glove service only. Not about geographic breadth. About flawless execution in a controlled environment.</li>
+      <li><strong>Go-to-market:</strong> Relationship-first, not marketing-first. Direct relationship development with intermediaries. 1:1 conversations. Private briefings. Concierge-handled inquiries. No scaled paid media. No mass social strategy.</li>
+      <li><strong>What investors need to see:</strong> Functioning booking intake flow, live CRM with real inquiries, early bookings or LOIs, clear pricing logic, documented service delivery processes, evidence of intermediary interest.</li>
+      <li><strong>Explicitly NOT doing pre-raise:</strong> No scaled outbound sales team, no country-by-country prospect lists, no VR-heavy production, no brand-first marketing campaigns, no franchise/licensing rollout. Those are Phase 2, funded by capital.</li>
+    </ul>
+    <p style="margin-top:10px;font-size:13px;color:var(--text-muted)"><a href="https://docs.google.com/document/d/1F96l3_YBUcznrLBAGgQ8yINXmOwHSDgm3ai5HaDyKi8/edit" target="_blank" rel="noopener noreferrer">Open in Google Docs</a></p>
+  </div>
+
+  <h3>2. Tripwix Destination Analysis (Mar 3, 2026)</h3>
+  <div class="callout callout-amber">
+    <div class="callout-title">Property Concentration Risk Confirmed</div>
+    <p style="margin-bottom:8px">Robert reviewed Tripwix's top 20 luxury properties ($10,300+/night). The geographic breakdown:</p>
+    <table>
+      <tr><th>Country</th><th>Properties</th><th>% of Top 20</th></tr>
+      <tr><td><strong>Mexico</strong></td><td>13</td><td style="color:var(--red);font-weight:700">65%</td></tr>
+      <tr><td>Barbados</td><td>4</td><td>20%</td></tr>
+      <tr><td>Italy (Tuscany)</td><td>2</td><td>10%</td></tr>
+      <tr><td>Greece</td><td>1</td><td>5%</td></tr>
+      <tr><td>Spain, Portugal, Turkey</td><td>0</td><td>0%</td></tr>
+    </table>
+    <p style="margin-top:10px">Sample properties range from $14,000/night (Chianti, 20BR) to $49,000/night (Los Cabos, 10BR). Includes properties with chefs, butlers, bowling alleys, and spas.</p>
+    <p style="margin-top:8px;font-weight:600;color:var(--amber)">Robert's concern: Heavy Mexico concentration is a market risk (political instability, violence). Zero inventory in Spain, Portugal, or Turkey despite being Tripwix "featured destinations." This limits TSK's geographic diversification story for investors.</p>
+    <p style="margin-top:10px;font-size:13px;color:var(--text-muted)"><a href="https://docs.google.com/document/d/15voERSQ8u1H-5PgLgPhKyZe0Yh9TZn97jCRH_wKfPtY/edit" target="_blank" rel="noopener noreferrer">Open in Google Docs</a></p>
+  </div>
+
+  <h3>3. Property Criteria Standards (Mar 2, 2026)</h3>
+  <div class="callout callout-green">
+    <div class="callout-title">Institutional-Grade Acquisition Framework</div>
+    <p style="margin-bottom:8px">A detailed internal operating standard for property acquisition and portfolio management. Key standards:</p>
+    <ul>
+      <li><strong>Price point:</strong> USD $20,000+/night baseline. Properties that can't consistently support this don't advance past preliminary review.</li>
+      <li><strong>Property types:</strong> Private villas, ultra-luxury penthouses, private islands, mountain chalets (ski-in/ski-out), waterfront estates, architecturally significant residences.</li>
+      <li><strong>Location requirements:</strong> Established UHNWI demand, private aviation access, political stability, proximity to elite lifestyle activities.</li>
+      <li><strong>Physical standards:</strong> Typically 6+ bedrooms, premium construction, gated/controlled access, ability to support discreet security.</li>
+      <li><strong>Design standards:</strong> Timeless luxury (not trend-driven), cohesive interior narrative, museum-quality art, zero visible wear.</li>
+      <li><strong>Staffing model:</strong> Every property must support full in-residence service: private chef (Michelin-trained), butler/house manager, housekeeping team, grounds/maintenance, security, wellness professionals, chauffeurs.</li>
+    </ul>
+    <p style="margin-top:10px;font-size:13px;color:var(--text-muted)"><a href="https://drive.google.com/open?id=118N2S03b2UF7cvKknsiuGKQrO-VCjhdq" target="_blank" rel="noopener noreferrer">Open in Google Drive</a></p>
+  </div>
+</div>
+
+<!-- COO VERDICT -->
+<div class="verdict-box">
+  <h3>COO Read on Robert</h3>
+  <p>Robert is not just asking the right questions. He's producing real work product. The Pre-Raise Commercial Strategy is a serious document with a clear thesis: prove credibility before you scale. The Property Criteria Standards reads like something a hotel REIT would publish. The Tripwix analysis shows he's doing his own due diligence on partnerships rather than accepting them at face value.</p>
+  <p style="margin-top: 10px;"><strong>Alliance value: High.</strong> Robert is the most operationally engaged C-suite member outside of Steve. He's aligned on transparency, skeptical of unverified claims, and producing deliverables that actually move the business forward. His LA base, travel industry instincts, and relationship-first sales philosophy complement Steve's operational focus.</p>
+  <p style="margin-top: 10px;"><strong>Strategic note:</strong> Robert's commercial strategy directly contradicts TSK's current approach. TSK is running a DealMaker/digital marketing play while Robert argues the revenue proof investors need can only come through intermediary relationships. This tension needs to be surfaced with Joel (incoming CEO) and resolved before the raise launches.</p>
+  <p style="margin-top: 10px;"><strong>Documents received:</strong> All three documents delivered same day (Mar 5). Commitment fulfilled. Tripwix doc was deliberately withheld from Riley, which shows Robert is thinking about information flow and leverage.</p>
+</div>
+
+<div class="footer">
+  <p>Confidential. Steve Cooper only. Derived from Gemini auto-generated notes (Mar 5, 2026). <a href="meeting-notes-2026-03-05-cro-1on1.html" target="_blank" rel="noopener noreferrer">Full meeting notes</a></p>
+</div>
+
+</div>
+
+<!-- Doc Toolbar -->
+<div id="doc-toolbar" style="position:fixed;top:16px;right:16px;z-index:9999;display:flex;gap:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;opacity:0.45;transition:opacity 0.2s" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.45'">
+  <button onclick="navigator.clipboard.writeText(document.body.innerText).then(function(){var b=event.target;b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Copy</button>
+  <button onclick="window.print()" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Save PDF</button>
+  <button onclick="window.print()" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Print</button>
+</div>
+<style media="print">#doc-toolbar{display:none!important}</style>
+<!-- /Doc Toolbar -->
+
+</body>
+</html>

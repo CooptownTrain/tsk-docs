@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meeting Notes: Intro Call with K &amp; Riley | Feb 25, 2026</title>
+<style>
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --surface-2: #f0efec;
+    --border: #d8d6d0;
+    --border-light: #eae8e4;
+    --text: #1a1a1a;
+    --text-muted: #5c5c5c;
+    --text-dim: #8a8a8a;
+    --accent: #2c5282;
+    --accent-light: #ebf2fa;
+    --red: #c53030;
+    --red-bg: #fff5f5;
+    --red-border: #fcc;
+    --amber: #b7791f;
+    --amber-bg: #fefcf3;
+    --amber-border: #f0e0a0;
+    --green: #276749;
+    --green-bg: #f0fff4;
+    --purple: #553c9a;
+    --purple-light: #f3f0ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .back-link {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+  .back-link:hover { color: var(--accent); text-decoration: none; }
+
+  .container { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* HEADER */
+  .header {
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    padding-top: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .header-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .date-badge {
+    background: var(--purple-light);
+    color: var(--purple);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  /* MEETING META */
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .meta-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .meta-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .meta-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 28px;
+  }
+  .section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .role-box {
+    background: var(--accent-light);
+    border: 1px solid #bee3f8;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .role-box p {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .role-box .note {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    font-weight: 400;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    background: var(--surface-2);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+  }
+
+  /* CALLOUTS */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  .callout-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .callout-amber {
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+  }
+  .callout-amber .callout-title { color: var(--amber); }
+  .callout-red {
+    background: var(--red-bg);
+    border: 1px solid var(--red-border);
+  }
+  .callout-red .callout-title { color: var(--red); }
+  .callout-green {
+    background: var(--green-bg);
+    border: 1px solid #b2e0c0;
+  }
+  .callout-green .callout-title { color: var(--green); }
+
+  ul { padding-left: 20px; }
+  li { margin-bottom: 6px; font-size: 14px; }
+
+  .footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .header-top { flex-direction: column; }
+    .meta-grid { grid-template-columns: 1fr; }
+  }
+  @media print { .back-link { display: none !important; } }
+</style>
+<link rel="stylesheet" href="interactive.css">
+</head>
+<body>
+
+<a href="index.html" class="back-link">&larr; Briefings</a>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>Intro Call with K &amp; Riley Stanton</h1>
+      <div class="header-sub">DealMaker &mdash; Steve's first day as COO</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+      <div id="header-toolbar-slot"></div>
+      <div class="date-badge">Feb 25, 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- META -->
+<div class="meta-grid">
+  <div class="meta-card">
+    <div class="meta-label">Attendees</div>
+    <div class="meta-value">K (CEO), Riley Stanton (DealMaker), Steve Cooper (COO)</div>
+  </div>
+  <div class="meta-card">
+    <div class="meta-label">Type</div>
+    <div class="meta-value">COO Introduction / Role Definition</div>
+  </div>
+  <div class="meta-card">
+    <div class="meta-label">Context</div>
+    <div class="meta-value">Steve's first day. Intro to DealMaker engagement.</div>
+  </div>
+  <div class="meta-card">
+    <div class="meta-label">Related Docs</div>
+    <div class="meta-value"><a href="deep-dive-2026-03-01.html#s10" target="_blank" rel="noopener">Deep Dive &sect;10</a> &middot; <a href="dealmaker-onboarding.html" target="_blank" rel="noopener">DealMaker Brief</a></div>
+  </div>
+</div>
+
+<!-- COO ROLE -->
+<div class="section">
+  <h2>Steve's Role (Defined by K)</h2>
+  <div class="role-box">
+    <p>Make sure the DealMaker process runs smoothly. Keep the people responsible for deliverables engaged, motivated, and informed on process objectives and deliverables.</p>
+    <div class="note">Translation: Steve is the <strong>process manager / deliverable traffic controller</strong> for the raise. Not strategy, not investor relations &mdash; execution coordination.</div>
+  </div>
+
+  <div class="callout callout-green">
+    <div class="callout-title">What This Means for Steve</div>
+    <ul>
+      <li><strong>Scope is defined and narrow:</strong> Keep Jake (CMO/marketing), Axel (CFO/finance), Cam (CCO/compliance), and Taiwo (CTO/tech) on track for their DealMaker deliverables</li>
+      <li><strong>Steve does NOT own:</strong> Strategy, investor relations, marketing content, financial projections, or the pitch</li>
+      <li><strong>Steve DOES own:</strong> Timeline management, deliverable tracking, internal coordination, ensuring nothing falls through the cracks</li>
+      <li><strong>Escalation role:</strong> If deliverables are late, blockers arise, or scope changes &mdash; Steve surfaces it</li>
+    </ul>
+  </div>
+</div>
+
+<!-- RAISE STRATEGY -->
+<div class="section">
+  <h2>Raise Strategy Confirmed</h2>
+  <div class="callout callout-amber">
+    <div class="callout-title">Two-Phase Raise: Reg CF &rarr; Reg A+</div>
+    <p><strong>Phase 1 (Current):</strong> Reg CF (Form C) &mdash; $5M max from retail investors. This is the active DealMaker engagement.</p>
+    <p style="margin-top: 6px;"><strong>Phase 2 (Future):</strong> Roll into Reg A+ &mdash; up to $75M/year. Separate Form 1-A filing, SEC qualification required. 4&ndash;6 month process.</p>
+    <p style="margin-top: 8px; font-size: 13px; color: var(--text-muted);">K's $20M target requires both phases. The $5M Reg CF aligns with Steve's Effective Date trigger. Reg A+ would be a separate process entirely.</p>
+  </div>
+</div>
+
+<!-- DEALMAKER SCOPE -->
+<div class="section">
+  <h2>DealMaker's Deliverables &amp; Services</h2>
+  <table>
+    <tr><th style="width: 40%;">Deliverable</th><th>Owner</th><th>Notes</th></tr>
+    <tr>
+      <td>Marketing to investors</td>
+      <td><strong>DealMaker</strong></td>
+      <td>Support or lead &mdash; per K's direction</td>
+    </tr>
+    <tr>
+      <td>Investor landing page</td>
+      <td><strong>TSK creates assets</strong></td>
+      <td>DealMaker hosts; TSK provides content</td>
+    </tr>
+    <tr>
+      <td>Paid advertising</td>
+      <td><strong>DealMaker</strong></td>
+      <td>Google + Meta ads for investor acquisition</td>
+    </tr>
+    <tr>
+      <td>Email campaigns</td>
+      <td><strong>DealMaker</strong></td>
+      <td>Investor outreach sequences</td>
+    </tr>
+    <tr>
+      <td>Banners &amp; images</td>
+      <td><strong>DealMaker</strong></td>
+      <td>Creative production for ads</td>
+    </tr>
+    <tr>
+      <td>Video shoot</td>
+      <td><strong>DealMaker</strong> (optional)</td>
+      <td>Available if TSK wants it</td>
+    </tr>
+    <tr>
+      <td>Newsletter partnerships</td>
+      <td><strong>DealMaker</strong></td>
+      <td>Morning Brew, 1440, and others</td>
+    </tr>
+    <tr>
+      <td>Compliance &amp; regulatory</td>
+      <td><strong>DealMaker Securities</strong></td>
+      <td>Broker-dealer side, regulatory compliance</td>
+    </tr>
+    <tr>
+      <td>Launch offering</td>
+      <td><strong>DealMaker</strong></td>
+      <td>Go-live coordination</td>
+    </tr>
+  </table>
+</div>
+
+<!-- OPEN QUESTIONS -->
+<div class="section">
+  <h2>Open Questions from the Call</h2>
+  <table>
+    <tr><th style="width: 50%;">Question</th><th>Context</th></tr>
+    <tr>
+      <td><strong>Marketing:</strong> Who at TSK is doing what?</td>
+      <td>Jake Wall (CMO) designated as marketing POC on Jan 8 call. Ownership split unclear.</td>
+    </tr>
+    <tr>
+      <td><strong>Marketing:</strong> What do the assets need to look like?</td>
+      <td>TSK must create landing page assets. Specs not defined.</td>
+    </tr>
+    <tr>
+      <td><strong>Revenue:</strong> How is TSK making revenue?</td>
+      <td>Riley's questions for Robert (CRO) in the Mar 2 meeting. Revenue model, % per stream, growth roadmap.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COO IMPLICATIONS -->
+<div class="section">
+  <h2>COO Implications &amp; Watch Items</h2>
+  <div class="callout callout-red">
+    <div class="callout-title">Critical Reminders</div>
+    <ul>
+      <li><strong>Agreement still not countersigned.</strong> Steve has no legal protection yet. Do not agree to be named in any Form C filing or marketing materials until this is resolved.</li>
+      <li><strong>"Institutional launch" language is wrong.</strong> K used this phrase in her Feb 25 welcome email &mdash; the same day as this call where Reg CF (retail crowdfunding) was discussed. Do not repeat or endorse this framing.</li>
+      <li><strong>Two-phase raise extends the timeline.</strong> Even if Reg CF closes and triggers Effective Date ($5M), K's full vision requires a separate Reg A+ filing &mdash; another 4&ndash;6 months from scratch.</li>
+      <li><strong>Form C includes officer bios.</strong> Steve must review any draft Form C before it is filed to verify how the COO role is represented.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- NEXT STEPS -->
+<div class="section">
+  <h2>Next Steps (from this call)</h2>
+  <ul>
+    <li><strong>Mar 2 meeting:</strong> Riley will ask Robert (CRO) about revenue model and growth roadmap. Steve observes.</li>
+    <li><strong>Asset creation:</strong> TSK needs to provide landing page content and creative assets to DealMaker.</li>
+    <li><strong>Steve tracks:</strong> Who owes what to DealMaker, and whether it's on time.</li>
+    <li><strong>Form C review:</strong> When draft is ready, Steve must review before filing.</li>
+  </ul>
+</div>
+
+<div class="footer">
+  <p>Confidential &mdash; Steve Cooper Only</p>
+</div>
+
+</div>
+<script src="interactive.js"></script>
+<script>(function(){var t=document.querySelector('body>.tsk-toolbar'),s=document.getElementById('header-toolbar-slot');if(t&&s){t.style.cssText='';s.appendChild(t)}})()</script>
+</body>
+</html>

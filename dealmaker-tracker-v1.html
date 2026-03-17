@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealMaker Onboarding Tracker | TSK COO</title>
+<style>
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --surface-2: #f0efec;
+    --border: #d8d6d0;
+    --border-light: #eae8e4;
+    --text: #1a1a1a;
+    --text-muted: #5c5c5c;
+    --text-dim: #8a8a8a;
+    --accent: #2c5282;
+    --accent-light: #ebf2fa;
+    --red: #c53030;
+    --red-bg: #fff5f5;
+    --red-border: #fcc;
+    --amber: #b7791f;
+    --amber-bg: #fefcf3;
+    --amber-border: #f0e0a0;
+    --green: #276749;
+    --green-bg: #f0fff4;
+    --green-border: #b2e0c0;
+    --purple: #553c9a;
+    --purple-light: #f3f0ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .back-link {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+  .back-link:hover { color: var(--accent); text-decoration: none; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* HEADER */
+  .header {
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    padding-top: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .date-badge {
+    background: var(--green-bg);
+    color: var(--green);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  /* PROGRESS BAR */
+  .progress-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .stat-red { color: var(--red); }
+  .stat-amber { color: var(--amber); }
+  .stat-green { color: var(--green); }
+
+  .progress-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+  .progress-bar-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-bar {
+    height: 10px;
+    background: var(--surface-2);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.3s;
+  }
+  .fill-red { background: var(--red); }
+  .fill-amber { background: var(--amber); }
+  .fill-green { background: var(--green); }
+
+  /* ALERTS */
+  .alert {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .alert-red { background: var(--red-bg); border: 1px solid var(--red-border); }
+  .alert-red strong { color: var(--red); }
+  .alert-amber { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+  .alert-amber strong { color: var(--amber); }
+  .alert-green { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .alert-green strong { color: var(--green); }
+
+  /* MILESTONE SECTIONS */
+  .milestone {
+    margin-bottom: 32px;
+  }
+  .milestone-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .milestone-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .milestone-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .milestone-progress {
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: auto;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+  .mp-red { background: var(--red-bg); color: var(--red); }
+  .mp-amber { background: var(--amber-bg); color: var(--amber); }
+  .mp-green { background: var(--green-bg); color: var(--green); }
+  .mp-locked { background: var(--surface-2); color: var(--text-dim); }
+
+  .milestone-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  /* TASK TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  th {
+    text-align: left;
+    padding: 8px 10px;
+    background: var(--surface-2);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+  }
+
+  /* STATUS BADGES */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .badge-done { background: var(--green-bg); color: var(--green); }
+  .badge-overdue { background: var(--red-bg); color: var(--red); }
+  .badge-pending { background: var(--amber-bg); color: var(--amber); }
+  .badge-locked { background: var(--surface-2); color: var(--text-dim); }
+  .badge-blocked { background: var(--purple-light); color: var(--purple); }
+
+  .owner-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .task-notes {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  /* COO IMPLICATIONS */
+  .section {
+    margin-bottom: 28px;
+  }
+  .section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .impl-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .impl-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .impl-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .impl-card ul {
+    padding-left: 16px;
+    font-size: 13px;
+  }
+  .impl-card li { margin-bottom: 4px; }
+
+  .footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    .header-top { flex-direction: column; }
+    .progress-section { grid-template-columns: 1fr 1fr; }
+    .impl-grid { grid-template-columns: 1fr; }
+  }
+  @media print { .back-link { display: none !important; } }
+</style>
+<link rel="stylesheet" href="interactive.css">
+</head>
+<body>
+
+<a href="index.html" class="back-link">&larr; Briefings</a>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>DealMaker Onboarding Tracker</h1>
+      <div class="header-sub">Reg CF ($5M) &mdash; By Milestone &mdash; <a href="https://start.dealmaker.tech/plans/faa32663" target="_blank" rel="noopener">Source: DealMaker Portal</a></div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+      <div id="header-toolbar-slot"></div>
+      <div class="date-badge">Updated Mar 4, 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS STATS -->
+<div class="progress-section" data-total-tasks="35">
+  <div class="stat-card">
+    <div class="stat-value stat-red">2/35</div>
+    <div class="stat-label">Tasks Complete</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value stat-red">6%</div>
+    <div class="stat-label">Overall Progress</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value stat-amber">Apr 14</div>
+    <div class="stat-label">Target Launch</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value stat-red">41 days</div>
+    <div class="stat-label">Until Launch</div>
+  </div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-label">
+    <span>Completion: 2 of 35 tasks</span>
+    <span>6%</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill fill-red" style="width: 6%;"></div>
+  </div>
+</div>
+
+<!-- RED FLAG ALERT -->
+<div class="alert alert-red">
+  <strong>Critical: 94% of tasks incomplete with 41 days to launch.</strong> Week 1 compliance items (financials, corporate docs, escrow, government IDs) were due February 24 and are all incomplete. The Campaign Brief must be approved before any creative production can begin. It has not been submitted. At current pace, the April 14 launch date is not achievable.
+</div>
+
+<div class="alert alert-amber">
+  <strong>COO Visibility:</strong> Steve now has the full onboarding plan. This is the deliverable schedule K should have shared on Day 1. Every TSK-side task is owned by K. Derhem. Steve's role: track progress, surface blockers, escalate delays.
+</div>
+
+
+<!-- ============================================ -->
+<!-- MILESTONE 1: SEC COMPLIANCE & LEGAL -->
+<!-- ============================================ -->
+<div class="milestone">
+  <div class="milestone-header">
+    <div class="milestone-icon" style="background: var(--red);">1</div>
+    <div class="milestone-title">SEC Compliance &amp; Legal</div>
+    <span class="milestone-progress mp-red">1/7 complete</span>
+  </div>
+  <p class="milestone-desc">Everything required for TSK to legally file and maintain a Reg CF offering with the SEC. These are the hardest items to accelerate because they involve third parties (CPAs, legal counsel, broker-dealer).</p>
+
+  <table>
+    <tr>
+      <th style="width:30%">Deliverable</th>
+      <th style="width:22%">Purpose</th>
+      <th style="width:12%">Owner</th>
+      <th style="width:12%">Due</th>
+      <th style="width:10%">Status</th>
+    </tr>
+    <tr>
+      <td>
+        <strong>Initiate Reviewed/Audited Financials</strong>
+        <div class="task-notes" style="color:var(--red);font-weight:600;">CRITICAL PATH: Single most likely item to delay launch. If CPA not yet engaged, add 4-6 weeks from today.</div>
+      </td>
+      <td class="task-notes">SEC-required financial statements for Form C. Reviewed takes ~1 month from CPA engagement, audited 2-3 months. 120-day validity window.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Feb 24</td>
+      <td><span class="badge badge-overdue">Overdue</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Submit Reviewed/Audited Financials</strong>
+      </td>
+      <td class="task-notes">Final CPA-prepared financials attached to Form C. Deliverable that started in Week 1 and finishes here.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 31</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Corporate &amp; Governance Documents</strong>
+      </td>
+      <td class="task-notes">Broker-dealer due diligence. DealMaker Securities can't legally represent the offering without these. IRS SS-4/EIN, formation docs, board actions, SPV docs if applicable.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Feb 24</td>
+      <td><span class="badge badge-overdue">Overdue</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Bad Actor Check</strong>
+        <div class="task-notes" style="color:var(--red);font-weight:600;">COO WATCH: If Steve is listed as an officer, he needs to submit one. Do not sign until agreement is countersigned.</div>
+      </td>
+      <td class="task-notes">SEC disqualification screening. Required for every officer, director, and 20%+ owner. Offering can't proceed if anyone fails.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 3</td>
+      <td><span class="badge badge-overdue">Overdue</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>SPV Inception Financials</strong>
+      </td>
+      <td class="task-notes">If using an SPV, it needs its own reviewed/audited financials even at $0. Decision was pending as of Jan 8. Adding later causes "significant delays."</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 3</td>
+      <td><span class="badge badge-overdue">Overdue</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Privacy Policy</strong>
+      </td>
+      <td class="task-notes">Legal requirement for collecting investor personal data on the investment portal.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 3</td>
+      <td><span class="badge badge-done">Done</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Comment Moderation Guide</strong>
+      </td>
+      <td class="task-notes">SEC requires a public Q&amp;A forum on the offering page. Issuer must monitor, respond, and ensure compliance. Failure to moderate = violation.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Apr 3</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================ -->
+<!-- MILESTONE 2: FORM C & SEC FILING -->
+<!-- ============================================ -->
+<div class="milestone">
+  <div class="milestone-header">
+    <div class="milestone-icon" style="background: var(--red);">2</div>
+    <div class="milestone-title">Form C &amp; SEC Filing</div>
+    <span class="milestone-progress mp-red">1/4 complete</span>
+  </div>
+  <p class="milestone-desc">The actual SEC filing that makes the offering legal. Form C goes public on EDGAR and becomes a permanent record. Requires almost everything from Milestone 1 to be done first.</p>
+
+  <table>
+    <tr>
+      <th style="width:30%">Deliverable</th>
+      <th style="width:22%">Purpose</th>
+      <th style="width:12%">Owner</th>
+      <th style="width:12%">Due</th>
+      <th style="width:10%">Status</th>
+    </tr>
+    <tr>
+      <td>
+        <strong>Financial Information</strong>
+      </td>
+      <td class="task-notes">Basic financial data for DealMaker's internal due diligence and campaign modeling.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 3</td>
+      <td><span class="badge badge-done">Done</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Capitalization Information</strong>
+      </td>
+      <td class="task-notes">Form C requires full ownership disclosure + dilution calculation. Cap table, SAFEs, notes, options, warrants, shareholder history. Also critical for Steve's equity transparency request.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 3</td>
+      <td><span class="badge badge-overdue">Overdue</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Form C Generator</strong>
+      </td>
+      <td class="task-notes">DealMaker's tool that assembles the SEC Form C from collected data (financials, cap table, terms, bios). Output = the actual filing.</td>
+      <td class="owner-badge">DealMaker</td>
+      <td class="task-notes">Mar 10</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Review &amp; Submit Form C + Subscription Agreement</strong>
+        <div class="task-notes" style="color:var(--red);font-weight:600;">COO WATCH: Steve must review before filing. Becomes a permanent SEC record. Contains officer bios, risk factors, use of proceeds.</div>
+      </td>
+      <td class="task-notes">Legal review of the SEC filing + investor contract. "Hess and Set Apart" (legal counsel) should be driving this.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 17</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================ -->
+<!-- MILESTONE 3: ESCROW & BANKING -->
+<!-- ============================================ -->
+<div class="milestone">
+  <div class="milestone-header">
+    <div class="milestone-icon" style="background: var(--red);">3</div>
+    <div class="milestone-title">Escrow &amp; Banking</div>
+    <span class="milestone-progress mp-red">0/3 complete</span>
+  </div>
+  <p class="milestone-desc">How investor money gets collected, held, and eventually disbursed. No escrow = no way to accept investments. No treasury = TSK pays all campaign costs out of pocket.</p>
+
+  <table>
+    <tr>
+      <th style="width:30%">Deliverable</th>
+      <th style="width:22%">Purpose</th>
+      <th style="width:12%">Owner</th>
+      <th style="width:12%">Due</th>
+      <th style="width:10%">Status</th>
+    </tr>
+    <tr>
+      <td>
+        <strong>Escrow: Business Information Packet</strong>
+      </td>
+      <td class="task-notes">Enterprise Bank &amp; Trust KYC for the escrow account. Fill-in-the-blank form provided by DealMaker. Should take about an hour.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Feb 24</td>
+      <td><span class="badge badge-overdue">Overdue</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Escrow: Government Issued ID</strong>
+      </td>
+      <td class="task-notes">KYC/AML for escrow bank. Valid passport or driver's license for all individuals listed in BIP ownership section. Blocked by BIP completion.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Feb 24</td>
+      <td><span class="badge badge-overdue">Overdue</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Treasury Account Setup (Stripe)</strong>
+      </td>
+      <td class="task-notes">Campaign bank for funding marketing from raise proceeds. K follows DealMaker email invitation to portal, connects via Stripe. Needs business details + banking info.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 24</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================ -->
+<!-- MILESTONE 4: CAMPAIGN STRATEGY & CREATIVE -->
+<!-- ============================================ -->
+<div class="milestone">
+  <div class="milestone-header">
+    <div class="milestone-icon" style="background: var(--purple);">4</div>
+    <div class="milestone-title">Campaign Strategy &amp; Creative</div>
+    <span class="milestone-progress mp-red">0/6 complete</span>
+  </div>
+  <p class="milestone-desc">The investor-facing narrative, creative assets, and marketing materials. Everything here is blocked by the Campaign Brief, which is the single biggest bottleneck in the entire plan.</p>
+
+  <table>
+    <tr>
+      <th style="width:30%">Deliverable</th>
+      <th style="width:22%">Purpose</th>
+      <th style="width:12%">Owner</th>
+      <th style="width:12%">Due</th>
+      <th style="width:10%">Status</th>
+    </tr>
+    <tr>
+      <td>
+        <strong>Campaign Brief</strong>
+        <div class="task-notes" style="color:var(--red);font-weight:600;">BLOCKER: All creative production is frozen until this is approved. #1 bottleneck in the entire plan.</div>
+      </td>
+      <td class="task-notes">Source of truth for TSK's investor narrative. DealMaker's team builds landing page, emails, ads, banners, and video from this document.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 10</td>
+      <td><span class="badge badge-blocked">Blocker</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Perks</strong>
+      </td>
+      <td class="task-notes">Non-equity investor incentives at different tiers (e.g., "invest $500, get early booking access"). Disclosed in Form C.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 10</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Review Marketing Materials</strong>
+      </td>
+      <td class="task-notes">TSK must approve all investor-facing content before it goes live. SEC compliance. Includes landing page, emails, ads, banners, video. 2 business days for feedback per asset.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 17 - Apr 7</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Additional FAQ Responses</strong>
+      </td>
+      <td class="task-notes">Pre-answers to common investor questions ("How does TSK make money?", "When can I sell?"). Reduces checkout friction and moderation load.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Apr 7</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Campaign Press Release</strong>
+      </td>
+      <td class="task-notes">Optional. PR announcement for media coverage and traffic. Additional cost (add-on). Not required for launch.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Apr 7</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>DealMaker Partnership Program Agreement</strong>
+      </td>
+      <td class="task-notes">Access to exclusive media placements (Morning Brew, 1440, etc.). Highest-ROI channel in crowdfunding. ~50% of campaign budgets deploy here. <a href="https://hntrbrk.com/shark-tank/" target="_blank" rel="noopener">Same channels Hunterbrook flagged.</a></td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Apr 3</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================ -->
+<!-- MILESTONE 5: TECHNOLOGY & INFRASTRUCTURE -->
+<!-- ============================================ -->
+<div class="milestone">
+  <div class="milestone-header">
+    <div class="milestone-icon" style="background: var(--amber);">5</div>
+    <div class="milestone-title">Technology &amp; Infrastructure</div>
+    <span class="milestone-progress mp-red">0/5 complete</span>
+  </div>
+  <p class="milestone-desc">DNS, email, and platform setup that lets investors find, reach, and trust TSK. Most items are straightforward technical tasks once someone with domain access (Taiwo) is engaged.</p>
+
+  <table>
+    <tr>
+      <th style="width:30%">Deliverable</th>
+      <th style="width:22%">Purpose</th>
+      <th style="width:12%">Owner</th>
+      <th style="width:12%">Due</th>
+      <th style="width:10%">Status</th>
+    </tr>
+    <tr>
+      <td>
+        <strong>Paid Media Account Access</strong>
+      </td>
+      <td class="task-notes">DealMaker needs admin access to TSK's Google/Meta ad accounts to run investor acquisition campaigns. Jake (CMO) likely manages these.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 10</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Klaviyo Account Setup (Email + SMS)</strong>
+      </td>
+      <td class="task-notes">Dedicated email/SMS for investor outreach. Must be separate from TSK marketing account. Grant admin to reach.analytics@dealmaker.tech. SMS verification takes 7-10 days.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 17</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Portal Email Domain Setup</strong>
+      </td>
+      <td class="task-notes">Makes automated investor emails come from @thesovereignkingdom.com instead of generic DealMaker address. Add 3 DNS records. Needs Taiwo (CTO).</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 17</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Configure Landing Page Subdomain</strong>
+      </td>
+      <td class="task-notes">Creates invest.thesovereignkingdom.com. Branded URL for all ads, emails, and newsletters. Add CNAME + TXT records. Tutorial video provided. Needs DNS access.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 24</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Klaviyo Audience List</strong>
+      </td>
+      <td class="task-notes">Warm contacts for investor outreach. Existing mailing list, waitlist, social followers. Warm audiences convert at 3-5x cold traffic rates. If none exists, campaign relies entirely on paid ads.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Mar 24</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================ -->
+<!-- MILESTONE 6: LAUNCH READINESS -->
+<!-- ============================================ -->
+<div class="milestone">
+  <div class="milestone-header">
+    <div class="milestone-icon" style="background: var(--accent);">6</div>
+    <div class="milestone-title">Launch Readiness</div>
+    <span class="milestone-progress mp-amber">0/3 complete</span>
+  </div>
+  <p class="milestone-desc">Final steps before the offering goes live. Everything from Milestones 1-5 must be complete before these make sense.</p>
+
+  <table>
+    <tr>
+      <th style="width:30%">Deliverable</th>
+      <th style="width:22%">Purpose</th>
+      <th style="width:12%">Owner</th>
+      <th style="width:12%">Due</th>
+      <th style="width:10%">Status</th>
+    </tr>
+    <tr>
+      <td>
+        <strong>Prep Investment Link / Banner for Website</strong>
+      </td>
+      <td class="task-notes">"Invest" button on thesovereignkingdom.com linking to DealMaker offering page. Primary organic traffic source with UTM tracking. Taiwo (CTO) or Jake (CMO) adds to site.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Apr 7</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Prepare Investor Newsfeed (Engage Portal)</strong>
+      </td>
+      <td class="task-notes">Investor CRM + update hub. First post must go up before investors enter funnel so portal isn't empty. K follows DealMaker invitation, publishes initial update.</td>
+      <td class="owner-badge">K. Derhem</td>
+      <td class="task-notes">Apr 10</td>
+      <td><span class="badge badge-pending">Pending</span></td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Final Walkthrough</strong>
+      </td>
+      <td class="task-notes">DealMaker conducts final review of all compliance, marketing, technical, and legal components. Offering goes live and ads begin running.</td>
+      <td class="owner-badge">DealMaker</td>
+      <td class="task-notes">Apr 14</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================ -->
+<!-- MILESTONE 7: POST-LAUNCH OPERATIONS -->
+<!-- ============================================ -->
+<div class="milestone">
+  <div class="milestone-header">
+    <div class="milestone-icon" style="background: var(--text-dim);">7</div>
+    <div class="milestone-title">Post-Launch Operations</div>
+    <span class="milestone-progress mp-locked">0/7 &mdash; Locked</span>
+  </div>
+  <p class="milestone-desc">Live raise management, investor relations, and closing procedures. All DealMaker-managed. Unlocks after launch.</p>
+
+  <table>
+    <tr>
+      <th style="width:30%">Deliverable</th>
+      <th style="width:22%">Purpose</th>
+      <th style="width:12%">Owner</th>
+      <th style="width:12%">Due</th>
+      <th style="width:10%">Status</th>
+    </tr>
+    <tr>
+      <td><strong>Live Offering</strong></td>
+      <td class="task-notes">Portal activated, ads go live, offering accepts investments.</td>
+      <td class="owner-badge">DealMaker</td>
+      <td class="task-notes">Apr 14+</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+    <tr>
+      <td><strong>Next Steps &amp; Resources</strong></td>
+      <td class="task-notes">Playbook for managing a live campaign (dashboard, ad spend, inquiries).</td>
+      <td class="owner-badge">DealMaker</td>
+      <td class="task-notes">Apr 14+</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+    <tr>
+      <td><strong>Rolling Close / Disbursement</strong></td>
+      <td class="task-notes">Escrow releases in tranches after hitting stated minimum. How TSK gets the money.</td>
+      <td class="owner-badge">DealMaker</td>
+      <td class="task-notes">Apr 14+</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+    <tr>
+      <td><strong>Refunds &amp; International Investors</strong></td>
+      <td class="task-notes">Handling non-US investors and refund processing.</td>
+      <td class="owner-badge">DealMaker</td>
+      <td class="task-notes">Apr 14+</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+    <tr>
+      <td><strong>Post-Launch Support</strong></td>
+      <td class="task-notes">Webinar playbook, social strategy, investor communication templates.</td>
+      <td class="owner-badge">DealMaker</td>
+      <td class="task-notes">Apr 14+</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+    <tr>
+      <td><strong>Portal Demo &amp; IR Training</strong></td>
+      <td class="task-notes">TSK team training on investor relations portal and analytics.</td>
+      <td class="owner-badge">DealMaker</td>
+      <td class="task-notes">Apr 14+</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+    <tr>
+      <td><strong>Domain Verification</strong></td>
+      <td class="task-notes">Transfer invest.thesovereignkingdom.com ownership records to TSK.</td>
+      <td class="owner-badge">DealMaker</td>
+      <td class="task-notes">Apr 14+</td>
+      <td><span class="badge badge-locked">Locked</span></td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================ -->
+<!-- COO IMPLICATIONS -->
+<!-- ============================================ -->
+<div class="section">
+  <h2>COO Implications</h2>
+
+  <div class="alert alert-red">
+    <strong>Agreement Status:</strong> Steve's agreement is fully executed (Feb 22, 2026). However, Addendum No. 1 remains unsigned. The Bad Actor Check requires forms for all officers. If Steve is listed as an officer in these materials, he should review what's being submitted. Monitor Form C draft for name/bio exposure.
+  </div>
+
+  <div class="impl-grid">
+    <div class="impl-card">
+      <h4 style="color: var(--red);">Immediate Red Flags</h4>
+      <ul>
+        <li><strong>8+ days overdue on compliance.</strong> Financials, corporate docs, escrow all past due. If CPA wasn't engaged by Feb 24, reviewed financials are minimum 1 month out.</li>
+        <li><strong>Campaign Brief not submitted.</strong> This blocks ALL creative production. Nothing in Milestone 4 can move forward.</li>
+        <li><strong>Bad Actor Check incomplete.</strong> SEC-required. If Steve is listed as an officer, confirm what's being submitted.</li>
+        <li><strong>SPV decision still pending.</strong> Decision was unresolved as of Jan 8. Adding mid-process causes "significant delays" per DealMaker.</li>
+      </ul>
+    </div>
+    <div class="impl-card">
+      <h4 style="color: var(--green);">What Steve Should Track</h4>
+      <ul>
+        <li><strong>CPA engagement status.</strong> Has K engaged a CPA? If not, reviewed financials are 1+ months from engagement date. Longest lead-time item.</li>
+        <li><strong>Campaign Brief submission.</strong> Single biggest blocker. Ask K directly: is this drafted?</li>
+        <li><strong>Form C draft.</strong> When it exists, Steve must review before filing. Officer bios are included.</li>
+        <li><strong>Klaviyo + DNS setup.</strong> Technical tasks that need Taiwo (CTO) or whoever manages TSK's domain.</li>
+        <li><strong>Treasury account.</strong> Stripe setup for campaign banking. Requires K's business details.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="impl-card" style="margin-top: 12px;">
+    <h4 style="color: var(--amber);">Timeline Reality Check</h4>
+    <ul>
+      <li><strong>Onboarding started Dec 10.</strong> 85 days ago. 2 of 35 tasks complete. That's a completion rate of ~0.024 tasks/day.</li>
+      <li><strong>At current pace:</strong> 33 remaining tasks / 0.024 tasks per day = <strong>~1,375 days</strong> (~3.8 years). Obviously unsustainable.</li>
+      <li><strong>To hit April 14:</strong> 33 tasks in 41 days = <strong>0.80 tasks/day</strong>. Nearly one task per day, every day, starting now.</li>
+      <li><strong>Critical path:</strong> Reviewed financials alone take 1 month <em>after</em> CPA engagement. If CPA isn't engaged yet, April 14 is mathematically impossible.</li>
+      <li><strong>Realistic estimate:</strong> If TSK mobilizes immediately, earliest plausible launch is <strong>late May to mid-June 2026</strong>, assuming no SPV complications.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- KEY CONTACTS -->
+<div class="section">
+  <h2>DealMaker Contacts</h2>
+  <table>
+    <tr><th>Role</th><th>Name</th><th>Function</th></tr>
+    <tr><td><strong>Account Manager</strong></td><td>Riley Stanton</td><td>Primary relationship &amp; strategy partner</td></tr>
+    <tr><td><strong>Implementation Manager</strong></td><td>Ani Akelyan</td><td>Onboarding guide coordinating all deliverables</td></tr>
+    <tr><td><strong>Compliance</strong></td><td>Ingrid Wong (DealMaker Securities)</td><td>Regulatory compliance, broker-dealer</td></tr>
+    <tr><td><strong>TSK Point Person</strong></td><td>K. Derhem (CEO)</td><td>Owner of all TSK-side deliverables</td></tr>
+  </table>
+</div>
+
+<div class="footer">
+  <p>Source: <a href="https://start.dealmaker.tech/plans/faa32663" target="_blank" rel="noopener">start.dealmaker.tech/plans/faa32663</a></p>
+  <p>Confidential. Steve Cooper Only.</p>
+</div>
+
+</div>
+
+<script>
+// Open all links in new tabs
+document.querySelectorAll('a[href]').forEach(function(link) {
+  if (!link.getAttribute('href').startsWith('#') && !link.classList.contains('back-link')) {
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener');
+  }
+});
+</script>
+<script src="interactive.js"></script>
+<script>
+// Move injected toolbar into header slot (above date badge, right-justified)
+(function () {
+  var injected = document.querySelector('body > .tsk-toolbar');
+  var slot = document.getElementById('header-toolbar-slot');
+  if (injected && slot) {
+    injected.style.cssText = '';
+    slot.appendChild(injected);
+  }
+})();
+</script>
+</body>
+</html>

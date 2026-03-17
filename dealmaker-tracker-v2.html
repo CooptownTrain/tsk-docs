@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealMaker Campaign Tracker | TSK COO</title>
+<style>
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --surface-2: #f0efec;
+    --surface-3: #e8e7e3;
+    --border: #d8d6d0;
+    --border-light: #eae8e4;
+    --text: #1a1a1a;
+    --text-muted: #5c5c5c;
+    --text-dim: #8a8a8a;
+    --accent: #2c5282;
+    --accent-light: #ebf2fa;
+    --red: #c53030;
+    --red-bg: #fff5f5;
+    --red-border: #fcc;
+    --amber: #b7791f;
+    --amber-bg: #fefcf3;
+    --amber-border: #f0e0a0;
+    --green: #276749;
+    --green-bg: #f0fff4;
+    --green-border: #b2e0c0;
+    --purple: #553c9a;
+    --purple-light: #f3f0ff;
+    --blue: #2c5282;
+    --blue-bg: #ebf2fa;
+    --blue-border: #b3cde0;
+    --gray: #8a8a8a;
+    --gray-bg: #f0efec;
+    --gray-border: #d8d6d0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* === STICKY HEADER === */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 2px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 24px 0;
+  }
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .version-select {
+    font-size: 12px;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .date-badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* === TAB BAR === */
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    margin-top: 12px;
+    border-bottom: none;
+  }
+  .tab-btn {
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover {
+    color: var(--text);
+  }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* === VIEW PANELS === */
+  .view-panel { display: none; padding-top: 24px; }
+  .view-panel.active { display: block; }
+
+  /* === SHARED: KPI CARDS === */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .c-red { color: var(--red); }
+  .c-amber { color: var(--amber); }
+  .c-green { color: var(--green); }
+  .c-blue { color: var(--accent); }
+  .c-gray { color: var(--gray); }
+
+  /* === SHARED: SECTIONS === */
+  .section-box {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .section-box h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-box ul { padding-left: 18px; }
+  .section-box li { font-size: 14px; margin-bottom: 6px; }
+
+  /* === SHARED: BADGES === */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .badge-overdue { background: var(--red-bg); color: var(--red); }
+  .badge-at-risk { background: var(--amber-bg); color: var(--amber); }
+  .badge-pending { background: var(--blue-bg); color: var(--blue); }
+  .badge-done { background: var(--green-bg); color: var(--green); }
+  .badge-locked { background: var(--gray-bg); color: var(--gray); }
+
+  .badge-critical { background: var(--red-bg); color: var(--red); }
+  .badge-high { background: var(--amber-bg); color: var(--amber); }
+  .badge-medium { background: var(--blue-bg); color: var(--blue); }
+  .badge-low { background: var(--gray-bg); color: var(--gray); }
+
+  /* === SHARED: ALERT === */
+  .alert {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .alert-red { background: var(--red-bg); border: 1px solid var(--red-border); }
+  .alert-red strong { color: var(--red); }
+  .alert-amber { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+  .alert-amber strong { color: var(--amber); }
+  .alert-green { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .alert-green strong { color: var(--green); }
+
+  /* === SHARED: COPY BTN === */
+  .copy-btn {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .copy-btn:hover { background: var(--surface-2); }
+  .copy-btn.copied { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+
+  /* === SHARED: PRINT BTN === */
+  .print-btn {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    margin-left: 4px;
+  }
+  .print-btn:hover { background: var(--surface-2); }
+
+  /* === PROGRESS BAR === */
+  .progress-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+  .progress-bar-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-bar {
+    height: 8px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+
+  /* === DASHBOARD: 2-col layout === */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .dash-full { grid-column: 1 / -1; }
+
+  /* === TASK TABLE === */
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .filter-bar select,
+  .filter-bar input {
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+  }
+  .filter-bar input {
+    flex: 1;
+    min-width: 180px;
+  }
+  .row-count {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+
+  .task-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .task-table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: var(--surface-2);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+  }
+  .task-table th:hover { color: var(--accent); }
+  .task-table th .sort-arrow {
+    font-size: 10px;
+    margin-left: 3px;
+    opacity: 0.4;
+  }
+  .task-table th.sorted .sort-arrow { opacity: 1; color: var(--accent); }
+  .task-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+  }
+  .task-table tr:last-child td { border-bottom: none; }
+  .task-table .task-name { font-weight: 600; }
+  .task-table .task-notes {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .task-table .task-critical-note {
+    font-size: 11px;
+    color: var(--red);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .owner-badge {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* === GANTT CHART === */
+  .gantt-container {
+    overflow-x: auto;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .gantt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .gantt-header h3 { font-size: 14px; font-weight: 700; }
+  .gantt-grid {
+    display: grid;
+    grid-template-columns: 240px repeat(12, 1fr);
+    gap: 0;
+    position: relative;
+    min-width: 900px;
+  }
+  .gantt-col-header {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 6px 4px;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface-2);
+  }
+  .gantt-col-header:first-child {
+    text-align: left;
+    padding-left: 8px;
+  }
+  .gantt-label {
+    font-size: 12px;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .gantt-label .owner-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 8px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .gantt-cell {
+    border-bottom: 1px solid var(--border-light);
+    border-left: 1px solid var(--border-light);
+    padding: 6px 2px;
+    position: relative;
+    min-height: 32px;
+  }
+  .gantt-bar {
+    height: 18px;
+    border-radius: 3px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    min-width: 8px;
+  }
+  .gantt-bar-overdue { background: var(--red); opacity: 0.7; }
+  .gantt-bar-at-risk { background: var(--amber); opacity: 0.7; }
+  .gantt-bar-pending { background: var(--accent); opacity: 0.5; }
+  .gantt-bar-done { background: var(--green); opacity: 0.7; }
+  .gantt-bar-locked { background: var(--gray); opacity: 0.3; }
+  .gantt-milestone-row .gantt-label {
+    font-weight: 700;
+    background: var(--surface-2);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+  }
+  .gantt-milestone-row .gantt-cell {
+    background: var(--surface-2);
+  }
+  .gantt-today {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--red);
+    z-index: 5;
+    pointer-events: none;
+  }
+  .gantt-today::after {
+    content: 'TODAY';
+    position: absolute;
+    top: -18px;
+    left: -14px;
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--red);
+    letter-spacing: 0.5px;
+  }
+
+  /* === CALENDAR VIEW === */
+  .cal-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .cal-nav button {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .cal-nav button:hover { background: var(--surface-2); }
+  .cal-nav .cal-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .cal-dow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 10px 4px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+  .cal-cell {
+    min-height: 90px;
+    padding: 6px;
+    border-right: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+    position: relative;
+  }
+  .cal-cell:nth-child(7n) { border-right: none; }
+  .cal-cell.outside { background: var(--surface-2); opacity: 0.5; }
+  .cal-cell.today { border: 2px solid var(--accent); }
+  .cal-day {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .cal-chip {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    max-width: 100%;
+    position: relative;
+  }
+  .cal-chip:hover { opacity: 0.8; }
+  .cal-popover {
+    display: none;
+    position: absolute;
+    z-index: 200;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    padding: 14px;
+    width: 260px;
+    top: 100%;
+    left: 0;
+    font-size: 13px;
+  }
+  .cal-popover.visible { display: block; }
+  .cal-popover h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .cal-popover .pop-row { margin-bottom: 4px; }
+  .cal-popover .pop-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* === EMAIL BUILDER === */
+  .email-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .email-controls label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .email-controls select {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    font-family: inherit;
+  }
+  .email-preview {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 300px;
+  }
+  .email-preview h4 {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .email-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .email-actions button {
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+  }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--surface-2); }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .kpi-grid .kpi-card:last-child { grid-column: 1 / -1; }
+    .dash-grid { grid-template-columns: 1fr; }
+    .email-controls { grid-template-columns: 1fr; }
+    .filter-bar { flex-direction: column; align-items: stretch; }
+    .filter-bar .row-count { margin-left: 0; margin-top: 4px; }
+    .tab-btn { padding: 8px 12px; font-size: 12px; }
+    .gantt-container { padding: 8px; }
+  }
+
+  /* === PRINT === */
+  @media print {
+    body { background: #fff; }
+    .header { position: static; box-shadow: none; }
+    .tab-bar { display: none; }
+    .view-panel { display: none !important; }
+    .view-panel.print-target { display: block !important; }
+    .copy-btn, .print-btn { display: none; }
+    .filter-bar { display: none; }
+    #doc-toolbar { display: none !important; }
+    .task-table th { position: static; }
+  }
+  @media print and (orientation: landscape) {
+    .gantt-container { border: none; }
+  }
+  body.print-gantt .view-panel#gantt-view { display: block !important; }
+  body.print-gantt .view-panel:not(#gantt-view) { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- HEADER                                                        -->
+<!-- ============================================================ -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-row">
+      <div>
+        <h1>DealMaker Campaign Tracker</h1>
+        <div class="header-sub">
+          Reg CF ($5M) &bull;
+          <a href="https://start.dealmaker.tech/plans/faa32663" target="_blank" rel="noopener noreferrer">DealMaker Portal</a>
+        </div>
+      </div>
+      <div class="header-right">
+        <select class="version-select" id="version-select">
+          <option value="current">v1 &mdash; Mar 4, 2026 (Latest)</option>
+        </select>
+        <div class="date-badge" id="date-badge">Data as of Mar 4, 2026</div>
+      </div>
+    </div>
+    <div class="tab-bar" id="tab-bar">
+      <button class="tab-btn active" data-view="dashboard">Dashboard</button>
+      <button class="tab-btn" data-view="tasks">Tasks</button>
+      <button class="tab-btn" data-view="gantt">Gantt</button>
+      <button class="tab-btn" data-view="calendar">Calendar</button>
+      <button class="tab-btn" data-view="email">Email</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- VIEWS                                                         -->
+<!-- ============================================================ -->
+<div class="container">
+
+  <!-- DASHBOARD VIEW -->
+  <div class="view-panel active" id="dashboard-view" data-view="dashboard">
+    <div id="kpi-container"></div>
+    <div id="progress-container"></div>
+    <div class="dash-grid" id="dash-grid"></div>
+  </div>
+
+  <!-- TASK TABLE VIEW -->
+  <div class="view-panel" id="tasks-view" data-view="tasks">
+    <div class="filter-bar" id="filter-bar"></div>
+    <div id="task-table-container"></div>
+  </div>
+
+  <!-- GANTT VIEW -->
+  <div class="view-panel" id="gantt-view" data-view="gantt">
+    <div class="gantt-container" id="gantt-container"></div>
+  </div>
+
+  <!-- CALENDAR VIEW -->
+  <div class="view-panel" id="calendar-view" data-view="calendar">
+    <div id="cal-container"></div>
+  </div>
+
+  <!-- EMAIL BUILDER VIEW -->
+  <div class="view-panel" id="email-view" data-view="email">
+    <div id="email-container"></div>
+  </div>
+
+</div>
+
+<!-- Doc Toolbar -->
+<div id="doc-toolbar" style="position:fixed;top:16px;right:16px;z-index:9999;display:flex;gap:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;opacity:0.45;transition:opacity 0.2s" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.45'">
+  <button onclick="navigator.clipboard.writeText(document.body.innerText).then(function(){var b=event.target;b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Copy</button>
+  <button onclick="window.print()" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Save PDF</button>
+  <button onclick="window.print()" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Print</button>
+</div>
+<style media="print">#doc-toolbar{display:none!important}</style>
+<!-- /Doc Toolbar -->
+
+
+<script>
+// ============================================================
+// DATA LAYER
+// ============================================================
+
+var TRACKER_DATA = {
+  planId: 'faa32663',
+  updatedAt: '2026-03-04',
+  launchTarget: '2026-04-14',
+  portalUrl: 'https://start.dealmaker.tech/plans/faa32663',
+  timelineStart: '2026-02-10',
+  timelineEnd: '2026-04-28',
+  milestones: [
+    { id: 1, name: 'SEC Compliance & Legal', description: 'Everything required for TSK to legally file and maintain a Reg CF offering with the SEC. These are the hardest items to accelerate because they involve third parties (CPAs, legal counsel, broker-dealer).', color: 'red' },
+    { id: 2, name: 'Form C & SEC Filing', description: 'The actual SEC filing that makes the offering legal. Form C goes public on EDGAR and becomes a permanent record.', color: 'red' },
+    { id: 3, name: 'Escrow & Banking', description: 'How investor money gets collected, held, and eventually disbursed. No escrow = no way to accept investments.', color: 'red' },
+    { id: 4, name: 'Campaign Strategy & Creative', description: 'The investor-facing narrative, creative assets, and marketing materials. Everything here is blocked by the Campaign Brief.', color: 'purple' },
+    { id: 5, name: 'Technology & Infrastructure', description: 'DNS, email, and platform setup that lets investors find, reach, and trust TSK.', color: 'amber' },
+    { id: 6, name: 'Launch Readiness', description: 'Final steps before the offering goes live. Everything from Milestones 1-5 must be complete.', color: 'blue' },
+    { id: 7, name: 'Post-Launch Operations', description: 'Live raise management, investor relations, and closing procedures. All DealMaker-managed.', color: 'gray' }
+  ],
+  tasks: [
+    // Milestone 1: SEC Compliance & Legal
+    { id: 1, milestoneId: 1, name: 'Initiate Reviewed/Audited Financials', description: 'SEC-required financial statements for Form C. Reviewed takes ~1 month from CPA engagement, audited 2-3 months. 120-day validity window.', owner: 'K. Derhem', dueDate: '2026-02-24', status: 'incomplete', notes: 'CRITICAL PATH: Single most likely item to delay launch. If CPA not yet engaged, add 4-6 weeks from today.', week: 1, blocksOthers: true, hasLeadTime: true, isPostLaunch: false },
+    { id: 2, milestoneId: 1, name: 'Submit Reviewed/Audited Financials', description: 'Final CPA-prepared financials attached to Form C. Deliverable that started in Week 1 and finishes here.', owner: 'K. Derhem', dueDate: '2026-03-31', status: 'incomplete', notes: '', week: 7, blocksOthers: true, hasLeadTime: true, isPostLaunch: false },
+    { id: 3, milestoneId: 1, name: 'Corporate & Governance Documents', description: 'Broker-dealer due diligence. DealMaker Securities can\'t legally represent the offering without these. IRS SS-4/EIN, formation docs, board actions, SPV docs if applicable.', owner: 'K. Derhem', dueDate: '2026-02-24', status: 'incomplete', notes: '', week: 1, blocksOthers: true, hasLeadTime: false, isPostLaunch: false },
+    { id: 4, milestoneId: 1, name: 'Bad Actor Check', description: 'SEC disqualification screening. Required for every officer, director, and 20%+ owner. Offering can\'t proceed if anyone fails.', owner: 'K. Derhem', dueDate: '2026-03-03', status: 'incomplete', notes: 'COO WATCH: If Steve is listed as an officer, he needs to submit one. Do not sign until agreement is countersigned.', week: 2, blocksOthers: true, hasLeadTime: false, isPostLaunch: false },
+    { id: 5, milestoneId: 1, name: 'SPV Inception Financials', description: 'If using an SPV, it needs its own reviewed/audited financials even at $0. Decision was pending as of Jan 8. Adding later causes "significant delays."', owner: 'K. Derhem', dueDate: '2026-03-03', status: 'incomplete', notes: '', week: 2, blocksOthers: false, hasLeadTime: true, isPostLaunch: false },
+    { id: 6, milestoneId: 1, name: 'Privacy Policy', description: 'Legal requirement for collecting investor personal data on the investment portal.', owner: 'K. Derhem', dueDate: '2026-03-03', status: 'complete', notes: '', week: 2, blocksOthers: false, hasLeadTime: false, isPostLaunch: false, completedAt: '2026-03-01' },
+    { id: 7, milestoneId: 1, name: 'Comment Moderation Guide', description: 'SEC requires a public Q&A forum on the offering page. Issuer must monitor, respond, and ensure compliance. Failure to moderate = violation.', owner: 'K. Derhem', dueDate: '2026-04-03', status: 'incomplete', notes: '', week: 7, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+
+    // Milestone 2: Form C & SEC Filing
+    { id: 8, milestoneId: 2, name: 'Financial Information', description: 'Basic financial data for DealMaker\'s internal due diligence and campaign modeling.', owner: 'K. Derhem', dueDate: '2026-03-03', status: 'complete', notes: '', week: 2, blocksOthers: false, hasLeadTime: false, isPostLaunch: false, completedAt: '2026-03-02' },
+    { id: 9, milestoneId: 2, name: 'Capitalization Information', description: 'Form C requires full ownership disclosure + dilution calculation. Cap table, SAFEs, notes, options, warrants, shareholder history. Also critical for Steve\'s equity transparency request.', owner: 'K. Derhem', dueDate: '2026-03-03', status: 'incomplete', notes: '', week: 2, blocksOthers: true, hasLeadTime: false, isPostLaunch: false },
+    { id: 10, milestoneId: 2, name: 'Form C Generator', description: 'DealMaker\'s tool that assembles the SEC Form C from collected data (financials, cap table, terms, bios). Output = the actual filing.', owner: 'DealMaker', dueDate: '2026-03-10', status: 'incomplete', notes: '', week: 3, blocksOthers: true, hasLeadTime: false, isPostLaunch: false },
+    { id: 11, milestoneId: 2, name: 'Review & Submit Form C + Subscription Agreement', description: 'Legal review of the SEC filing + investor contract. "Hess and Set Apart" (legal counsel) should be driving this.', owner: 'K. Derhem', dueDate: '2026-03-17', status: 'incomplete', notes: 'COO WATCH: Steve must review before filing. Becomes a permanent SEC record. Contains officer bios, risk factors, use of proceeds.', week: 4, blocksOthers: true, hasLeadTime: false, isPostLaunch: false },
+
+    // Milestone 3: Escrow & Banking
+    { id: 12, milestoneId: 3, name: 'Escrow: Business Information Packet', description: 'Enterprise Bank & Trust KYC for the escrow account. Fill-in-the-blank form provided by DealMaker. Should take about an hour.', owner: 'K. Derhem', dueDate: '2026-02-24', status: 'incomplete', notes: '', week: 1, blocksOthers: true, hasLeadTime: false, isPostLaunch: false },
+    { id: 13, milestoneId: 3, name: 'Escrow: Government Issued ID', description: 'KYC/AML for escrow bank. Valid passport or driver\'s license for all individuals listed in BIP ownership section. Blocked by BIP completion.', owner: 'K. Derhem', dueDate: '2026-02-24', status: 'incomplete', notes: '', week: 1, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+    { id: 14, milestoneId: 3, name: 'Treasury Account Setup (Stripe)', description: 'Campaign bank for funding marketing from raise proceeds. K follows DealMaker email invitation to portal, connects via Stripe. Needs business details + banking info.', owner: 'K. Derhem', dueDate: '2026-03-24', status: 'incomplete', notes: '', week: 5, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+
+    // Milestone 4: Campaign Strategy & Creative
+    { id: 15, milestoneId: 4, name: 'Campaign Brief', description: 'Source of truth for TSK\'s investor narrative. DealMaker\'s team builds landing page, emails, ads, banners, and video from this document.', owner: 'K. Derhem', dueDate: '2026-03-10', status: 'incomplete', notes: 'BLOCKER: All creative production is frozen until this is approved. #1 bottleneck in the entire plan.', week: 3, blocksOthers: true, hasLeadTime: false, isPostLaunch: false },
+    { id: 16, milestoneId: 4, name: 'Perks', description: 'Non-equity investor incentives at different tiers (e.g., "invest $500, get early booking access"). Disclosed in Form C.', owner: 'K. Derhem', dueDate: '2026-03-10', status: 'incomplete', notes: '', week: 3, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+    { id: 17, milestoneId: 4, name: 'Review Marketing Materials', description: 'TSK must approve all investor-facing content before it goes live. SEC compliance. Includes landing page, emails, ads, banners, video. 2 business days for feedback per asset.', owner: 'K. Derhem', dueDate: '2026-04-07', status: 'incomplete', notes: '', week: 7, blocksOthers: false, hasLeadTime: true, isPostLaunch: false },
+    { id: 18, milestoneId: 4, name: 'Additional FAQ Responses', description: 'Pre-answers to common investor questions ("How does TSK make money?", "When can I sell?"). Reduces checkout friction and moderation load.', owner: 'K. Derhem', dueDate: '2026-04-07', status: 'incomplete', notes: '', week: 7, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+    { id: 19, milestoneId: 4, name: 'Campaign Press Release', description: 'Optional. PR announcement for media coverage and traffic. Additional cost (add-on). Not required for launch.', owner: 'K. Derhem', dueDate: '2026-04-07', status: 'incomplete', notes: '', week: 7, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+    { id: 20, milestoneId: 4, name: 'DealMaker Partnership Program Agreement', description: 'Access to exclusive media placements (Morning Brew, 1440, etc.). Highest-ROI channel in crowdfunding. ~50% of campaign budgets deploy here.', owner: 'K. Derhem', dueDate: '2026-04-03', status: 'incomplete', notes: '', week: 7, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+
+    // Milestone 5: Technology & Infrastructure
+    { id: 21, milestoneId: 5, name: 'Paid Media Account Access', description: 'DealMaker needs admin access to TSK\'s Google/Meta ad accounts to run investor acquisition campaigns. Jake (CMO) likely manages these.', owner: 'K. Derhem', dueDate: '2026-03-10', status: 'incomplete', notes: '', week: 3, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+    { id: 22, milestoneId: 5, name: 'Klaviyo Account Setup (Email + SMS)', description: 'Dedicated email/SMS for investor outreach. Must be separate from TSK marketing account. Grant admin to reach.analytics@dealmaker.tech. SMS verification takes 7-10 days.', owner: 'K. Derhem', dueDate: '2026-03-17', status: 'incomplete', notes: '', week: 4, blocksOthers: false, hasLeadTime: true, isPostLaunch: false },
+    { id: 23, milestoneId: 5, name: 'Portal Email Domain Setup', description: 'Makes automated investor emails come from @thesovereignkingdom.com instead of generic DealMaker address. Add 3 DNS records. Needs Taiwo (CTO).', owner: 'K. Derhem', dueDate: '2026-03-17', status: 'incomplete', notes: '', week: 4, blocksOthers: false, hasLeadTime: true, isPostLaunch: false },
+    { id: 24, milestoneId: 5, name: 'Configure Landing Page Subdomain', description: 'Creates invest.thesovereignkingdom.com. Branded URL for all ads, emails, and newsletters. Add CNAME + TXT records. Needs DNS access.', owner: 'K. Derhem', dueDate: '2026-03-24', status: 'incomplete', notes: '', week: 5, blocksOthers: false, hasLeadTime: true, isPostLaunch: false },
+    { id: 25, milestoneId: 5, name: 'Klaviyo Audience List', description: 'Warm contacts for investor outreach. Existing mailing list, waitlist, social followers. Warm audiences convert at 3-5x cold traffic rates.', owner: 'K. Derhem', dueDate: '2026-03-24', status: 'incomplete', notes: '', week: 5, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+
+    // Milestone 6: Launch Readiness
+    { id: 26, milestoneId: 6, name: 'Prep Investment Link / Banner for Website', description: '"Invest" button on thesovereignkingdom.com linking to DealMaker offering page. Primary organic traffic source with UTM tracking.', owner: 'K. Derhem', dueDate: '2026-04-07', status: 'incomplete', notes: '', week: 7, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+    { id: 27, milestoneId: 6, name: 'Prepare Investor Newsfeed (Engage Portal)', description: 'Investor CRM + update hub. First post must go up before investors enter funnel so portal isn\'t empty.', owner: 'K. Derhem', dueDate: '2026-04-10', status: 'incomplete', notes: '', week: 8, blocksOthers: false, hasLeadTime: false, isPostLaunch: false },
+    { id: 28, milestoneId: 6, name: 'Final Walkthrough', description: 'DealMaker conducts final review of all compliance, marketing, technical, and legal components. Offering goes live and ads begin running.', owner: 'DealMaker', dueDate: '2026-04-14', status: 'incomplete', notes: '', week: 9, blocksOthers: true, hasLeadTime: false, isPostLaunch: false },
+
+    // Milestone 7: Post-Launch Operations
+    { id: 29, milestoneId: 7, name: 'Live Offering', description: 'Portal activated, ads go live, offering accepts investments.', owner: 'DealMaker', dueDate: '2026-04-14', status: 'incomplete', notes: '', week: 9, blocksOthers: false, hasLeadTime: false, isPostLaunch: true },
+    { id: 30, milestoneId: 7, name: 'Next Steps & Resources', description: 'Playbook for managing a live campaign (dashboard, ad spend, inquiries).', owner: 'DealMaker', dueDate: '2026-04-14', status: 'incomplete', notes: '', week: 9, blocksOthers: false, hasLeadTime: false, isPostLaunch: true },
+    { id: 31, milestoneId: 7, name: 'Rolling Close / Disbursement', description: 'Escrow releases in tranches after hitting stated minimum. How TSK gets the money.', owner: 'DealMaker', dueDate: '2026-04-14', status: 'incomplete', notes: '', week: 9, blocksOthers: false, hasLeadTime: false, isPostLaunch: true },
+    { id: 32, milestoneId: 7, name: 'Refunds & International Investors', description: 'Handling non-US investors and refund processing.', owner: 'DealMaker', dueDate: '2026-04-14', status: 'incomplete', notes: '', week: 9, blocksOthers: false, hasLeadTime: false, isPostLaunch: true },
+    { id: 33, milestoneId: 7, name: 'Post-Launch Support', description: 'Webinar playbook, social strategy, investor communication templates.', owner: 'DealMaker', dueDate: '2026-04-14', status: 'incomplete', notes: '', week: 9, blocksOthers: false, hasLeadTime: false, isPostLaunch: true },
+    { id: 34, milestoneId: 7, name: 'Portal Demo & IR Training', description: 'TSK team training on investor relations portal and analytics.', owner: 'DealMaker', dueDate: '2026-04-14', status: 'incomplete', notes: '', week: 9, blocksOthers: false, hasLeadTime: false, isPostLaunch: true },
+    { id: 35, milestoneId: 7, name: 'Domain Verification', description: 'Transfer invest.thesovereignkingdom.com ownership records to TSK.', owner: 'DealMaker', dueDate: '2026-04-14', status: 'incomplete', notes: '', week: 9, blocksOthers: false, hasLeadTime: false, isPostLaunch: true }
+  ],
+  contacts: [
+    { role: 'Account Manager', name: 'Riley Stanton', fn: 'Primary relationship & strategy partner' },
+    { role: 'Implementation Manager', name: 'Ani Akelyan', fn: 'Onboarding guide coordinating all deliverables' },
+    { role: 'Compliance', name: 'Ingrid Wong (DealMaker Securities)', fn: 'Regulatory compliance, broker-dealer' },
+    { role: 'TSK Point Person', name: 'K. Derhem (CEO)', fn: 'Owner of all TSK-side deliverables' }
+  ]
+};
+
+
+// ============================================================
+// STATUS & PRIORITY DERIVATION
+// ============================================================
+
+function getToday() {
+  // Use current date but allow override for testing
+  return new Date();
+}
+
+function deriveStatus(task) {
+  if (task.status === 'complete') return 'done';
+  if (task.isPostLaunch) return 'locked';
+
+  var today = getToday();
+  var due = new Date(task.dueDate + 'T23:59:59');
+  if (due < today) return 'overdue';
+
+  var daysUntilDue = (due - today) / 86400000;
+  if (daysUntilDue <= 14) return 'at-risk';
+
+  return 'pending';
+}
+
+function derivePriority(task) {
+  var name = task.name.toLowerCase();
+  // Hard launch blockers
+  if (['financials', 'escrow', 'form c', 'bad actor', 'capitalization'].some(function(k) { return name.indexOf(k) > -1; })) return 'critical';
+  if (task.blocksOthers) return 'critical';
+  if (task.hasLeadTime) return 'high';
+  if (!task.isPostLaunch && task.week <= 5) return 'medium';
+  return 'low';
+}
+
+function enrichTasks(tasks) {
+  return tasks.map(function(t) {
+    var copy = Object.assign({}, t);
+    copy.computedStatus = deriveStatus(t);
+    copy.computedPriority = derivePriority(t);
+    return copy;
+  });
+}
+
+var TASKS = enrichTasks(TRACKER_DATA.tasks);
+
+
+// ============================================================
+// UTILITY FUNCTIONS
+// ============================================================
+
+function $(id) { return document.getElementById(id); }
+
+function statusLabel(s) {
+  var map = { overdue: 'Overdue', 'at-risk': 'At Risk', pending: 'Pending', done: 'Done', locked: 'Locked' };
+  return map[s] || s;
+}
+
+function priorityLabel(p) {
+  var map = { critical: 'Critical', high: 'High', medium: 'Medium', low: 'Low' };
+  return map[p] || p;
+}
+
+function statusColor(s) {
+  var map = { overdue: 'red', 'at-risk': 'amber', pending: 'blue', done: 'green', locked: 'gray' };
+  return map[s] || 'gray';
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  var d = new Date(dateStr + 'T00:00:00');
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[d.getMonth()] + ' ' + d.getDate();
+}
+
+function daysBetween(a, b) {
+  return Math.ceil((new Date(b) - new Date(a)) / 86400000);
+}
+
+function ownerInitials(name) {
+  if (!name) return '??';
+  return name.split(/[\s.]+/).filter(function(p) { return p.length > 0; }).map(function(p) { return p[0].toUpperCase(); }).slice(0, 2).join('');
+}
+
+function getMilestone(id) {
+  return TRACKER_DATA.milestones.find(function(m) { return m.id === id; });
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function copyWithFormatting(el) {
+  try {
+    var html = el.innerHTML;
+    var text = el.innerText;
+    var blob = new Blob([html], { type: 'text/html' });
+    var textBlob = new Blob([text], { type: 'text/plain' });
+    navigator.clipboard.write([
+      new ClipboardItem({ 'text/html': blob, 'text/plain': textBlob })
+    ]);
+    return true;
+  } catch (e) {
+    // Fallback
+    var range = document.createRange();
+    range.selectNodeContents(el);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+    return true;
+  }
+}
+
+function makeCopyBtn(targetId) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copy';
+  btn.addEventListener('click', function() {
+    var target = $(targetId) || btn.closest('.section-box');
+    if (target && copyWithFormatting(target)) {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+    }
+  });
+  return btn;
+}
+
+function makePrintBtn(viewId) {
+  var btn = document.createElement('button');
+  btn.className = 'print-btn';
+  btn.textContent = 'Print';
+  btn.addEventListener('click', function() {
+    var panels = document.querySelectorAll('.view-panel');
+    panels.forEach(function(p) { p.classList.remove('print-target'); });
+    $(viewId).classList.add('print-target');
+    window.print();
+    setTimeout(function() { $(viewId).classList.remove('print-target'); }, 100);
+  });
+  return btn;
+}
+
+
+// ============================================================
+// PERSISTENCE (localStorage)
+// ============================================================
+
+var Store = {
+  _key: function(k) { return 'tsk:tracker:' + k; },
+  get: function(k, def) {
+    try { var v = localStorage.getItem(this._key(k)); return v ? JSON.parse(v) : def; } catch(e) { return def; }
+  },
+  set: function(k, v) {
+    try { localStorage.setItem(this._key(k), JSON.stringify(v)); } catch(e) {}
+  }
+};
+
+
+// ============================================================
+// TAB NAVIGATION
+// ============================================================
+
+(function initTabs() {
+  var saved = Store.get('activeTab', 'dashboard');
+  var btns = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.view-panel');
+
+  function activate(view) {
+    btns.forEach(function(b) { b.classList.toggle('active', b.dataset.view === view); });
+    panels.forEach(function(p) { p.classList.toggle('active', p.dataset.view === view); });
+    Store.set('activeTab', view);
+  }
+
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() { activate(btn.dataset.view); });
+  });
+
+  activate(saved);
+})();
+
+
+// ============================================================
+// DASHBOARD VIEW
+// ============================================================
+
+(function renderDashboard() {
+  var today = getToday();
+  var launch = new Date(TRACKER_DATA.launchTarget + 'T00:00:00');
+  var daysToLaunch = Math.max(0, Math.ceil((launch - today) / 86400000));
+
+  var counts = { overdue: 0, 'at-risk': 0, pending: 0, done: 0, locked: 0 };
+  TASKS.forEach(function(t) { counts[t.computedStatus] = (counts[t.computedStatus] || 0) + 1; });
+
+  var total = TASKS.length;
+  var pct = Math.round((counts.done / total) * 100);
+  var pctColor = pct >= 75 ? 'green' : pct >= 25 ? 'amber' : 'red';
+
+  // KPIs
+  var kpiHtml = '<div class="kpi-grid">' +
+    '<div class="kpi-card"><div class="kpi-value c-' + pctColor + '">' + pct + '%</div><div class="kpi-label">Complete</div><div class="kpi-sub">' + counts.done + ' of ' + total + ' tasks</div></div>' +
+    '<div class="kpi-card"><div class="kpi-value c-red">' + counts.overdue + '</div><div class="kpi-label">Overdue</div></div>' +
+    '<div class="kpi-card"><div class="kpi-value c-amber">' + counts['at-risk'] + '</div><div class="kpi-label">At Risk</div></div>' +
+    '<div class="kpi-card"><div class="kpi-value c-green">' + counts.done + '</div><div class="kpi-label">Done</div></div>' +
+    '<div class="kpi-card"><div class="kpi-value c-' + (daysToLaunch <= 30 ? 'red' : daysToLaunch <= 60 ? 'amber' : 'blue') + '">' + daysToLaunch + '</div><div class="kpi-label">Days to Launch</div><div class="kpi-sub">' + formatDate(TRACKER_DATA.launchTarget) + '</div></div>' +
+  '</div>';
+  $('kpi-container').innerHTML = kpiHtml;
+
+  // Progress bar
+  var pbHtml = '<div class="progress-bar-wrap"><div class="progress-bar-label"><span>Completion: ' + counts.done + ' of ' + total + ' tasks</span><span>' + pct + '%</span></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%;background:var(--' + pctColor + ')"></div></div></div>';
+  $('progress-container').innerHTML = pbHtml;
+
+  // Dashboard grid
+  var overdues = TASKS.filter(function(t) { return t.computedStatus === 'overdue'; });
+  var criticals = TASKS.filter(function(t) { return t.computedStatus === 'overdue' && t.computedPriority === 'critical'; });
+  var actionable = TASKS.filter(function(t) { return t.computedStatus === 'overdue' || t.computedStatus === 'at-risk'; })
+    .sort(function(a, b) {
+      var po = { critical: 0, high: 1, medium: 2, low: 3 };
+      return (po[a.computedPriority] || 9) - (po[b.computedPriority] || 9);
+    }).slice(0, 5);
+
+  // Executive summary
+  var summaryText = counts.done + ' of ' + total + ' tasks complete (' + pct + '%). ';
+  if (counts.overdue > 0) summaryText += counts.overdue + ' overdue. ';
+  if (criticals.length > 0) summaryText += criticals.length + ' critical items past due. ';
+  if (daysToLaunch <= 45) summaryText += 'Launch target is ' + formatDate(TRACKER_DATA.launchTarget) + ' (' + daysToLaunch + ' days). ';
+  if (pct < 25 && daysToLaunch < 60) summaryText += 'At current pace, the launch date is not achievable without immediate acceleration.';
+
+  var grid = $('dash-grid');
+  var html = '';
+
+  // Exec summary
+  html += '<div class="section-box dash-full" id="dash-summary"><h3>Executive Summary <span></span></h3><p style="font-size:14px;line-height:1.6">' + summaryText + '</p></div>';
+
+  // Critical risks
+  if (criticals.length > 0) {
+    html += '<div class="section-box" id="dash-risks"><h3 style="color:var(--red)">Critical Risks</h3><ul>';
+    criticals.forEach(function(t) {
+      var m = getMilestone(t.milestoneId);
+      html += '<li><strong>' + escapeHtml(t.name) + '</strong> (due ' + formatDate(t.dueDate) + ', ' + m.name + ')';
+      if (t.notes) html += '<br><span style="font-size:12px;color:var(--red)">' + escapeHtml(t.notes) + '</span>';
+      html += '</li>';
+    });
+    html += '</ul></div>';
+  }
+
+  // Recommended actions
+  if (actionable.length > 0) {
+    html += '<div class="section-box" id="dash-actions"><h3>Recommended Actions</h3><ol>';
+    actionable.forEach(function(t) {
+      html += '<li><strong>' + escapeHtml(t.name) + '</strong> <span class="badge badge-' + t.computedStatus + '">' + statusLabel(t.computedStatus) + '</span> <span class="badge badge-' + t.computedPriority + '">' + priorityLabel(t.computedPriority) + '</span><br><span style="font-size:12px;color:var(--text-muted)">Owner: ' + escapeHtml(t.owner) + ' / Due: ' + formatDate(t.dueDate) + '</span></li>';
+    });
+    html += '</ol></div>';
+  }
+
+  // Milestone progress
+  html += '<div class="section-box dash-full" id="dash-milestones"><h3>Milestone Progress</h3>';
+  TRACKER_DATA.milestones.forEach(function(m) {
+    var mTasks = TASKS.filter(function(t) { return t.milestoneId === m.id; });
+    var mDone = mTasks.filter(function(t) { return t.computedStatus === 'done'; }).length;
+    var mOverdue = mTasks.filter(function(t) { return t.computedStatus === 'overdue'; }).length;
+    var mPct = Math.round((mDone / mTasks.length) * 100);
+    var barColor = mDone === mTasks.length ? 'green' : mOverdue > 0 ? 'red' : 'amber';
+    html += '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:4px"><span>' + m.id + '. ' + escapeHtml(m.name) + '</span><span style="color:var(--text-muted)">' + mDone + '/' + mTasks.length + '</span></div><div class="progress-bar"><div class="progress-fill" style="width:' + mPct + '%;background:var(--' + barColor + ')"></div></div></div>';
+  });
+  html += '</div>';
+
+  // COO implications
+  html += '<div class="section-box dash-full" id="dash-coo"><h3>COO Implications</h3>';
+  html += '<div class="alert alert-red"><strong>Agreement Status:</strong> Steve\'s agreement is fully executed (Feb 22, 2026). However, Addendum No. 1 remains unsigned. The Bad Actor Check requires forms for all officers. If Steve is listed as an officer in these materials, he should review what\'s being submitted. Monitor Form C draft for name/bio exposure.</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
+  html += '<div style="background:var(--red-bg);border:1px solid var(--red-border);border-radius:8px;padding:14px"><h4 style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px">Immediate Red Flags</h4><ul style="padding-left:16px;font-size:13px"><li>8+ days overdue on compliance. Financials, corporate docs, escrow all past due.</li><li>Campaign Brief not submitted. Blocks ALL creative production.</li><li>Bad Actor Check incomplete. SEC-required.</li><li>SPV decision still pending.</li></ul></div>';
+  html += '<div style="background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:14px"><h4 style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px">What Steve Should Track</h4><ul style="padding-left:16px;font-size:13px"><li>CPA engagement status. Longest lead-time item.</li><li>Campaign Brief submission. Single biggest blocker.</li><li>Form C draft. Steve must review before filing.</li><li>Klaviyo + DNS setup. Needs Taiwo (CTO).</li><li>Treasury account. Stripe setup for campaign banking.</li></ul></div>';
+  html += '</div></div>';
+
+  // DealMaker contacts
+  html += '<div class="section-box dash-full" id="dash-contacts"><h3>DealMaker Contacts</h3><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim)">Role</th><th style="text-align:left;padding:6px 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim)">Name</th><th style="text-align:left;padding:6px 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim)">Function</th></tr>';
+  TRACKER_DATA.contacts.forEach(function(c) {
+    html += '<tr style="border-bottom:1px solid var(--border-light)"><td style="padding:8px;font-weight:600">' + escapeHtml(c.role) + '</td><td style="padding:8px">' + escapeHtml(c.name) + '</td><td style="padding:8px;color:var(--text-muted)">' + escapeHtml(c.fn) + '</td></tr>';
+  });
+  html += '</table></div>';
+
+  grid.innerHTML = html;
+
+  // Add copy buttons to sections
+  ['dash-summary', 'dash-risks', 'dash-actions', 'dash-milestones', 'dash-coo', 'dash-contacts'].forEach(function(id) {
+    var el = $(id);
+    if (el) {
+      var h3 = el.querySelector('h3 span') || el.querySelector('h3');
+      if (h3.tagName === 'SPAN') {
+        h3.appendChild(makeCopyBtn(id));
+      }
+    }
+  });
+})();
+
+
+// ============================================================
+// TASK TABLE VIEW
+// ============================================================
+
+(function renderTaskTable() {
+  var container = $('filter-bar');
+
+  // Build unique values
+  var owners = [];
+  var weeks = [];
+  TASKS.forEach(function(t) {
+    if (owners.indexOf(t.owner) === -1) owners.push(t.owner);
+    if (weeks.indexOf(t.week) === -1) weeks.push(t.week);
+  });
+  weeks.sort(function(a, b) { return a - b; });
+
+  var html = '<select id="f-status"><option value="">All Statuses</option><option value="overdue">Overdue</option><option value="at-risk">At Risk</option><option value="pending">Pending</option><option value="done">Done</option><option value="locked">Locked</option></select>';
+  html += '<select id="f-priority"><option value="">All Priorities</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>';
+  html += '<select id="f-owner"><option value="">All Owners</option>';
+  owners.forEach(function(o) { html += '<option value="' + escapeHtml(o) + '">' + escapeHtml(o) + '</option>'; });
+  html += '</select>';
+  html += '<select id="f-week"><option value="">All Weeks</option>';
+  weeks.forEach(function(w) { html += '<option value="' + w + '">Week ' + w + '</option>'; });
+  html += '</select>';
+  html += '<input type="text" id="f-search" placeholder="Search tasks...">';
+  html += '<span class="row-count" id="row-count"></span>';
+  container.innerHTML = html;
+
+  // Build table
+  var tbl = '<table class="task-table" id="task-table"><thead><tr>';
+  var cols = [
+    { key: 'name', label: 'Task', width: '25%' },
+    { key: 'description', label: 'Purpose', width: '22%' },
+    { key: 'milestone', label: 'Milestone', width: '12%' },
+    { key: 'owner', label: 'Owner', width: '10%' },
+    { key: 'dueDate', label: 'Due', width: '8%' },
+    { key: 'computedStatus', label: 'Status', width: '8%' },
+    { key: 'computedPriority', label: 'Priority', width: '8%' }
+  ];
+  cols.forEach(function(c) {
+    tbl += '<th data-sort="' + c.key + '" style="width:' + c.width + '">' + c.label + ' <span class="sort-arrow">&#9650;</span></th>';
+  });
+  tbl += '</tr></thead><tbody id="task-tbody">';
+  TASKS.forEach(function(t) {
+    var m = getMilestone(t.milestoneId);
+    tbl += '<tr data-task-id="' + t.id + '" data-status="' + t.computedStatus + '" data-priority="' + t.computedPriority + '" data-owner="' + escapeHtml(t.owner) + '" data-week="' + t.week + '">';
+    tbl += '<td><div class="task-name">' + escapeHtml(t.name) + '</div>';
+    if (t.notes) tbl += '<div class="task-critical-note">' + escapeHtml(t.notes) + '</div>';
+    tbl += '</td>';
+    tbl += '<td><div class="task-notes">' + escapeHtml(t.description) + '</div></td>';
+    tbl += '<td><span style="font-size:12px;color:var(--text-muted)">' + m.id + '. ' + escapeHtml(m.name) + '</span></td>';
+    tbl += '<td><span class="owner-badge">' + escapeHtml(t.owner) + '</span></td>';
+    tbl += '<td style="white-space:nowrap;font-size:13px">' + formatDate(t.dueDate) + '</td>';
+    tbl += '<td><span class="badge badge-' + t.computedStatus + '">' + statusLabel(t.computedStatus) + '</span></td>';
+    tbl += '<td><span class="badge badge-' + t.computedPriority + '">' + priorityLabel(t.computedPriority) + '</span></td>';
+    tbl += '</tr>';
+  });
+  tbl += '</tbody></table>';
+
+  var tableContainer = $('task-table-container');
+  tableContainer.innerHTML = tbl;
+
+  // Filter logic
+  function applyFilters() {
+    var status = $('f-status').value;
+    var priority = $('f-priority').value;
+    var owner = $('f-owner').value;
+    var week = $('f-week').value;
+    var search = $('f-search').value.toLowerCase();
+
+    var rows = document.querySelectorAll('#task-tbody tr');
+    var shown = 0;
+    rows.forEach(function(row) {
+      var show = true;
+      if (status && row.dataset.status !== status) show = false;
+      if (priority && row.dataset.priority !== priority) show = false;
+      if (owner && row.dataset.owner !== owner) show = false;
+      if (week && row.dataset.week !== week) show = false;
+      if (search && row.textContent.toLowerCase().indexOf(search) === -1) show = false;
+      row.style.display = show ? '' : 'none';
+      if (show) shown++;
+    });
+    $('row-count').textContent = 'Showing ' + shown + ' of ' + TASKS.length + ' tasks';
+  }
+
+  ['f-status', 'f-priority', 'f-owner', 'f-week', 'f-search'].forEach(function(id) {
+    $(id).addEventListener('input', applyFilters);
+    $(id).addEventListener('change', applyFilters);
+  });
+
+  applyFilters();
+
+  // Sort logic
+  var sortState = { col: null, asc: true };
+  document.querySelectorAll('#task-table th[data-sort]').forEach(function(th) {
+    th.addEventListener('click', function() {
+      var key = th.dataset.sort;
+      if (sortState.col === key) {
+        sortState.asc = !sortState.asc;
+      } else {
+        sortState.col = key;
+        sortState.asc = true;
+      }
+
+      // Update arrows
+      document.querySelectorAll('#task-table th').forEach(function(h) { h.classList.remove('sorted'); h.querySelector('.sort-arrow').innerHTML = '&#9650;'; });
+      th.classList.add('sorted');
+      th.querySelector('.sort-arrow').innerHTML = sortState.asc ? '&#9650;' : '&#9660;';
+
+      // Sort rows
+      var tbody = $('task-tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+      var statusOrder = { overdue: 0, 'at-risk': 1, pending: 2, done: 3, locked: 4 };
+
+      rows.sort(function(a, b) {
+        var taskA = TASKS.find(function(t) { return t.id === parseInt(a.dataset.taskId); });
+        var taskB = TASKS.find(function(t) { return t.id === parseInt(b.dataset.taskId); });
+        var va, vb;
+
+        if (key === 'milestone') {
+          va = taskA.milestoneId; vb = taskB.milestoneId;
+        } else if (key === 'computedPriority') {
+          va = priorityOrder[taskA.computedPriority]; vb = priorityOrder[taskB.computedPriority];
+        } else if (key === 'computedStatus') {
+          va = statusOrder[taskA.computedStatus]; vb = statusOrder[taskB.computedStatus];
+        } else if (key === 'dueDate') {
+          va = taskA.dueDate; vb = taskB.dueDate;
+        } else {
+          va = (taskA[key] || '').toString().toLowerCase();
+          vb = (taskB[key] || '').toString().toLowerCase();
+        }
+
+        if (va < vb) return sortState.asc ? -1 : 1;
+        if (va > vb) return sortState.asc ? 1 : -1;
+        return 0;
+      });
+
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+
+  // Add copy & print buttons for table
+  var filterBar = $('filter-bar');
+  var copyTbl = document.createElement('button');
+  copyTbl.className = 'copy-btn';
+  copyTbl.textContent = 'Copy Table';
+  copyTbl.addEventListener('click', function() {
+    if (copyWithFormatting($('task-table'))) {
+      copyTbl.textContent = 'Copied!';
+      copyTbl.classList.add('copied');
+      setTimeout(function() { copyTbl.textContent = 'Copy Table'; copyTbl.classList.remove('copied'); }, 1500);
+    }
+  });
+  filterBar.appendChild(copyTbl);
+  filterBar.appendChild(makePrintBtn('tasks-view'));
+})();
+
+
+// ============================================================
+// GANTT CHART VIEW
+// ============================================================
+
+(function renderGantt() {
+  var container = $('gantt-container');
+  var startDate = new Date(TRACKER_DATA.timelineStart + 'T00:00:00');
+  var today = getToday();
+
+  // 12 weeks
+  var weeks = [];
+  for (var i = 0; i < 12; i++) {
+    var ws = new Date(startDate.getTime() + i * 7 * 86400000);
+    weeks.push(ws);
+  }
+
+  var html = '<div class="gantt-header"><h3>Campaign Timeline</h3><span>';
+  html += '</span></div>';
+  html += '<div class="gantt-grid" id="gantt-grid">';
+
+  // Column headers
+  html += '<div class="gantt-col-header">Task</div>';
+  weeks.forEach(function(ws) {
+    var m = ws.getMonth() + 1;
+    var d = ws.getDate();
+    html += '<div class="gantt-col-header">W' + (weeks.indexOf(ws) + 1) + '<br>' + m + '/' + d + '</div>';
+  });
+
+  // Rows by milestone
+  TRACKER_DATA.milestones.forEach(function(m) {
+    // Milestone header row
+    html += '<div class="gantt-label gantt-milestone-row" style="grid-column:1">' + m.id + '. ' + escapeHtml(m.name) + '</div>';
+    for (var w = 0; w < 12; w++) {
+      html += '<div class="gantt-cell gantt-milestone-row"></div>';
+    }
+
+    var mTasks = TASKS.filter(function(t) { return t.milestoneId === m.id; });
+    mTasks.forEach(function(t) {
+      // Label
+      html += '<div class="gantt-label" title="' + escapeHtml(t.name) + ' - ' + escapeHtml(t.owner) + ' - Due ' + formatDate(t.dueDate) + ' - ' + statusLabel(t.computedStatus) + '">';
+      html += '<span class="owner-dot">' + ownerInitials(t.owner) + '</span>';
+      html += '<span style="overflow:hidden;text-overflow:ellipsis">' + escapeHtml(t.name) + '</span>';
+      html += '</div>';
+
+      // Cells with bar
+      var due = new Date(t.dueDate + 'T00:00:00');
+      var totalDays = 12 * 7;
+
+      for (var w = 0; w < 12; w++) {
+        var weekStart = weeks[w];
+        var weekEnd = new Date(weekStart.getTime() + 7 * 86400000);
+
+        html += '<div class="gantt-cell">';
+        // Place bar in the week the task is due
+        if (due >= weekStart && due < weekEnd) {
+          var dayInWeek = (due - weekStart) / 86400000;
+          var leftPct = (dayInWeek / 7 * 100);
+          html += '<div class="gantt-bar gantt-bar-' + t.computedStatus + '" style="left:0;right:' + Math.max(0, 100 - leftPct - 20) + '%" title="' + escapeHtml(t.name) + ' - Due ' + formatDate(t.dueDate) + '"></div>';
+        }
+        // For tasks that span multiple weeks (week < due week), show continuation bar
+        else if (t.week > 0) {
+          var taskWeekStart = weeks[t.week - 1];
+          if (taskWeekStart && weekStart >= taskWeekStart && weekStart < due && due > weekEnd) {
+            html += '<div class="gantt-bar gantt-bar-' + t.computedStatus + '" style="left:0;right:0" title="' + escapeHtml(t.name) + '"></div>';
+          }
+        }
+        html += '</div>';
+      }
+    });
+  });
+
+  html += '</div>'; // end gantt-grid
+
+  container.innerHTML = html;
+
+  // Add today marker
+  var grid = $('gantt-grid');
+  var daysSinceStart = (today - startDate) / 86400000;
+  var totalDays = 12 * 7;
+  if (daysSinceStart >= 0 && daysSinceStart <= totalDays) {
+    // Calculate position relative to the grid (skip the label column)
+    var gridCols = 13; // 1 label + 12 weeks
+    var labelWidthPct = 240; // approximate px
+    var pctOfTimeline = daysSinceStart / totalDays;
+    var marker = document.createElement('div');
+    marker.className = 'gantt-today';
+    // Position: label column is ~240px, then the rest is the 12 week columns
+    marker.style.left = 'calc(240px + ' + (pctOfTimeline * 100) + '% * (1 - 240px / ' + grid.scrollWidth + 'px))';
+    // Simpler approach: use percentage of total width
+    var totalWidth = grid.scrollWidth || 900;
+    var labelFraction = 240 / totalWidth;
+    var dataFraction = 1 - labelFraction;
+    var markerLeft = labelFraction + (pctOfTimeline * dataFraction);
+    marker.style.left = (markerLeft * 100) + '%';
+    grid.style.position = 'relative';
+    grid.appendChild(marker);
+  }
+
+  // Add print button
+  var ganttHeader = container.querySelector('.gantt-header span');
+  ganttHeader.appendChild(makeCopyBtn('gantt-grid'));
+  ganttHeader.appendChild(makePrintBtn('gantt-view'));
+})();
+
+
+// ============================================================
+// CALENDAR VIEW
+// ============================================================
+
+(function renderCalendar() {
+  var container = $('cal-container');
+  var currentMonth = new Date();
+  // Default to the month with the most tasks, or current
+  var taskMonths = {};
+  TASKS.forEach(function(t) {
+    var key = t.dueDate.substring(0, 7);
+    taskMonths[key] = (taskMonths[key] || 0) + 1;
+  });
+
+  var calState = { year: currentMonth.getFullYear(), month: currentMonth.getMonth() };
+
+  function renderMonth() {
+    var year = calState.year;
+    var month = calState.month;
+    var firstDay = new Date(year, month, 1);
+    var lastDay = new Date(year, month + 1, 0);
+    var startDow = firstDay.getDay(); // 0=Sun
+    var daysInMonth = lastDay.getDate();
+    var today = getToday();
+    var todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    var html = '<div class="cal-nav">';
+    html += '<button id="cal-prev">&larr; Prev</button>';
+    html += '<span class="cal-title">' + months[month] + ' ' + year + '</span>';
+    html += '<button id="cal-next">Next &rarr;</button>';
+    html += '<span style="margin-left:auto"></span>';
+    html += '</div>';
+
+    html += '<div class="cal-grid">';
+    // Day-of-week headers
+    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(function(d) {
+      html += '<div class="cal-dow">' + d + '</div>';
+    });
+
+    // Empty cells before first day
+    for (var e = 0; e < startDow; e++) {
+      html += '<div class="cal-cell outside"></div>';
+    }
+
+    // Day cells
+    for (var d = 1; d <= daysInMonth; d++) {
+      var dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+      var isToday = dateStr === todayStr;
+      html += '<div class="cal-cell' + (isToday ? ' today' : '') + '">';
+      html += '<div class="cal-day">' + d + '</div>';
+
+      // Tasks on this day
+      TASKS.forEach(function(t) {
+        if (t.dueDate === dateStr) {
+          var sc = statusColor(t.computedStatus);
+          html += '<div class="cal-chip" style="background:var(--' + sc + '-bg,var(--surface-2));color:var(--' + sc + ',var(--text-muted));border:1px solid var(--' + sc + '-border,var(--border-light))" data-task-id="' + t.id + '" title="' + escapeHtml(t.name) + ' - ' + escapeHtml(t.owner) + ' - ' + statusLabel(t.computedStatus) + '">' + escapeHtml(t.name.length > 20 ? t.name.substring(0, 18) + '...' : t.name) + '</div>';
+        }
+      });
+
+      html += '</div>';
+    }
+
+    // Fill remaining cells
+    var totalCells = startDow + daysInMonth;
+    var remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+    for (var r = 0; r < remaining; r++) {
+      html += '<div class="cal-cell outside"></div>';
+    }
+
+    html += '</div>'; // end cal-grid
+
+    container.innerHTML = html;
+
+    // Nav events
+    $('cal-prev').addEventListener('click', function() {
+      calState.month--;
+      if (calState.month < 0) { calState.month = 11; calState.year--; }
+      renderMonth();
+    });
+    $('cal-next').addEventListener('click', function() {
+      calState.month++;
+      if (calState.month > 11) { calState.month = 0; calState.year++; }
+      renderMonth();
+    });
+
+    // Task chip click -> popover
+    document.querySelectorAll('.cal-chip[data-task-id]').forEach(function(chip) {
+      chip.addEventListener('click', function(e) {
+        e.stopPropagation();
+        // Remove existing popovers
+        document.querySelectorAll('.cal-popover').forEach(function(p) { p.remove(); });
+
+        var task = TASKS.find(function(t) { return t.id === parseInt(chip.dataset.taskId); });
+        if (!task) return;
+        var m = getMilestone(task.milestoneId);
+
+        var pop = document.createElement('div');
+        pop.className = 'cal-popover visible';
+        pop.innerHTML = '<h4>' + escapeHtml(task.name) + '</h4>' +
+          '<div class="pop-row"><span class="pop-label">Status</span> <span class="badge badge-' + task.computedStatus + '">' + statusLabel(task.computedStatus) + '</span> <span class="badge badge-' + task.computedPriority + '">' + priorityLabel(task.computedPriority) + '</span></div>' +
+          '<div class="pop-row"><span class="pop-label">Owner</span> ' + escapeHtml(task.owner) + '</div>' +
+          '<div class="pop-row"><span class="pop-label">Due</span> ' + formatDate(task.dueDate) + '</div>' +
+          '<div class="pop-row"><span class="pop-label">Milestone</span> ' + m.id + '. ' + escapeHtml(m.name) + '</div>' +
+          (task.description ? '<div class="pop-row" style="margin-top:8px;font-size:12px;color:var(--text-muted)">' + escapeHtml(task.description) + '</div>' : '') +
+          (task.notes ? '<div class="pop-row" style="margin-top:4px;font-size:12px;color:var(--red);font-weight:600">' + escapeHtml(task.notes) + '</div>' : '');
+
+        chip.style.position = 'relative';
+        chip.appendChild(pop);
+      });
+    });
+
+    // Click outside closes popover
+    document.addEventListener('click', function() {
+      document.querySelectorAll('.cal-popover').forEach(function(p) { p.remove(); });
+    });
+  }
+
+  // Start on month with most activity
+  var bestMonth = Object.keys(taskMonths).sort(function(a, b) { return taskMonths[b] - taskMonths[a]; })[0];
+  if (bestMonth) {
+    calState.year = parseInt(bestMonth.split('-')[0]);
+    calState.month = parseInt(bestMonth.split('-')[1]) - 1;
+  }
+
+  renderMonth();
+})();
+
+
+// ============================================================
+// EMAIL BUILDER VIEW
+// ============================================================
+
+(function renderEmailBuilder() {
+  var container = $('email-container');
+
+  var recipients = {
+    'k-derhem': { name: 'K. Derhem', email: 'admin@thesovereignkingdom.com', greeting: 'K' },
+    'leadership': { name: 'Leadership Team', email: '', greeting: 'Team' },
+    'dealmaker': { name: 'DealMaker Team', email: 'riley.stanton@dealmaker.tech', greeting: 'Riley' },
+    'custom': { name: 'Custom', email: '', greeting: '' }
+  };
+
+  var scopes = {
+    'overdue': 'Overdue Only',
+    'this-week': 'This Week\'s Priorities',
+    'all-open': 'All Open Tasks',
+    'full': 'Full Report'
+  };
+
+  var html = '<div class="email-controls">';
+  html += '<div><label>Recipient</label><select id="email-recipient"><option value="k-derhem">K. Derhem (CEO)</option><option value="leadership">Leadership Team</option><option value="dealmaker">DealMaker Team</option><option value="custom">Custom</option></select></div>';
+  html += '<div><label>Scope</label><select id="email-scope"><option value="overdue">Overdue Only</option><option value="this-week">This Week\'s Priorities</option><option value="all-open">All Open Tasks</option><option value="full">Full Report</option></select></div>';
+  html += '</div>';
+  html += '<div class="email-preview" id="email-preview"></div>';
+  html += '<div class="email-actions">';
+  html += '<button class="btn-primary" id="email-copy">Copy with Formatting</button>';
+  html += '<button class="btn-secondary" id="email-gmail">Open in Gmail</button>';
+  html += '</div>';
+
+  container.innerHTML = html;
+
+  function generateEmail() {
+    var recipientKey = $('email-recipient').value;
+    var scopeKey = $('email-scope').value;
+    var r = recipients[recipientKey];
+    var today = getToday();
+
+    // Filter tasks by scope
+    var filtered;
+    if (scopeKey === 'overdue') {
+      filtered = TASKS.filter(function(t) { return t.computedStatus === 'overdue'; });
+    } else if (scopeKey === 'this-week') {
+      var weekEnd = new Date(today.getTime() + 7 * 86400000);
+      filtered = TASKS.filter(function(t) {
+        var due = new Date(t.dueDate + 'T00:00:00');
+        return t.computedStatus !== 'done' && t.computedStatus !== 'locked' && due <= weekEnd;
+      });
+    } else if (scopeKey === 'all-open') {
+      filtered = TASKS.filter(function(t) { return t.computedStatus !== 'done' && t.computedStatus !== 'locked'; });
+    } else {
+      filtered = TASKS.slice();
+    }
+
+    // Sort by priority
+    var po = { critical: 0, high: 1, medium: 2, low: 3 };
+    filtered.sort(function(a, b) { return (po[a.computedPriority] || 9) - (po[b.computedPriority] || 9); });
+
+    // Build email
+    var counts = { overdue: 0, 'at-risk': 0, done: 0, total: TASKS.length };
+    TASKS.forEach(function(t) { if (t.computedStatus === 'overdue') counts.overdue++; if (t.computedStatus === 'at-risk') counts['at-risk']++; if (t.computedStatus === 'done') counts.done++; });
+
+    var greeting = r.greeting || 'Team';
+    var subject = 'DealMaker Onboarding Status Update';
+    if (scopeKey === 'overdue') subject = 'DealMaker: ' + counts.overdue + ' Overdue Items Require Attention';
+
+    var body = '<h4 style="color:var(--text-dim);border-bottom:1px solid var(--border-light);padding-bottom:8px;margin-bottom:12px">To: ' + escapeHtml(r.name) + (r.email ? ' (' + escapeHtml(r.email) + ')' : '') + '<br>Subject: ' + escapeHtml(subject) + '</h4>';
+
+    body += '<p>' + escapeHtml(greeting) + ',</p>';
+
+    // Context line
+    body += '<p>Quick update on the Reg CF onboarding status. We\'re at <strong>' + counts.done + '/' + counts.total + ' tasks complete</strong>';
+    if (counts.overdue > 0) body += ' with <strong style="color:var(--red)">' + counts.overdue + ' overdue</strong>';
+    body += '.</p>';
+
+    // Task list
+    if (filtered.length > 0) {
+      body += '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0">';
+      body += '<tr style="border-bottom:2px solid var(--border)"><th style="text-align:left;padding:6px 8px;font-size:11px;text-transform:uppercase;color:var(--text-dim)">Task</th><th style="text-align:left;padding:6px 8px;font-size:11px;text-transform:uppercase;color:var(--text-dim)">Owner</th><th style="text-align:left;padding:6px 8px;font-size:11px;text-transform:uppercase;color:var(--text-dim)">Due</th><th style="text-align:left;padding:6px 8px;font-size:11px;text-transform:uppercase;color:var(--text-dim)">Status</th></tr>';
+      filtered.forEach(function(t) {
+        body += '<tr style="border-bottom:1px solid var(--border-light)"><td style="padding:6px 8px"><strong>' + escapeHtml(t.name) + '</strong></td><td style="padding:6px 8px">' + escapeHtml(t.owner) + '</td><td style="padding:6px 8px">' + formatDate(t.dueDate) + '</td><td style="padding:6px 8px"><span class="badge badge-' + t.computedStatus + '">' + statusLabel(t.computedStatus) + '</span></td></tr>';
+      });
+      body += '</table>';
+    } else {
+      body += '<p style="color:var(--text-muted);font-style:italic">No tasks match this scope.</p>';
+    }
+
+    // Action items for specific recipients
+    if (recipientKey === 'k-derhem' && counts.overdue > 0) {
+      body += '<p><strong>Immediate action needed:</strong></p><ul>';
+      var overdues = filtered.filter(function(t) { return t.computedStatus === 'overdue'; }).slice(0, 5);
+      overdues.forEach(function(t) {
+        body += '<li>' + escapeHtml(t.name) + ' (was due ' + formatDate(t.dueDate) + ')</li>';
+      });
+      body += '</ul>';
+    }
+
+    body += '<p>Let me know if you need anything or want to discuss priorities.</p>';
+    body += '<p>Best,<br>Steve</p>';
+
+    $('email-preview').innerHTML = body;
+
+    // Store subject for Gmail
+    $('email-preview').dataset.subject = subject;
+    $('email-preview').dataset.to = r.email || '';
+  }
+
+  $('email-recipient').addEventListener('change', generateEmail);
+  $('email-scope').addEventListener('change', generateEmail);
+
+  // Copy button
+  $('email-copy').addEventListener('click', function() {
+    var preview = $('email-preview');
+    if (copyWithFormatting(preview)) {
+      $('email-copy').textContent = 'Copied!';
+      setTimeout(function() { $('email-copy').textContent = 'Copy with Formatting'; }, 1500);
+    }
+  });
+
+  // Gmail button
+  $('email-gmail').addEventListener('click', function() {
+    var preview = $('email-preview');
+    var subject = encodeURIComponent(preview.dataset.subject || 'DealMaker Status Update');
+    var to = encodeURIComponent(preview.dataset.to || '');
+    var body = encodeURIComponent(preview.innerText);
+    var url = 'https://mail.google.com/mail/?view=cm&su=' + subject + '&to=' + to + '&body=' + body;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  });
+
+  generateEmail();
+})();
+
+
+// ============================================================
+// EXTERNAL LINKS: open in new tab
+// ============================================================
+document.querySelectorAll('a[href]').forEach(function(link) {
+  if (!link.getAttribute('href').startsWith('#')) {
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener noreferrer');
+  }
+});
+</script>
+
+</body>
+</html>

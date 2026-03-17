@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TSK COO Weekly Briefing | March 2-8, 2026</title>
+<style>
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --surface-2: #f0efec;
+    --surface-3: #e8e7e3;
+    --border: #d8d6d0;
+    --border-light: #eae8e4;
+    --text: #1a1a1a;
+    --text-muted: #5c5c5c;
+    --text-dim: #8a8a8a;
+    --accent: #2c5282;
+    --accent-light: #ebf2fa;
+    --accent-dim: #d4e2f0;
+    --red: #c53030;
+    --red-bg: #fff5f5;
+    --red-border: #fcc;
+    --amber: #b7791f;
+    --amber-bg: #fefcf3;
+    --amber-border: #f0e0a0;
+    --green: #276749;
+    --green-bg: #f0fff4;
+    --green-border: #b2e0c0;
+    --gold: #8b6914;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  /* --- HEADER --- */
+  .header {
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    padding-top: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .header h1 span { color: var(--gold); }
+  .header .subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .header .date-badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .header .date-badge strong {
+    color: var(--text);
+    display: block;
+    font-size: 15px;
+  }
+
+  /* --- SOURCE REFS --- */
+  .src {
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 1px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .src:hover { background: var(--accent-dim); }
+
+  /* --- STATUS DASHBOARD --- */
+  .dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .stat-card .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .stat-card .value {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .stat-card .sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .stat-card.critical { border-color: var(--red-border); background: var(--red-bg); }
+  .stat-card.critical .value { color: var(--red); }
+  .stat-card.warning { border-color: var(--amber-border); background: var(--amber-bg); }
+  .stat-card.warning .value { color: var(--amber); }
+  .stat-card.neutral .value { color: var(--text-muted); }
+
+  /* --- SECTIONS --- */
+  .section {
+    margin-bottom: 36px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-number {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  /* --- CALENDAR --- */
+  .cal-grid { display: grid; gap: 8px; }
+  .cal-row {
+    display: grid;
+    grid-template-columns: 90px 100px 1fr 200px;
+    gap: 12px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: border-color 0.15s;
+  }
+  .cal-row:hover { border-color: var(--accent); }
+  .cal-row.highlight {
+    border-color: var(--amber-border);
+    background: var(--amber-bg);
+    border-width: 2px;
+    padding: 11px 15px;
+  }
+  .cal-day { font-weight: 700; font-size: 13px; color: var(--accent); }
+  .cal-time { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .cal-meeting { font-weight: 600; font-size: 14px; }
+  .cal-who { font-size: 13px; color: var(--text-muted); text-align: right; }
+  .cal-note {
+    grid-column: 1 / -1;
+    font-size: 13px;
+    color: var(--amber);
+    padding: 10px 14px;
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-radius: 8px;
+    margin-top: 4px;
+  }
+
+  /* --- MEETING PREP CARDS --- */
+  .prep-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .prep-card-header {
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .prep-card-header:hover { background: var(--surface-2); }
+  .prep-card-header h3 { font-size: 16px; font-weight: 600; }
+  .prep-card-header .meta { font-size: 13px; color: var(--text-muted); }
+  .prep-card-header .toggle { color: var(--text-dim); font-size: 18px; transition: transform 0.2s; }
+  .prep-card.open .toggle { transform: rotate(90deg); }
+  .prep-card-body { display: none; padding: 0 20px 20px; border-top: 1px solid var(--border-light); }
+  .prep-card.open .prep-card-body { display: block; padding-top: 16px; }
+
+  .prep-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--surface-2);
+    font-size: 14px;
+  }
+  .prep-row:last-child { border-bottom: none; }
+  .prep-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    padding-top: 2px;
+  }
+
+  .q-list { list-style: none; padding: 0; }
+  .q-list li {
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  .q-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    border: 2px solid var(--accent);
+  }
+  .watch-list li::before {
+    background: var(--amber-bg);
+    border-color: var(--amber);
+  }
+
+  /* --- RISK REGISTER --- */
+  .risk-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    align-items: start;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .risk-badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 0;
+    text-align: center;
+    border-radius: 6px;
+  }
+  .risk-critical { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .risk-high { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .risk-medium { background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border); }
+  .risk-text { font-size: 14px; }
+  .risk-text strong { color: var(--text); }
+
+  /* --- INTEL --- */
+  .intel-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .intel-date { font-size: 12px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+  .intel-source { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+  .intel-headline { font-size: 14px; font-weight: 500; }
+  .intel-tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* --- DRIVE INVENTORY --- */
+  .inventory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .inventory-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .inventory-card h4 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .inventory-card.present h4 { color: var(--green); }
+  .inventory-card.missing h4 { color: var(--red); }
+  .inventory-card.stale h4 { color: var(--amber); }
+  .inventory-card.discrepancy h4 { color: var(--red); }
+  .inventory-card ul { list-style: none; padding: 0; }
+  .inventory-card li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 3px 0;
+    padding-left: 12px;
+    position: relative;
+  }
+  .inventory-card li::before { content: '\2022'; position: absolute; left: 0; color: var(--text-dim); }
+
+  /* --- QUESTIONS --- */
+  .question-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .question-text { font-size: 14px; }
+  .question-target {
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 3px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+
+  /* --- ACTION ITEMS --- */
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .action-check {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .action-text { font-size: 14px; }
+  .action-deadline { font-size: 12px; color: var(--amber); margin-top: 2px; }
+
+  /* --- GUARDRAILS --- */
+  .guardrail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .guardrail-card { padding: 16px; border-radius: 10px; }
+  .guardrail-card.dont { background: var(--red-bg); border: 1px solid var(--red-border); }
+  .guardrail-card.do { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .guardrail-card h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .guardrail-card.dont h4 { color: var(--red); }
+  .guardrail-card.do h4 { color: var(--green); }
+  .guardrail-card li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 3px 0;
+    list-style: none;
+    padding-left: 16px;
+    position: relative;
+  }
+  .guardrail-card.dont li::before { content: '\2715'; position: absolute; left: 0; color: var(--red); }
+  .guardrail-card.do li::before { content: '\2713'; position: absolute; left: 0; color: var(--green); }
+
+  /* --- SCOPE BANNER --- */
+  .fyj-banner {
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--amber);
+  }
+  .fyj-banner strong { color: var(--text); }
+
+  /* --- DETAIL CARDS --- */
+  .detail-card { background: var(--surface); border: 1px solid var(--border-light); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; }
+  .detail-label { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+
+  /* --- DATA TABLES --- */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  .data-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); padding: 8px 12px; border-bottom: 2px solid var(--border); }
+  .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+  .data-table tr:last-child td { border-bottom: none; }
+
+  /* --- RACI TABLE --- */
+  .raci-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .raci-table th { text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); padding: 8px 6px; border-bottom: 2px solid var(--border); }
+  .raci-table th:first-child { text-align: left; width: 30%; }
+  .raci-table td { padding: 8px 6px; border-bottom: 1px solid var(--border-light); text-align: center; vertical-align: top; }
+  .raci-table td:first-child { text-align: left; font-weight: 500; }
+  .raci-table .r { color: var(--red); font-weight: 700; }
+  .raci-table .a { color: var(--accent); font-weight: 700; }
+  .raci-table .c { color: var(--amber); }
+  .raci-table .i { color: var(--text-dim); }
+
+  /* --- PROCESS STEPS --- */
+  .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0; }
+  .process-step { background: var(--surface); border: 1px solid var(--border-light); border-radius: 10px; padding: 14px 12px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .process-step .step-num { font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 4px; }
+  .process-step .step-label { font-size: 13px; font-weight: 500; }
+
+  /* --- CASE STUDY STATS --- */
+  .case-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 12px 0; }
+  .case-stat { background: var(--surface); border: 1px solid var(--border-light); border-radius: 10px; padding: 12px; text-align: center; }
+  .case-stat .cs-value { font-size: 22px; font-weight: 700; color: var(--accent); }
+  .case-stat .cs-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* --- ALERT BOXES --- */
+  .alert { padding: 14px 18px; border-radius: 10px; font-size: 14px; margin-bottom: 12px; }
+  .alert.amber { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber); }
+  .alert.red { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+  .alert strong { color: var(--text); }
+
+  /* --- GUARDRAIL VARIANTS --- */
+  .guardrail-card.left { background: var(--accent-light); border: 1px solid var(--accent-dim); }
+  .guardrail-card.right { background: var(--surface); border: 1px solid var(--border-light); }
+  .guardrail-card.left h4, .guardrail-card.right h4 { color: var(--accent); }
+  .guardrail-card.right h4 { color: var(--text-muted); }
+  .guardrail-card.left li::before { content: '\2022'; position: absolute; left: 0; color: var(--accent); }
+  .guardrail-card.right li::before { content: '\2022'; position: absolute; left: 0; color: var(--text-dim); }
+
+  .stat-card.good { border-color: var(--green-border); background: var(--green-bg); }
+  .stat-card.good .value { color: var(--green); }
+
+  /* --- FOOTER --- */
+  .footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 2px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 768px) {
+    .cal-row { grid-template-columns: 1fr; gap: 4px; }
+    .cal-who { text-align: left; }
+    .inventory-grid { grid-template-columns: 1fr; }
+    .guardrail-grid { grid-template-columns: 1fr; }
+    .dashboard { grid-template-columns: repeat(2, 1fr); }
+    .header-top { flex-direction: column; gap: 12px; }
+    .risk-item { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: repeat(2, 1fr); }
+    .prep-row { grid-template-columns: 1fr; }
+    .raci-table { font-size: 11px; }
+    .case-stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* --- SECTION NAV --- */
+  .back-link {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--accent); text-decoration: none; }
+
+  .section-nav {
+    position: fixed;
+    top: 80px;
+    left: 16px;
+    width: 170px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 12px 0;
+  }
+  .section-nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    line-height: 1.3;
+  }
+  .section-nav a:hover { color: var(--text); text-decoration: none; }
+  .section-nav a.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+  .section-nav .nav-num {
+    font-weight: 700;
+    font-size: 10px;
+    min-width: 18px;
+    color: inherit;
+  }
+  .section-nav .nav-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (min-width: 1400px) {
+    .container { margin-left: 200px; }
+  }
+
+  .nav-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 200;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  @media (max-width: 1200px) {
+    .section-nav {
+      display: none;
+      position: fixed;
+      top: auto;
+      bottom: 60px;
+      left: 20px;
+      width: 220px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      padding: 12px 0;
+      max-height: 60vh;
+    }
+    .section-nav.open { display: block; }
+    .nav-toggle { display: block; }
+  }
+
+  /* --- PRINT --- */
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .container { max-width: 100%; padding: 0; }
+    .stat-card, .prep-card, .risk-item, .intel-item, .question-card, .action-item, .inventory-card, .guardrail-card, .detail-card, .process-step, .case-stat { box-shadow: none; }
+    .prep-card-body { display: block !important; }
+    .section-nav, .nav-toggle, .back-link { display: none !important; }
+  }
+</style>
+<link rel="stylesheet" href="interactive.css">
+</head>
+<body>
+
+<a href="index.html" class="back-link">&larr; Briefings</a>
+
+<nav class="section-nav" id="sectionNav">
+  <a href="#w1"><span class="nav-num">1</span><span class="nav-label">Deal Status</span></a>
+  <a href="#w2"><span class="nav-num">2</span><span class="nav-label">Week at a Glance</span></a>
+  <a href="#w3"><span class="nav-num">3</span><span class="nav-label">Meeting Prep</span></a>
+  <a href="#w4"><span class="nav-num">4</span><span class="nav-label">Intelligence</span></a>
+  <a href="#w5"><span class="nav-num">5</span><span class="nav-label">Drive Inventory</span></a>
+  <a href="#w6"><span class="nav-num">6</span><span class="nav-label">Risk Register</span></a>
+  <a href="#wg"><span class="nav-num">!</span><span class="nav-label">Guardrails</span></a>
+  <a href="#w7"><span class="nav-num">7</span><span class="nav-label">Questions</span></a>
+  <a href="#w8"><span class="nav-num">8</span><span class="nav-label">Actions</span></a>
+  <a href="#w9"><span class="nav-num">9</span><span class="nav-label">Agreement</span></a>
+  <a href="#w10"><span class="nav-num">10</span><span class="nav-label">DealMaker</span></a>
+  <a href="#w11"><span class="nav-num">11</span><span class="nav-label">Reg CF</span></a>
+  <a href="#w12"><span class="nav-num">12</span><span class="nav-label">Responsibilities</span></a>
+  <a href="#w13"><span class="nav-num">13</span><span class="nav-label">TSK Position</span></a>
+  <a href="#w14"><span class="nav-num">14</span><span class="nav-label">COO Deliverables</span></a>
+  <a href="#w15"><span class="nav-num">15</span><span class="nav-label">EnergyX Case</span></a>
+</nav>
+
+<button class="nav-toggle" id="navToggle" onclick="document.getElementById('sectionNav').classList.toggle('open')">Sections</button>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <h1>TSK <span>COO Weekly Briefing</span></h1>
+        <div class="subtitle">Prepared for Stephen Cooper | Chief Operating Officer</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div id="header-toolbar-slot"></div>
+        <div class="date-badge"><strong>March 2 - 8, 2026</strong><br>Week 1 as COO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. DEAL STATUS DASHBOARD -->
+  <div class="section" id="w1">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <div class="section-title">Deal Status Dashboard</div>
+    </div>
+    <div class="dashboard">
+      <div class="stat-card critical">
+        <div class="label">Agreement</div>
+        <div class="value">UNSIGNED</div>
+        <div class="sub">Steve signed Feb 22 (8 days ago)<br>TSK has NOT countersigned<br><a href="https://drive.google.com/file/d/1EgluhzYH8m858tEMvvXApryWQ7nzVK4r/view" class="src">View Agreement</a></div>
+      </div>
+      <div class="stat-card critical">
+        <div class="label">Capital Raised</div>
+        <div class="value">$0</div>
+        <div class="sub">999+ days with no raise activity<br>$5M trigger not met<br><a href="https://drive.google.com/drive/folders/1uoG-KorUagdHf_Vl0OmnX1vnvPMMQKjG" class="src">DealMaker Folder</a></div>
+      </div>
+      <div class="stat-card warning">
+        <div class="label">Deal Health</div>
+        <div class="value">19<span style="font-size:14px;color:var(--text-dim)">/100</span></div>
+        <div class="sub">Critical action required<br>&lt;15% close probability<br><a href="https://docs.google.com/spreadsheets/d/1MVB9Fu4xTZmg5sS42xGf4YQJfZFC_6jBGXIBq7nhRTs/edit" class="src">Intel Database</a></div>
+      </div>
+      <div class="stat-card neutral">
+        <div class="label">Sunset Countdown</div>
+        <div class="value">727</div>
+        <div class="sub">days remaining<br>Expires Feb 21, 2028</div>
+      </div>
+      <div class="stat-card critical">
+        <div class="label">Compensation</div>
+        <div class="value">$0</div>
+        <div class="sub">Not triggered<br>$0 until $5M raised</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="label">C-Suite Departures</div>
+        <div class="value">2</div>
+        <div class="sub">Nathan Johnson (COO)<br>Sam Shah (CRO) &mdash; both unexplained</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. WEEK AT A GLANCE -->
+  <div class="section" id="w2">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <div class="section-title">Week at a Glance</div>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-row">
+        <div class="cal-day">MON 3/2</div>
+        <div class="cal-time">12:30-1pm</div>
+        <div class="cal-meeting">1:1 with CMO (bi-weekly)</div>
+        <div class="cal-who">Jake Wall &nbsp;<a href="https://docs.google.com/document/d/1WVUviff7DNePMgCGrJ3LiG9RQ6drRumazMWk-eLIzf0/edit" class="src">Notes</a></div>
+      </div>
+      <div class="cal-row highlight">
+        <div class="cal-day">MON 3/2</div>
+        <div class="cal-time">2:30-3pm</div>
+        <div class="cal-meeting">DealMaker + CEO/CRO/CFO</div>
+        <div class="cal-who">Riley Stanton, K, Robert, Axel &nbsp;<a href="https://www.google.com/calendar/event?eid=ZGc3a2dtcGh0djkxOXByY2plZmtsc3Rmb2MgY29vQHRoZXNvdmVyZWlnbmtpbmdkb20uY29t" class="src">Cal</a></div>
+      </div>
+      <div class="cal-row highlight">
+        <div class="cal-day">TUE 3/3</div>
+        <div class="cal-time">1-2pm</div>
+        <div class="cal-meeting">Monthly Team Meeting (FIRST)</div>
+        <div class="cal-who">Full team</div>
+      </div>
+      <div class="cal-row">
+        <div class="cal-day">TUE 3/3</div>
+        <div class="cal-time">2-2:30pm</div>
+        <div class="cal-meeting">1:1 with CTO (bi-weekly)</div>
+        <div class="cal-who">Taiwo Oyeniyi &nbsp;<a href="https://www.google.com/calendar/event?eid=Xzc1MmthZDlnOGdya2NiOWs2MHA0Y2I5azhjczQ0YjlvOGdyM2FiOWs4a29rY2MyNjg1Mmo2ZzluNnNfMjAyNjAzMDNUMTkwMDAwWiBjb29AdGhlc292ZXJlaWdua2luZ2RvbS5jb20" class="src">Cal</a></div>
+      </div>
+      <div class="cal-row">
+        <div class="cal-day">THU 3/5</div>
+        <div class="cal-time">2:30-3pm</div>
+        <div class="cal-meeting">1:1 with IP Counsel (bi-weekly)</div>
+        <div class="cal-who">Sergei Orel</div>
+      </div>
+      <div class="cal-row">
+        <div class="cal-day">THU 3/5</div>
+        <div class="cal-time">4:30-5pm</div>
+        <div class="cal-meeting">1:1 with CRO (bi-weekly)</div>
+        <div class="cal-who">Robert Fitzgerald</div>
+      </div>
+      <div class="cal-row">
+        <div class="cal-day">FRI 3/7</div>
+        <div class="cal-time">4:30-5pm</div>
+        <div class="cal-meeting">1:1 with CCO (bi-weekly)</div>
+        <div class="cal-who">Kamrul Khan</div>
+      </div>
+      <div class="cal-note">
+        <strong>Note:</strong> Allison asked K to "stay behind after your Monday meeting to provide specific direction on how to engage with the rest of the team." <a href="mailto:admin@thesovereignkingdom.com" class="src">Allison Email, Feb 27</a> &mdash; Only 2 of 7 meetings confirmed via calendar API. Verify all meetings are properly calendared.
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. MEETING PREP CARDS -->
+  <div class="section" id="w3">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <div class="section-title">Meeting-by-Meeting Prep</div>
+    </div>
+
+    <!-- CMO -->
+    <div class="prep-card open">
+      <div class="prep-card-header">
+        <div>
+          <h3>1:1 with CMO &mdash; Jake Wall</h3>
+          <div class="meta">Monday March 2 | 12:30-1:00 PM ET | bi-weekly</div>
+        </div>
+        <div class="toggle">&#9654;</div>
+      </div>
+      <div class="prep-card-body">
+        <div class="prep-row">
+          <div class="prep-label">Contact</div>
+          <div>cmo@thesovereignkingdom.com &nbsp;<a href="https://drive.google.com/drive/folders/1VZtFcx6fxlgY5ruk_Ne4BeqWwRb49Jgd" class="src">CMO Folder</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Context</div>
+          <div>First meeting with Jake. No prior meeting notes. CMO vertical folder exists in Drive but contents unknown. Budget allocation for S&amp;M is only $2M of $20M raised &mdash; yet projections assume $84M Y1 revenue. Marketing ROI expectations are unrealistic on paper. <a href="https://docs.google.com/document/d/1WVUviff7DNePMgCGrJ3LiG9RQ6drRumazMWk-eLIzf0/edit" class="src">Meeting Notes Doc</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Objectives</div>
+          <div>Build rapport. Understand brand strategy, target audience definition, and current marketing assets or channels. Assess whether Jake has a realistic view of the go-to-market challenge.</div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Questions</div>
+          <div>
+            <ul class="q-list">
+              <li>What marketing assets exist today &mdash; website, social, content, partnerships?</li>
+              <li>How is TSK planning to reach UHNWIs? What's the acquisition strategy?</li>
+              <li>What's the brand spend to date, and what has it produced?</li>
+              <li>How do you see the CMO and COO roles intersecting operationally?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Watch For</div>
+          <div>
+            <ul class="q-list watch-list">
+              <li>Does Jake reference real campaigns or just conceptual plans?</li>
+              <li>Has he engaged any actual UHNWI prospects or channels?</li>
+              <li>Does he challenge the projections or parrot them?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DealMaker -->
+    <div class="prep-card open">
+      <div class="prep-card-header">
+        <div>
+          <h3>DealMaker + CEO/CRO/CFO</h3>
+          <div class="meta">Monday March 2 | 2:30-3:00 PM ET | Calendar-confirmed</div>
+        </div>
+        <div class="toggle">&#9654;</div>
+      </div>
+      <div class="prep-card-body">
+        <div class="prep-row">
+          <div class="prep-label">Prep Brief</div>
+          <div><strong>Read the <a href="dealmaker-onboarding.html">DealMaker Analyst Brief</a> before this meeting.</strong> Covers: platform mechanics ($2.4B raised, largest in NA), Reg A+ process, TSK's position, COO deliverable ownership framework, and research-informed questions.</div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Attendees</div>
+          <div>Riley Stanton (<a href="mailto:riley.stanton@dealmaker.tech">riley.stanton@dealmaker.tech</a>) &mdash; DealMaker<br>K (CEO), Robert Fitzgerald (CRO), Axel Reijmers (CFO), Steve (COO) &mdash; TSK &nbsp;<a href="https://www.google.com/calendar/event?eid=ZGc3a2dtcGh0djkxOXByY2plZmtsc3Rmb2MgY29vQHRoZXNvdmVyZWlnbmtpbmdkb20uY29t" class="src">Calendar Invite</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Context</div>
+          <div><strong>This is the most important meeting of the week.</strong> DealMaker is North America's largest retail capital-raising platform ($2.4B+ raised, $500M in 2025). Riley's prep questions (from the calendar invite) are directed at Robert (CRO):<br><br>
+          &bull; <strong>Revenue model:</strong> How TSK generates revenue, % per stream, other streams being considered<br>
+          &bull; <strong>Growth roadmap:</strong> How TSK plans to grow near/long term, expansions, partnerships<br><br>
+          <strong>UPDATE (from Jan 8 onboarding call):</strong> TSK is filing <strong>Form C (Reg CF) &mdash; $5M max</strong> from retail investors. This was confirmed on the onboarding call. K's "institutional launch" framing is factually incorrect. Form C has not been filed yet despite a ~Mar 9 target. Note: Form C includes officer bios &mdash; Steve's name may be included. See <a href="deep-dive-2026-03-01.html#s10" class="src">Deep Dive Section 10</a> for full analysis.<br><br>
+          Steve asked Allison on Friday whether Riley's deliverables for this meeting were received &mdash; <strong>no confirmation</strong>. <a href="mailto:admin@thesovereignkingdom.com" class="src">Steve's Email, Feb 27</a> &nbsp;<a href="https://drive.google.com/drive/folders/1uoG-KorUagdHf_Vl0OmnX1vnvPMMQKjG" class="src">DealMaker Folder</a> &nbsp;<a href="https://drive.google.com/file/d/1myQPsGJYt0GUy_YAh031OnmbX1om0KFu/view" class="src">Onboarding Kickoff PDF</a>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Objectives</div>
+          <div>Observe, learn, and <strong>claim the deliverable-owner role</strong>. Understand the full process, timeline, and what TSK owes DealMaker. Position yourself as the person who keeps deliverables on track. Do NOT volunteer operational commitments or validate projections you haven't vetted.</div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Talking Points</div>
+          <div>
+            <ul class="q-list">
+              <li>I'd like to understand the full process flow from where we are today to an active offering.</li>
+              <li>Walk me through the deliverable timeline &mdash; what's needed from TSK and by when?</li>
+              <li>I'll be the point person for keeping our deliverables on track internally.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Questions</div>
+          <div>
+            <ul class="q-list">
+              <li><s>Which regulation type?</s> &mdash; <strong>Answered:</strong> Reg CF ($5M) &rarr; Reg A+</li>
+              <li>What's the Form C filing status? 60-day target from Jan 8 has lapsed. Revised timeline?</li>
+              <li>Has "testing the waters" begun? Any investor expressions of interest?</li>
+              <li>What does the investor portal look like? Is there a live URL?</li>
+              <li>What materials have been delivered to DealMaker so far? What's still outstanding?</li>
+              <li>How does the COO role feature in investor-facing materials?</li>
+              <li>Is there a deliverable schedule or milestone tracker we should be working from?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Watch For</div>
+          <div>
+            <ul class="q-list watch-list">
+              <li><strong>Is Steve's name/bio being used in investor materials or SEC filings?</strong> Agreement is unsigned &mdash; this is an escalation trigger.</li>
+              <li>Are the $84M Y1 projections in DealMaker materials? Does anyone push back?</li>
+              <li>What does Riley actually know about TSK vs. what TSK has represented?</li>
+              <li>Is there a realistic timeline or is this still exploratory?</li>
+              <li>Does Riley expect specific deliverables from Steve's role?</li>
+              <li>How does TSK's readiness compare to what DealMaker normally sees at this stage?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Risk</div>
+          <div style="color:var(--red)"><strong>HIGH:</strong> Participating in investor-facing meetings before agreement is countersigned creates exposure. If Steve's name/bio appears in materials, escalate immediately. Form 1-A requires officer bios &mdash; confirm status. <a href="https://drive.google.com/file/d/1EgluhzYH8m858tEMvvXApryWQ7nzVK4r/view" class="src">View Agreement</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly Team -->
+    <div class="prep-card open">
+      <div class="prep-card-header">
+        <div>
+          <h3>Monthly Team Meeting (First)</h3>
+          <div class="meta">Tuesday March 3 | 1:00-2:00 PM ET | First monthly</div>
+        </div>
+        <div class="toggle">&#9654;</div>
+      </div>
+      <div class="prep-card-body">
+        <div class="prep-row">
+          <div class="prep-label">Context</div>
+          <div>CEO announced this on Feb 25: "We will be formally acquainted with everyone at our next monthly team meeting on March 3, 2026, at 1:00 PM ET." Three new hires being introduced: Steve (COO), Robert Fitzgerald (CRO), Sergei Orel (IP Counsel). <strong>May not be properly calendared yet</strong> &mdash; verify with Allison. <a href="mailto:ceo@thesovereignkingdom.com" class="src">CEO Email, Feb 25</a> &nbsp;<a href="https://drive.google.com/file/d/1LAj17JvFCn6GmMlSFa1EIlzSNEod378M/view" class="src">Team Phone Numbers</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Objectives</div>
+          <div>Make a professional first impression. Be warm, confident, brief. Listen more than you talk. Observe team dynamics &mdash; who defers to K, who speaks independently, who stays silent.</div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Talking Points</div>
+          <div>
+            <ul class="q-list">
+              <li>Brief intro: background, excitement about TSK's market opportunity, commitment to building operational excellence</li>
+              <li>Mention you'll be reaching out to each exec for 1:1s (per CEO's email)</li>
+              <li>Express genuine interest in understanding each person's domain before forming opinions</li>
+            </ul>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Watch For</div>
+          <div>
+            <ul class="q-list watch-list">
+              <li>Team size and composition &mdash; who actually shows up?</li>
+              <li>Does K run a structured meeting or is it free-form?</li>
+              <li>Any references to Nathan Johnson or Sam Shah? How is their absence handled?</li>
+              <li>Body language and engagement levels &mdash; who's checked in vs. checked out?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTO -->
+    <div class="prep-card open">
+      <div class="prep-card-header">
+        <div>
+          <h3>1:1 with CTO &mdash; Taiwo Oyeniyi</h3>
+          <div class="meta">Tuesday March 3 | 2:00-2:30 PM ET | bi-weekly | Calendar-confirmed</div>
+        </div>
+        <div class="toggle">&#9654;</div>
+      </div>
+      <div class="prep-card-body">
+        <div class="prep-row">
+          <div class="prep-label">Contact</div>
+          <div>cto@thesovereignkingdom.com &nbsp;<a href="https://drive.google.com/drive/folders/1C5v0JHciuvNnxgKBoNlTBgOQlarbCbs9" class="src">CTO Folder</a> &nbsp;<a href="https://www.google.com/calendar/event?eid=Xzc1MmthZDlnOGdya2NiOWs2MHA0Y2I5azhjczQ0YjlvOGdyM2FiOWs4a29rY2MyNjg1Mmo2ZzluNnNfMjAyNjAzMDNUMTkwMDAwWiBjb29AdGhlc292ZXJlaWdua2luZ2RvbS5jb20" class="src">Calendar Invite</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Context</div>
+          <div>Critical meeting. Platform/tech status is completely unknown. $8M (40%) of the $20M raise is allocated to Technology/Platform. Is there a working product, a prototype, or just slides? The investor deck claims capabilities (booking engine, concierge platform, property management) that need to be verified. <strong>Note:</strong> One email was sent to "Lance Allison" at cto@ &mdash; identity discrepancy to investigate. <a href="https://drive.google.com/drive/folders/1tirx5hyFj6R8970tp8jzMsUXRoEocN41" class="src">Investor Deck (Final)</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Objectives</div>
+          <div>Determine whether a platform exists. Understand current tech stack, development stage, and team size. Assess Taiwo's capability and whether the $8M tech budget is justified.</div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Questions</div>
+          <div>
+            <ul class="q-list">
+              <li>Can you walk me through the current platform? Is there anything I can see or demo?</li>
+              <li>What's the tech stack and where is it hosted?</li>
+              <li>How many engineers/developers are on the team today?</li>
+              <li>What's the development roadmap for the next 90 days?</li>
+              <li>Are we building custom or integrating with existing platforms (booking engines, PMS)?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Watch For</div>
+          <div>
+            <ul class="q-list watch-list">
+              <li>Can Taiwo show you something real, or is it all "in development"?</li>
+              <li>Does the tech vision match the business model?</li>
+              <li>Is $8M justified or is it padding?</li>
+              <li>"Lance Allison" email &mdash; who is this person at cto@?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IP Counsel -->
+    <div class="prep-card">
+      <div class="prep-card-header">
+        <div>
+          <h3>1:1 with IP Counsel &mdash; Sergei Orel</h3>
+          <div class="meta">Thursday March 5 | 2:30-3:00 PM ET | bi-weekly | New hire</div>
+        </div>
+        <div class="toggle">&#9654;</div>
+      </div>
+      <div class="prep-card-body">
+        <div class="prep-row">
+          <div class="prep-label">Contact</div>
+          <div>ipcounsel@thesovereignkingdom.com &nbsp;<a href="https://drive.google.com/drive/folders/14ln8yBkxdGZ51SoB0PaoHVDomhMww_IR" class="src">IP Counsel Folder</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Context</div>
+          <div>Sergei is a new hire (announced same day as Steve, Feb 25). Fellow newcomer &mdash; potential ally. IP Counsel role is relevant to understanding the IP assignment clause (Section 4) and prior work carve-outs (Section 5). <a href="https://drive.google.com/file/d/1EgluhzYH8m858tEMvvXApryWQ7nzVK4r/view" class="src">Agreement &sect;4-5</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Objectives</div>
+          <div>Build rapport with a fellow new hire. Understand TSK's IP position &mdash; trademarks, domain, brand protection. Subtly assess whether Sergei understands the prior work carve-out in the agreement.</div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Questions</div>
+          <div>
+            <ul class="q-list">
+              <li>What's your understanding of TSK's current IP portfolio?</li>
+              <li>Are there existing trademarks, patents, or filings?</li>
+              <li>How does the IP role interact with the COO function?</li>
+              <li>What brought you to TSK?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Watch For</div>
+          <div>
+            <ul class="q-list watch-list">
+              <li>Does Sergei have access to the agreement/addendum?</li>
+              <li>Any awareness of the prior work carve-out provisions in the agreement?</li>
+              <li>Is he a practicing attorney or an executive with legal background?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRO -->
+    <div class="prep-card">
+      <div class="prep-card-header">
+        <div>
+          <h3>1:1 with CRO &mdash; Robert Fitzgerald</h3>
+          <div class="meta">Thursday March 5 | 4:30-5:00 PM ET | bi-weekly | New hire (replaced Sam Shah)</div>
+        </div>
+        <div class="toggle">&#9654;</div>
+      </div>
+      <div class="prep-card-body">
+        <div class="prep-row">
+          <div class="prep-label">Contact</div>
+          <div>cro@thesovereignkingdom.com &nbsp;<a href="https://drive.google.com/drive/folders/1EbgCVfZeOL9QBgo5k4yyoJQFb_APO7hu" class="src">CRO Folder</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Context</div>
+          <div><strong>Robert replaced Sam Shah as CRO</strong> &mdash; this change was not announced or explained. Robert is a new hire (announced Feb 25). He is the person Riley Stanton's DealMaker questions are directed at (revenue model, growth roadmap). <a href="mailto:ceo@thesovereignkingdom.com" class="src">CEO Welcome Email, Feb 25</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Objectives</div>
+          <div>Understand revenue strategy and pipeline. Determine if any bookings, customer engagements, or revenue have ever occurred. Assess Robert's understanding of the UHNWI sales cycle.</div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Questions</div>
+          <div>
+            <ul class="q-list">
+              <li>Has TSK ever completed a booking or generated revenue of any kind?</li>
+              <li>What's the sales pipeline look like today &mdash; any warm prospects?</li>
+              <li>How do you see the revenue model working? What are the streams?</li>
+              <li>What happened with the previous CRO (Sam Shah)?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Watch For</div>
+          <div>
+            <ul class="q-list watch-list">
+              <li>Does Robert reference real prospects or only conceptual strategy?</li>
+              <li>How does he respond to the Sam Shah question? Evasion = red flag.</li>
+              <li>Is the revenue model he describes consistent with the investor deck?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CCO -->
+    <div class="prep-card">
+      <div class="prep-card-header">
+        <div>
+          <h3>1:1 with CCO &mdash; Kamrul Khan</h3>
+          <div class="meta">Friday March 7 | 4:30-5:00 PM ET | bi-weekly</div>
+        </div>
+        <div class="toggle">&#9654;</div>
+      </div>
+      <div class="prep-card-body">
+        <div class="prep-row">
+          <div class="prep-label">Contact</div>
+          <div>cco@thesovereignkingdom.com &nbsp;<a href="https://drive.google.com/drive/folders/1ONt-eW8rJ8dd5IfHxIgSZS0Uk4b2b6GJ" class="src">CCO Folder</a> &nbsp;<a href="https://docs.google.com/document/d/1bmmZlqyo0oWQhrdQg97UBrTCoTJyHmxS/edit" class="src">CCO Role Doc</a></div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Context</div>
+          <div>Chief Compliance Officer. CCO vertical folder exists with a role description doc (259KB). Compliance is critical for luxury travel &mdash; licensing, AML/KYC for UHNWI clients, destination-specific regulations. Also relevant to fundraising compliance (SEC/Reg D).</div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Objectives</div>
+          <div>Understand compliance framework. Determine if there's a real compliance infrastructure or just a title. Assess regulatory readiness across target markets.</div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Questions</div>
+          <div>
+            <ul class="q-list">
+              <li>What compliance framework has been established for TSK operations?</li>
+              <li>What licensing or permits are needed in the target destination markets?</li>
+              <li>How is the fundraising structured from a securities compliance perspective?</li>
+              <li>Are there KYC/AML requirements for UHNWI clients?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="prep-row">
+          <div class="prep-label">Watch For</div>
+          <div>
+            <ul class="q-list watch-list">
+              <li>Is there actual compliance infrastructure or just plans?</li>
+              <li>Does Kamrul have regulatory experience in travel/hospitality?</li>
+              <li>Any awareness of the SEC filing history?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 4. INTELLIGENCE BRIEF -->
+  <div class="section" id="w4">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <div class="section-title">Intelligence Brief</div>
+    </div>
+
+    <div class="intel-item" style="border-color: var(--amber-border);">
+      <div>
+        <div class="intel-date">Feb 24-27</div>
+        <div class="intel-source">Multiple</div>
+      </div>
+      <div>
+        <div class="intel-headline"><strong>The Exclusive Collective</strong> launches bold new platform, expands Canadian footprint</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">Inspirato + Exclusive Resorts + onefinestay have merged and are aggressively building a combined $500M+ luxury travel platform. Direct competitor to TSK's stated positioning. They have existing customers, properties, and capital.</div>
+        <div><span class="intel-tag">Competitor</span> <span class="intel-tag">Inspirato</span> &nbsp;<a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxNdGNrUFBfSzZtUnktR253R0JCODBWU01ja3h5a09FYlAyVTV5cU5pLXZvbURFT19iTFdwbGtNRjhWbm0tdzRiSzFhYm9YZmhsVGhjcExac18ybVhIVFRsVmxFcnFmU3dQN3RBWjlJa0gyYVJIRGFOMXBFMVZHZmY0c2R3?oc=5" class="src">View Article</a> &nbsp;<a href="https://news.google.com/rss/articles/CBMizAFBVV95cUxOZ0V0dThkY0xyUHRmcFNVUERQa0RRZ0I5YnhzaWJlSTZXblM0R0FUS0tGTnZkejREckF0a0hsYVpZUjhRUHViS3BFaGV6eE8zc28tVUs3UUdmTjliaG5Pd0hIa1lEdnpNaE8yVlZkY3M1bmdsTlVTSzd6emljdzNEaTdGTUdBUkRmeHp6VGUxM2dTdm96SVVJZkxnejMxbDhOQmZfbkM5dC1tc0lWRnBVMzdzVFFfenFyTl9FaE42UXpSWWlrQy1IMTYxRGE?oc=5" class="src">Travel Market Report</a></div>
+      </div>
+    </div>
+
+    <div class="intel-item">
+      <div>
+        <div class="intel-date">Feb 22</div>
+        <div class="intel-source">stupidDOPE</div>
+      </div>
+      <div>
+        <div class="intel-headline"><strong>Aman Resorts</strong> launches "Legends Program" at Amanyara, Turks &amp; Caicos</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">Bringing elite athletes to their resort &mdash; experience-driven luxury strategy. Aman is the gold standard ($1.7B revenue, $3B valuation) and continues to expand experiential offerings.</div>
+        <div><span class="intel-tag">Competitor</span> <span class="intel-tag">Aman</span> &nbsp;<a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOQm82OXBBQzJBUGQ3cnNYWko4azBpSG4zZXlxX3pxOHF3LVdoMnNJMEs3NWUzUlFUNzN3QUt6ZlRwd09PZWlEVUVKWDBmdmdMaWdEUUVxN0JjeEtkd29NN2NuVU1leTF0a2VhalhwQ2UzMW9hQ3RvWmRQVGFPTnJ6bXJGOXdtcUY1RWRHdmMweVVzUC1rSHZuT0JWalFnVDQ?oc=5" class="src">View Article</a></div>
+      </div>
+    </div>
+
+    <div class="intel-item">
+      <div>
+        <div class="intel-date">Feb 26</div>
+        <div class="intel-source">Skift</div>
+      </div>
+      <div>
+        <div class="intel-headline"><strong>Prism/Belvilla</strong> acquires 10 Sonder properties for US luxury rental market entry</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">European luxury rental brand entering US market through Sonder property acquisitions. Another player entering the same space TSK is targeting.</div>
+        <div><span class="intel-tag">Industry</span> <span class="intel-tag">Market Entry</span> &nbsp;<a href="https://skift.com/2026/02/26/prism-acquires-10-sonder-properties-to-bring-belvilla-brand-to-u-s-exclusive/" class="src">Skift Article</a></div>
+      </div>
+    </div>
+
+    <div class="intel-item">
+      <div>
+        <div class="intel-date">Feb 28</div>
+        <div class="intel-source">Financial</div>
+      </div>
+      <div>
+        <div class="intel-headline"><strong>Inspirato</strong> stock analysis pieces appearing post-$59M acquisition</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">From $1.1B SPAC valuation to $59M fire sale. Multiple articles analyzing the wreckage. Relevant context for TSK's own projections and fundraise narrative.</div>
+        <div><span class="intel-tag">Competitor</span> <span class="intel-tag">Cautionary</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;color:var(--text-dim);margin-top:8px;text-align:right;">Source: <a href="https://docs.google.com/spreadsheets/d/1MVB9Fu4xTZmg5sS42xGf4YQJfZFC_6jBGXIBq7nhRTs/edit" class="src">TSK Intelligence Database</a></div>
+  </div>
+
+  <!-- 5. DRIVE INVENTORY -->
+  <div class="section" id="w5">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <div class="section-title">Drive Inventory Assessment</div>
+    </div>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">
+      Source: <a href="https://drive.google.com/drive/folders/1HYobI5nK9ggJT5ilrbiziYrF9eO_jfNE" class="src">TSK COO Shared Folder</a>
+    </div>
+    <div class="inventory-grid">
+      <div class="inventory-card present">
+        <h4>&#9679; Present</h4>
+        <ul>
+          <li><a href="https://drive.google.com/file/d/1EgluhzYH8m858tEMvvXApryWQ7nzVK4r/view">2nd Amended Agreement PDF</a> (Steve signed, TSK unsigned)</li>
+          <li><a href="https://drive.google.com/drive/folders/1PDnL7Kpc5i-KiBrHhxzQImBThIB9iOIM">Investor deck</a> (8 draft versions, V2-V8 + Final)</li>
+          <li><a href="https://drive.google.com/file/d/1LAj17JvFCn6GmMlSFa1EIlzSNEod378M/view">Team phone numbers PDF</a></li>
+          <li><a href="https://drive.google.com/drive/folders/14Xy1SPH9kaDLsNZgdiBWKwbft2r9LqSy">Partnerships spreadsheet</a> (current + projected)</li>
+          <li><a href="https://drive.google.com/drive/folders/1kXKRnb1bJspBmTnxpWg5Um3Ohjv_mfdK">Budget template</a> (COO dept, Draft July 2025)</li>
+          <li><a href="https://drive.google.com/drive/folders/1jdbNbrmrricknA_qu2-a_q3UOI9FKFBU">Prior COO bi-weekly notes</a> (DOCX)</li>
+          <li><a href="https://drive.google.com/file/d/1IpJ-bXBN3u1XIz3QE4fsTpbGRIBYnBxb/view">Onboarding call recording</a> (Jan 8, 2026)</li>
+          <li><a href="https://drive.google.com/file/d/1myQPsGJYt0GUy_YAh031OnmbX1om0KFu/view">DealMaker onboarding kickoff PDF</a></li>
+          <li><a href="https://drive.google.com/drive/folders/199W1QXIKSpqkMSxC3CiCjyG-speXs085">Vertical folders</a> (CEO, CTO, CFO, CRO, CMO, CCO, GC, IP)</li>
+          <li><a href="https://docs.google.com/document/d/10EtvbbP93Nh6OU7EJc8zUJGprLJkR_2y/edit">CEO role doc</a> (36KB), <a href="https://docs.google.com/document/d/1bmmZlqyo0oWQhrdQg97UBrTCoTJyHmxS/edit">CCO role doc</a> (259KB)</li>
+          <li><a href="https://docs.google.com/spreadsheets/d/1MVB9Fu4xTZmg5sS42xGf4YQJfZFC_6jBGXIBq7nhRTs/edit">TSK Intelligence Database</a> (Google Sheet)</li>
+          <li>Meeting notes templates (<a href="https://docs.google.com/document/d/1WVUviff7DNePMgCGrJ3LiG9RQ6drRumazMWk-eLIzf0/edit">CMO</a>, <a href="https://docs.google.com/document/d/1DRIXu4w1mRcG7fmoq249u_ixmRjqpMX--YAYRKVBaOU/edit">GC</a> &mdash; empty)</li>
+          <li><a href="https://drive.google.com/drive/folders/1ElOGuQxMbOYD1X32qT60oAyHmwe4jf3W">Policy docs</a> (Terms &amp; Conditions, Privacy Policy)</li>
+          <li><a href="https://drive.google.com/drive/folders/1SkUr6cXgRL5lBQvVw0ICwbRfIBcUN3Oo">General Partnership Agreement</a> folder</li>
+        </ul>
+      </div>
+      <div class="inventory-card missing">
+        <h4>&#9679; Missing / Concerning</h4>
+        <ul>
+          <li>No operational playbooks or SOPs</li>
+          <li>No customer data or booking records</li>
+          <li>No platform access or demo credentials</li>
+          <li>No financial statements or P&amp;L</li>
+          <li>No cap table or equity schedule</li>
+          <li>No org chart with reporting lines</li>
+          <li>No 90-day plan or onboarding checklist from CEO</li>
+          <li>No board minutes or investor correspondence</li>
+          <li>No property inventory or destination market data</li>
+          <li>No partnership agreements (only spreadsheet)</li>
+        </ul>
+      </div>
+      <div class="inventory-card stale">
+        <h4>&#9679; Stale</h4>
+        <ul>
+          <li>Budget template dated July 2025 (8 months old)</li>
+          <li>Prior COO notes from Nathan Johnson era</li>
+          <li>Investor deck "Final" may predate recent team changes</li>
+        </ul>
+      </div>
+      <div class="inventory-card discrepancy">
+        <h4>&#9679; Data Discrepancies</h4>
+        <ul>
+          <li>CLAUDE.md listed Sam Shah as CRO &mdash; now Robert Fitzgerald</li>
+          <li>"Lance Allison" sent email at cto@ &mdash; CTO is Taiwo Oyeniyi</li>
+          <li>Prior COO notes (DOCX) unreadable &mdash; context gap</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. RISK REGISTER -->
+  <div class="section" id="w6">
+    <div class="section-header">
+      <div class="section-number">6</div>
+      <div class="section-title">Risk Register &mdash; Red-Teamed</div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge risk-critical">Critical</div>
+      <div class="risk-text"><strong>Working without a signed agreement.</strong> Every meeting this week deepens public association with TSK while Steve has zero legal protection. Addendum protections are not enforceable. K has not countersigned. <a href="https://drive.google.com/file/d/1EgluhzYH8m858tEMvvXApryWQ7nzVK4r/view" class="src">View Agreement</a></div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge risk-critical">Critical</div>
+      <div class="risk-text"><strong>Two unexplained C-suite departures.</strong> Nathan Johnson (COO) and Sam Shah (CRO) both departed without explanation. Steve and Robert Fitzgerald are their replacements. This is a pattern, not an anomaly. <a href="mailto:ceo@thesovereignkingdom.com" class="src">CEO Email, Feb 25</a></div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge risk-high">High</div>
+      <div class="risk-text"><strong>DealMaker meeting and projection exposure.</strong> Riley Stanton wants revenue model specifics. The model projects $84M Y1 on $20M raised &mdash; fantasy numbers. Steve should NOT validate projections he hasn't vetted. His role in this meeting is unclear. <a href="https://www.google.com/calendar/event?eid=ZGc3a2dtcGh0djkxOXByY2plZmtsc3Rmb2MgY29vQHRoZXNvdmVyZWlnbmtpbmdkb20uY29t" class="src">Calendar Invite</a></div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge risk-high">High</div>
+      <div class="risk-text"><strong>Meeting schedule partially unconfirmed.</strong> Calendar API only returned 2 of 7 expected meetings. Monthly team meeting and most 1:1s may not be properly set up after the calendar transfer from the prior COO.</div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge risk-high">High</div>
+      <div class="risk-text"><strong>CTO identity discrepancy.</strong> One email sent to "Lance Allison" at cto@thesovereignkingdom.com, but CTO is Taiwo Oyeniyi everywhere else. Could be a forwarding artifact or a deeper issue.</div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge risk-medium">Medium</div>
+      <div class="risk-text"><strong>Riley's deliverables unconfirmed.</strong> Steve asked Allison on Friday whether Riley Stanton's deliverables for the DealMaker meeting arrived. No confirmation received.</div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge risk-medium">Medium</div>
+      <div class="risk-text"><strong>Prior COO notes inaccessible.</strong> Nathan Johnson's bi-weekly notes (DOCX in Drive) could contain critical context about his work and departure, but the file is unreadable. <a href="https://drive.google.com/drive/folders/1jdbNbrmrricknA_qu2-a_q3UOI9FKFBU" class="src">Bi-Weekly Notes Folder</a></div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge risk-medium">Medium</div>
+      <div class="risk-text"><strong>Three simultaneous C-suite hires.</strong> Steve (COO), Robert (CRO), and Sergei (IP Counsel) all announced on Feb 25. Either K is building for the DealMaker launch or there's a revolving door.</div>
+    </div>
+  </div>
+
+  <!-- 6a. GUARDRAILS -->
+  <div class="section" id="wg">
+    <div class="section-header">
+      <div class="section-number" style="background:var(--red-bg);color:var(--red);">!</div>
+      <div class="section-title">Legal Guardrails &mdash; This Week</div>
+    </div>
+    <div class="guardrail-grid">
+      <div class="guardrail-card dont">
+        <h4>Do Not</h4>
+        <ul>
+          <li>Make commitments on behalf of TSK</li>
+          <li>Sign anything or authorize expenditures</li>
+          <li>Represent TSK to external parties</li>
+          <li>Validate the $84M Y1 projections</li>
+          <li>Use personal email, systems, or IP for TSK work</li>
+          <li>Share personal financial or business details</li>
+        </ul>
+      </div>
+      <div class="guardrail-card do">
+        <h4>Do</h4>
+        <ul>
+          <li>Observe, ask questions, collect information</li>
+          <li>Build genuine relationships with the team</li>
+          <li>Take detailed notes in every meeting</li>
+          <li>Note what people say and what they avoid saying</li>
+          <li>Assess team capability and alignment to reality</li>
+          <li>Gather direct contact info from each exec</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. STRATEGIC QUESTIONS -->
+  <div class="section" id="w7">
+    <div class="section-header">
+      <div class="section-number">7</div>
+      <div class="section-title">Strategic Questions to Pursue</div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-text">Does a working technology platform exist? Can you see a demo?</div>
+      <div class="question-target">Ask CTO</div>
+    </div>
+    <div class="question-card">
+      <div class="question-text">Has TSK ever completed a single booking or generated any revenue?</div>
+      <div class="question-target">Ask CRO</div>
+    </div>
+    <div class="question-card">
+      <div class="question-text">What is the actual raise status? Any committed capital or term sheets?</div>
+      <div class="question-target">DealMaker Mtg</div>
+    </div>
+    <div class="question-card">
+      <div class="question-text">What happened to Nathan Johnson (prior COO)?</div>
+      <div class="question-target">Ask Anyone</div>
+    </div>
+    <div class="question-card">
+      <div class="question-text">What happened to Sam Shah (prior CRO)?</div>
+      <div class="question-target">Ask Robert / K</div>
+    </div>
+    <div class="question-card">
+      <div class="question-text">What is the Form C (Reg CF) filing timeline? 60-day target from Jan 8 has lapsed.</div>
+      <div class="question-target">Ask Riley / K</div>
+    </div>
+    <div class="question-card">
+      <div class="question-text">Where is the Addendum countersignature? <a href="https://drive.google.com/file/d/1EgluhzYH8m858tEMvvXApryWQ7nzVK4r/view" class="src">Agreement</a></div>
+      <div class="question-target">Ask K Directly</div>
+    </div>
+    <div class="question-card">
+      <div class="question-text">What legal entities exist and what is the corporate structure? <a href="https://drive.google.com/drive/folders/1SkUr6cXgRL5lBQvVw0ICwbRfIBcUN3Oo" class="src">GP Agreement Folder</a></div>
+      <div class="question-target">Ask GC (Mar 10)</div>
+    </div>
+    <div class="question-card">
+      <div class="question-text">Is Steve's name/bio being used in any investor-facing materials? <a href="https://drive.google.com/drive/folders/1tirx5hyFj6R8970tp8jzMsUXRoEocN41" class="src">Investor Deck</a></div>
+      <div class="question-target">DealMaker Mtg</div>
+    </div>
+  </div>
+
+  <!-- 8. ACTION ITEMS -->
+  <div class="section" id="w8">
+    <div class="section-header">
+      <div class="section-number">8</div>
+      <div class="section-title">Action Items</div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">Confirm DealMaker deliverables received from Riley Stanton &nbsp;<a href="mailto:admin@thesovereignkingdom.com" class="src">Email Allison</a></div>
+        <div class="action-deadline">Before Monday 2:30pm ET</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">Verify all 7 meetings are properly on your calendar (check <a href="https://calendar.google.com" style="color:var(--accent)">Google Calendar web</a>)</div>
+        <div class="action-deadline">Sunday night / Monday morning</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">Prepare 2-3 intro talking points for Monthly Team Meeting</div>
+        <div class="action-deadline">Before Tuesday 1:00pm ET</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">Review investor deck (latest version) before DealMaker meeting &nbsp;<a href="https://drive.google.com/drive/folders/1tirx5hyFj6R8970tp8jzMsUXRoEocN41" class="src">Final Deck</a></div>
+        <div class="action-deadline">Before Monday 2:30pm ET</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">Review DealMaker Onboarding Kickoff PDF &nbsp;<a href="https://drive.google.com/file/d/1myQPsGJYt0GUy_YAh031OnmbX1om0KFu/view" class="src">Kickoff PDF</a></div>
+        <div class="action-deadline">Before Monday 2:30pm ET</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text"><s>Confirm regulation type</s> &mdash; <strong>RESOLVED:</strong> Reg CF (Form C, $5M max). Source: Jan 8 onboarding call.</div>
+        <div class="action-deadline" style="color: var(--green);">Answered</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">During DealMaker meeting: Ask if Steve's name/bio is in any investor materials or SEC filings</div>
+        <div class="action-deadline">Monday 2:30pm &mdash; escalation trigger if yes</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">During DealMaker meeting: Get the full deliverable list with owners and deadlines</div>
+        <div class="action-deadline">Monday 2:30pm</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">After DealMaker meeting: Fill in deliverable tracker and RACI matrix (Section 14) with actual data</div>
+        <div class="action-deadline">Monday evening</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">Collect direct contact info (phone + personal email) from each exec during 1:1s &nbsp;<a href="https://drive.google.com/file/d/1LAj17JvFCn6GmMlSFa1EIlzSNEod378M/view" class="src">Current Phone List</a></div>
+        <div class="action-deadline">Per Allison's advice &mdash; "a great exercise to start conversations"</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">Take structured notes in every meeting using Google Doc templates &nbsp;<a href="https://docs.google.com/document/d/1WVUviff7DNePMgCGrJ3LiG9RQ6drRumazMWk-eLIzf0/edit" class="src">CMO Notes</a> &nbsp;<a href="https://docs.google.com/document/d/1DRIXu4w1mRcG7fmoq249u_ixmRjqpMX--YAYRKVBaOU/edit" class="src">GC Notes</a></div>
+        <div class="action-deadline">All week</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">After all 1:1s complete: assess team capability, alignment, and reality check</div>
+        <div class="action-deadline">Friday evening debrief</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-check"></div>
+      <div>
+        <div class="action-text">Flag any raise signals, investor activity, or concerning patterns</div>
+        <div class="action-deadline">Ongoing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. SCOPE BOUNDARIES -->
+  <div class="section" id="w9">
+    <div class="section-header">
+      <div class="section-number">9</div>
+      <div class="section-title">Agreement &amp; Scope Boundaries</div>
+    </div>
+    <div class="fyj-banner">
+      <strong>Standing Reminder:</strong> Agreement unsigned = Addendum protections are NOT enforceable. <a href="https://drive.google.com/file/d/1EgluhzYH8m858tEMvvXApryWQ7nzVK4r/view" class="src">View Agreement</a><br><br>
+      &bull; Use only TSK email (coo@thesovereignkingdom.com) for all TSK business<br>
+      &bull; Section 4 IP assignment clause is broad &mdash; keep all personal/outside work completely separate<br>
+      &bull; Watch for any requests that blur scope boundaries before agreement is signed<br>
+      &bull; Do not use personal tools, accounts, or resources for TSK until agreement is fully executed<br>
+      &bull; Prior work carve-out (Section 5) is acknowledged but not in the countersigned agreement
+    </div>
+  </div>
+
+  <!-- 10. DEALMAKER PLATFORM OVERVIEW -->
+  <div class="section" id="w10">
+    <div class="section-header">
+      <div class="section-number">10</div>
+      <div class="section-title">DealMaker Platform Overview</div>
+    </div>
+
+    <div class="dashboard">
+      <div class="stat-card good">
+        <div class="label">Total Raised</div>
+        <div class="value">$2.4B+</div>
+        <div class="sub">All offerings to date<br><a href="https://www.dealmaker.tech" class="src">DealMaker.tech</a></div>
+      </div>
+      <div class="stat-card good">
+        <div class="label">2025 Volume</div>
+        <div class="value">$500M</div>
+        <div class="sub">$57K/hour average<br>157% YoY Reg A growth</div>
+      </div>
+      <div class="stat-card neutral">
+        <div class="label">Largest Single Raise</div>
+        <div class="value">$75M</div>
+        <div class="sub">EnergyX &mdash; 40K investors<br>Reg A Tier 2</div>
+      </div>
+      <div class="stat-card neutral">
+        <div class="label">Founded By</div>
+        <div class="value" style="font-size:18px">Securities<br>Lawyers</div>
+        <div class="sub">HQ: Toronto + NYC</div>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">What DealMaker Is</div>
+      <p style="font-size:14px">North America's largest retail capital-raising platform. White-labeled, end-to-end infrastructure for raising capital from accredited and non-accredited investors. Handles investor portal, KYC/AML, payments, e-signatures, compliance, and analytics. <strong>Key point:</strong> DealMaker provides rails; TSK owns strategy, content, investor relationships, and raise outcome. <a href="https://www.dealmaker.tech/why-dealmaker" class="src">Why DealMaker</a></p>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">6-Phase Onboarding Process</div>
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-num">Phase 1</div>
+          <div class="step-label">Get Started</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Checklist, setup fee, docs</div>
+        </div>
+        <div class="process-step">
+          <div class="step-num">Phase 2</div>
+          <div class="step-label">Digitize Agreement</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Subscription docs converted</div>
+        </div>
+        <div class="process-step">
+          <div class="step-num">Phase 3</div>
+          <div class="step-label">Document Review</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Company + counsel approve</div>
+        </div>
+        <div class="process-step">
+          <div class="step-num">Phase 4</div>
+          <div class="step-label">Portal Creation</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Branded investor portal</div>
+        </div>
+        <div class="process-step">
+          <div class="step-num">Phase 5</div>
+          <div class="step-label">Provide Access</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Fund account linked</div>
+        </div>
+        <div class="process-step">
+          <div class="step-num">Phase 6</div>
+          <div class="step-label">Training</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px">1-hour team training</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--text-dim);margin-top:8px"><a href="https://help.dealmaker.tech/deal-setup-timeline" class="src">Setup Timeline</a> &nbsp; Investor stages: Draft &rarr; In Progress &rarr; Signed-Pending Review &rarr; Countersignature Pending &rarr; Complete <a href="https://help.dealmaker.tech/investor-stages" class="src">Stages</a></p>
+    </div>
+  </div>
+
+  <!-- 11. REGULATION & FILING MECHANICS -->
+  <div class="section" id="w11">
+    <div class="section-header">
+      <div class="section-number">11</div>
+      <div class="section-title">Regulation &amp; Filing Mechanics</div>
+    </div>
+
+    <div class="alert red">
+      <strong>UPDATE:</strong> TSK is filing <strong>Form C (Reg CF) &mdash; $5M max.</strong> Confirmed on Jan 8 DealMaker onboarding call. DealMaker Securities (Ingrid Wong) handles the filing. Legal counsel: "Hess and Set Apart." 60-day launch target from Jan 8 (~Mar 9) has lapsed with no Form C filed. See <a href="deep-dive-2026-03-01.html#s10">Deep Dive Section 10</a> for full analysis.
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">Regulation Comparison</div>
+      <table class="data-table">
+        <thead><tr><th>Factor</th><th>Reg CF</th><th>Reg A Tier 1</th><th>Reg A Tier 2</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Max raise</strong></td><td>$5M / 12 months</td><td>$20M / 12 months</td><td>$75M / 12 months</td></tr>
+          <tr><td><strong>Timeline</strong></td><td>30-60 days</td><td>2-3 months</td><td>4-6 months</td></tr>
+          <tr><td><strong>Financials</strong></td><td>Reviewed</td><td>Reviewed (or audited)</td><td>Audited (required)</td></tr>
+          <tr><td><strong>SEC filing</strong></td><td>Form C</td><td>Form 1-A</td><td>Form 1-A</td></tr>
+          <tr><td><strong>State compliance</strong></td><td>Preempted</td><td>State review required</td><td>Preempted</td></tr>
+          <tr><td><strong>Ongoing reporting</strong></td><td>Annual</td><td>None</td><td>Annual + semi-annual</td></tr>
+          <tr><td><strong>Non-accredited limits</strong></td><td>Income-based</td><td>None</td><td>10% income/net worth</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:13px;color:var(--text-dim)"><a href="https://www.dealmaker.tech/offering-types" class="src">Offering Types</a> &nbsp;<a href="https://www.dealmaker.tech/content/the-difference-between-tier-1-and-tier-2-of-regulation-a" class="src">Tier Comparison</a></p>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">TSK's $5M &ndash; $20M Target: Which Fits?</div>
+      <table class="data-table">
+        <thead><tr><th>Option</th><th>Fits?</th><th>Pros</th><th>Cons</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Reg CF</strong></td><td>Partial</td><td>Fastest, cheapest, validates demand</td><td>$5M cap too low for full raise</td></tr>
+          <tr><td><strong>Reg A Tier 1</strong></td><td>Yes</td><td>Covers full range, no ongoing SEC reporting</td><td>State-by-state compliance</td></tr>
+          <tr><td><strong>Reg A Tier 2</strong></td><td>Yes</td><td>State preemption, IPO path</td><td>Audited financials, ongoing reporting, slower</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert red">
+      <strong>Form 1-A requires officer bios.</strong> If TSK has filed or is preparing Form 1-A with Steve's name/bio while the agreement is unsigned, this is investor-facing exposure without legal protection. <strong>Confirm status Monday.</strong>
+    </div>
+  </div>
+
+  <!-- 12. DEALMAKER VS TSK RESPONSIBILITIES -->
+  <div class="section" id="w12">
+    <div class="section-header">
+      <div class="section-number">12</div>
+      <div class="section-title">Responsibilities: DealMaker vs TSK</div>
+    </div>
+
+    <div class="guardrail-grid">
+      <div class="guardrail-card left">
+        <h4>DealMaker Handles</h4>
+        <ul>
+          <li>Investor portal (white-labeled, branded)</li>
+          <li>Subscription agreement digitization</li>
+          <li>E-signatures (Dropbox Sign)</li>
+          <li>KYC/AML verification (99% AI success)</li>
+          <li>Payment processing (card, ACH, wire)</li>
+          <li>SEC compliance tooling</li>
+          <li>Investor CRM + communication tools</li>
+          <li>Real-time analytics dashboard</li>
+          <li>Transfer agent services (optional)</li>
+        </ul>
+      </div>
+      <div class="guardrail-card right">
+        <h4>TSK Owns</h4>
+        <ul>
+          <li><strong>Offering narrative</strong> &mdash; pitch, thesis, opportunity</li>
+          <li><strong>Investor deck &amp; marketing materials</strong></li>
+          <li><strong>SEC filing content</strong> &mdash; Form 1-A</li>
+          <li><strong>Revenue model &amp; projections</strong></li>
+          <li><strong>Growth roadmap</strong></li>
+          <li><strong>Legal counsel</strong></li>
+          <li><strong>Countersigning subscriptions</strong> (manual)</li>
+          <li><strong>Investor outreach &amp; community</strong></li>
+          <li><strong>Raise outcome</strong> &mdash; primary responsibility</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--text-dim);margin-top:8px"><a href="https://help.dealmaker.tech/who-is-responsible-for-what-during-a-deal-on-dealmaker" class="src">Responsibility Matrix</a></p>
+  </div>
+
+  <!-- 13. TSK's DEALMAKER POSITION -->
+  <div class="section" id="w13">
+    <div class="section-header">
+      <div class="section-number">13</div>
+      <div class="section-title">TSK's DealMaker Position</div>
+    </div>
+
+    <div class="alert red">
+      <strong>CRITICAL UPDATE:</strong> DealMaker onboarding portal accessed &mdash; <strong>2 of 35 tasks complete (6%)</strong> after 83 days. Week 1 compliance items (due Feb 24) all overdue. Campaign Brief not submitted &mdash; blocks all creative production. April 14 launch target is not achievable. <a href="dealmaker-tracker.html">Full task-by-task tracker &rarr;</a> &nbsp; <a href="deep-dive-2026-03-01.html#s10">Deep Dive Section 10</a>
+    </div>
+
+    <div class="guardrail-grid">
+      <div class="detail-card" style="margin-bottom:0">
+        <div class="detail-label" style="color:var(--green)">What We Know (Updated with Onboarding Plan Data)</div>
+        <ul style="list-style:none;padding:0">
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>Filing: Reg CF (Form C), $5M max</strong> &mdash; confirmed Jan 8 onboarding call</li>
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>Two-phase strategy: Reg CF &rarr; Reg A+</strong> &mdash; confirmed by K on Feb 25 intro call</li>
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>Steve's role: process manager</strong> for DealMaker deliverables &mdash; per K, Feb 25</li>
+          <li style="font-size:13px;padding:3px 0">&bull; DealMaker team: Riley Stanton (account), Ani Akelyan (implementations), Ingrid Wong (compliance)</li>
+          <li style="font-size:13px;padding:3px 0">&bull; DealMaker handles: paid ads, email campaigns, banners, video, newsletter partnerships, compliance</li>
+          <li style="font-size:13px;padding:3px 0">&bull; TSK must create: landing page assets and content</li>
+          <li style="font-size:13px;padding:3px 0">&bull; Legal counsel: "Hess and Set Apart" (not GC or IP Counsel)</li>
+          <li style="font-size:13px;padding:3px 0; color: var(--red)">&bull; <strong>Onboarding plan: 2/35 tasks complete (6%) after 83 days.</strong> 4-phase plan started Dec 10. Target launch Apr 14.</li>
+          <li style="font-size:13px;padding:3px 0; color: var(--red)">&bull; <strong>Week 1 compliance items (financials, corporate docs, escrow, IDs) due Feb 24 &mdash; all overdue.</strong></li>
+          <li style="font-size:13px;padding:3px 0; color: var(--red)">&bull; <strong>Campaign Brief not submitted &mdash; blocks ALL creative production</strong> (marketing materials, landing page, emails, ads).</li>
+          <li style="font-size:13px;padding:3px 0">&bull; <a href="dealmaker-tracker.html"><strong>Full task-by-task tracker &rarr;</strong></a></li>
+        </ul>
+      </div>
+      <div class="detail-card" style="margin-bottom:0">
+        <div class="detail-label" style="color:var(--red)">Still Unknown</div>
+        <ul style="list-style:none;padding:0">
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>DealMaker fee structure for TSK?</strong></li>
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>Offering valuation?</strong></li>
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>Steve's name in Form C / materials?</strong> (Bad Actor Check requires forms for all officers)</li>
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>SPV decision status?</strong> (SPV tasks exist in plan but decision pending since Jan 8)</li>
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>"Hess and Set Apart" engagement confirmed?</strong></li>
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>CPA engagement status?</strong> Reviewed financials take 1+ months from engagement. If not started, April launch is impossible.</li>
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>Campaign Brief status?</strong> Blocks all Phase 2 creative production.</li>
+          <li style="font-size:13px;padding:3px 0">&bull; <strong>Cap table submitted?</strong> (Week 2 task, overdue)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14. COO DELIVERABLE OWNERSHIP -->
+  <div class="section" id="w14">
+    <div class="section-header">
+      <div class="section-number">14</div>
+      <div class="section-title">COO Deliverable Ownership</div>
+    </div>
+
+    <div class="alert green">
+      <strong>Confirmed by K (Feb 25 intro call):</strong> Steve's role is to make sure the DealMaker process runs smoothly and to keep deliverable owners engaged, motivated, and informed. Framework below reflects K's direction.
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">COO Role in the Raise</div>
+      <p style="font-size:14px;margin-bottom:8px">You don't own the investor pitch (CEO/CRO) or the financials (CFO). You own the <strong>delivery machine</strong> &mdash; ensuring every deliverable hits its deadline, every team member knows what they owe, and nothing falls through the cracks.</p>
+      <ul style="list-style:none;padding:0;font-size:14px">
+        <li style="padding:3px 0"><strong>You own:</strong> Timeline management, deliverable tracking, internal coordination, operational readiness</li>
+        <li style="padding:3px 0"><strong>You monitor:</strong> Investor materials (CRO), financials (CFO), legal filings (GC), portal build (DealMaker)</li>
+        <li style="padding:3px 0"><strong>You escalate:</strong> Missed deadlines, scope changes, blockers, name/bio exposure</li>
+      </ul>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">Proposed RACI Matrix &mdash; Validate Monday</div>
+      <table class="raci-table">
+        <thead><tr><th>Deliverable</th><th>CEO (K)</th><th>COO (Steve)</th><th>CRO (Robert)</th><th>CFO (Axel)</th><th>GC/IP</th></tr></thead>
+        <tbody>
+          <tr><td>Investor narrative / pitch</td><td class="r">R</td><td class="c">C</td><td class="a">A</td><td class="i">I</td><td class="i">I</td></tr>
+          <tr><td>Revenue model &amp; projections</td><td class="c">C</td><td class="c">C</td><td class="r">R</td><td class="a">A</td><td class="i">I</td></tr>
+          <tr><td>Growth roadmap</td><td class="r">R</td><td class="c">C</td><td class="a">A</td><td class="i">I</td><td class="i">I</td></tr>
+          <tr><td>Investor deck (content)</td><td class="c">C</td><td class="i">I</td><td class="r">R</td><td class="c">C</td><td class="i">I</td></tr>
+          <tr><td>Financial statements</td><td class="i">I</td><td class="c">C</td><td class="i">I</td><td class="r">R</td><td class="c">C</td></tr>
+          <tr><td>Form 1-A / SEC filing</td><td class="a">A</td><td class="c">C</td><td class="c">C</td><td class="c">C</td><td class="r">R</td></tr>
+          <tr><td>DealMaker portal content</td><td class="i">I</td><td class="c">C</td><td class="r">R</td><td class="i">I</td><td class="i">I</td></tr>
+          <tr><td>Subscription countersigning</td><td class="a">A</td><td class="c">C</td><td class="i">I</td><td class="i">I</td><td class="r">R</td></tr>
+          <tr><td>Deliverable tracking &amp; timeline</td><td class="i">I</td><td class="r">R</td><td class="c">C</td><td class="c">C</td><td class="c">C</td></tr>
+          <tr><td>Internal coordination / blockers</td><td class="a">A</td><td class="r">R</td><td class="c">C</td><td class="c">C</td><td class="c">C</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--text-dim);margin-top:8px"><span class="r" style="color:var(--red);font-weight:700">R</span> = Responsible &nbsp; <span class="a" style="color:var(--accent);font-weight:700">A</span> = Accountable &nbsp; <span class="c" style="color:var(--amber)">C</span> = Consulted &nbsp; <span class="i" style="color:var(--text-dim)">I</span> = Informed</p>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">Deliverable Tracker &mdash; From DealMaker Onboarding Portal (2/35 complete)</div>
+      <table class="data-table">
+        <thead><tr><th>Deliverable</th><th>Owner</th><th>Deadline</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Reviewed/Audited financials</td><td>K. Derhem</td><td style="color:var(--red)">Feb 24</td><td style="color:var(--red)"><strong>OVERDUE</strong></td></tr>
+          <tr><td>Corporate &amp; governance docs</td><td>K. Derhem</td><td style="color:var(--red)">Feb 24</td><td style="color:var(--red)"><strong>OVERDUE</strong></td></tr>
+          <tr><td>Escrow: Business Info Packet</td><td>K. Derhem</td><td style="color:var(--red)">Feb 24</td><td style="color:var(--red)"><strong>OVERDUE</strong></td></tr>
+          <tr><td>Escrow: Government ID</td><td>K. Derhem</td><td style="color:var(--red)">Feb 24</td><td style="color:var(--red)"><strong>OVERDUE</strong></td></tr>
+          <tr><td>Cap table / financing docs</td><td>K. Derhem</td><td style="color:var(--red)">Overdue</td><td style="color:var(--red)"><strong>OVERDUE</strong></td></tr>
+          <tr><td>Bad Actor Check (all officers)</td><td>K. Derhem</td><td style="color:var(--red)">Overdue</td><td style="color:var(--red)"><strong>OVERDUE</strong> &mdash; COO exposure risk</td></tr>
+          <tr><td>Campaign Brief</td><td>K. Derhem</td><td style="color:var(--red)">Overdue</td><td style="color:var(--purple)"><strong>BLOCKER</strong> &mdash; blocks all creative</td></tr>
+          <tr><td>Form C &amp; Subscription Agreement</td><td>K. Derhem</td><td>Week 4</td><td style="color:var(--amber)">Pending &mdash; Steve must review before filing</td></tr>
+          <tr><td>Klaviyo account (email/SMS)</td><td>K. Derhem</td><td>Week 4</td><td style="color:var(--text-dim)">Pending</td></tr>
+          <tr><td>Landing page subdomain (DNS)</td><td>K. Derhem</td><td>Week 5</td><td style="color:var(--text-dim)">Pending</td></tr>
+          <tr><td>Treasury account (Stripe)</td><td>K. Derhem</td><td>Week 5</td><td style="color:var(--text-dim)">Pending</td></tr>
+          <tr><td>Marketing materials review</td><td>K. Derhem</td><td>Weeks 4-8</td><td style="color:var(--text-dim)">Blocked by Campaign Brief</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--text-dim);margin-top:8px"><a href="dealmaker-tracker.html">Full 35-task tracker with all phases &rarr;</a> &nbsp; Source: <a href="https://start.dealmaker.tech/plans/faa32663">DealMaker onboarding portal</a></p>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">COO Escalation Triggers</div>
+      <div class="risk-item">
+        <div class="risk-badge risk-critical">Critical</div>
+        <div class="risk-text"><strong>Steve's name/bio in investor materials or SEC filings while agreement is unsigned.</strong> Escalate immediately to K.</div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-badge risk-high">High</div>
+        <div class="risk-text"><strong>Deliverables with no owner or no deadline.</strong> If Monday doesn't produce clear ownership, flag it.</div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-badge risk-high">High</div>
+        <div class="risk-text"><strong>$84M Y1 projections in DealMaker materials without CFO sign-off.</strong> If no one can defend it, it shouldn't be in investor materials.</div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-badge risk-medium">Medium</div>
+        <div class="risk-text"><strong>Missed DealMaker deliverable requests.</strong> Riley's request from last week is still unconfirmed.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15. ENERGYX CASE STUDY & DEALMAKER PRICING -->
+  <div class="section" id="w15">
+    <div class="section-header">
+      <div class="section-number">15</div>
+      <div class="section-title">EnergyX Case Study &amp; DealMaker Pricing</div>
+    </div>
+
+    <div class="case-stat-grid">
+      <div class="case-stat"><div class="cs-value">$75M</div><div class="cs-label">Single Raise</div></div>
+      <div class="case-stat"><div class="cs-value">40K</div><div class="cs-label">Investors</div></div>
+      <div class="case-stat"><div class="cs-value">$4.3M</div><div class="cs-label">From Webinars</div></div>
+      <div class="case-stat"><div class="cs-value">7,000</div><div class="cs-label">Community Converts</div></div>
+      <div class="case-stat"><div class="cs-value">35.8%</div><div class="cs-label">Webinar Attendance</div></div>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">What Worked for EnergyX (Reg A Tier 2)</div>
+      <ul style="list-style:none;padding:0;font-size:14px">
+        <li style="padding:3px 0">&bull; <strong>Webinars were massive:</strong> 10 sessions, 9,972 registrants, $4.3M+ generated</li>
+        <li style="padding:3px 0">&bull; <strong>Community-first:</strong> 7,000 existing supporters converted &mdash; most impactful channel</li>
+        <li style="padding:3px 0">&bull; <strong>Hybrid funding:</strong> Retail (DealMaker) + institutional (GM, Posco, DOE)</li>
+        <li style="padding:3px 0">&bull; <strong>Founder engaged:</strong> CEO directly partnered with DealMaker team</li>
+        <li style="padding:3px 0">&bull; <strong>Mobile-optimized:</strong> Checkout in under a minute from phones</li>
+      </ul>
+      <p style="font-size:13px;color:var(--text-dim);margin-top:8px"><strong>TSK question:</strong> Does TSK have a community to convert? Any waitlist, mailing list, or warm leads? <a href="https://www.dealmaker.tech/content/energyx-case-study" class="src">Full Case Study</a></p>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">DealMaker Platform Costs</div>
+      <table class="data-table">
+        <thead><tr><th>Component</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Monthly hosting</td><td>$120/month</td></tr>
+          <tr><td>Per-investor processing</td><td>$5/investor</td></tr>
+          <tr><td>Credit card processing</td><td>3.25-4.5%</td></tr>
+          <tr><td>Refunds</td><td>$50/refund</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-label">Estimated Budget for $5M &ndash; $20M Raise</div>
+      <table class="data-table">
+        <thead><tr><th>Category</th><th>Estimated Range</th></tr></thead>
+        <tbody>
+          <tr><td>Platform (monthly, 6-12 months)</td><td>$700 &ndash; $2,400</td></tr>
+          <tr><td>Processing &amp; card fees (~4-5%)</td><td>$200K &ndash; $1M</td></tr>
+          <tr><td>Legal fees (Form 1-A, counsel)</td><td>$20K &ndash; $50K+</td></tr>
+          <tr><td>Audited financials (if Tier 2)</td><td>$10K &ndash; $30K</td></tr>
+          <tr><td>Marketing (if DealMaker services)</td><td>$50K &ndash; $250K+</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:13px;color:var(--text-muted)"><strong>Ask Monday:</strong> What is TSK's raise budget? Who covers legal, marketing, and platform costs? <a href="https://www.dealmaker.tech/pricing" class="src">DealMaker Pricing</a></p>
+    </div>
+  </div>
+
+  <!-- DATA SOURCES -->
+  <div class="section" style="margin-bottom:0">
+    <div class="section-header">
+      <div class="section-number" style="background:var(--surface-2);color:var(--text-dim)">i</div>
+      <div class="section-title" style="color:var(--text-dim)">Data Sources</div>
+    </div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.8;">
+      TSK Gmail (coo@thesovereignkingdom.com): 18 emails, Feb 25 &ndash; Mar 1, 2026<br>
+      Google Calendar: 2 confirmed + 5 inferred events for week of March 2-8<br>
+      <a href="https://drive.google.com/drive/folders/1HYobI5nK9ggJT5ilrbiziYrF9eO_jfNE">COO Shared Drive</a>: 50+ files across 9 folders<br>
+      <a href="https://docs.google.com/spreadsheets/d/1MVB9Fu4xTZmg5sS42xGf4YQJfZFC_6jBGXIBq7nhRTs/edit">TSK Intelligence Database</a> (Google Sheet): 7 entries, Feb 22-28<br>
+      Local research: red-flags.md, company-swot.md, market-data.md, version-comparison.md, <strong>dealmaker-analysis.md</strong><br>
+      Deal terms: memory/deal-terms.md (signature status, version comparison)<br>
+      <a href="https://www.dealmaker.tech">DealMaker.tech</a>: Platform overview, pricing, process, offering types<br>
+      <a href="https://www.dealmaker.tech/content/the-ultimate-guide-to-regulation-a-reg-a-unleash-the-power-of-retail-capital">DealMaker Reg A+ Guide</a> (article shared by Riley Stanton)<br>
+      <a href="https://www.dealmaker.tech/content/energyx-case-study">EnergyX Case Study</a> &nbsp;
+      <a href="https://help.dealmaker.tech/deal-setup-timeline">Setup Timeline</a> &nbsp;
+      <a href="https://help.dealmaker.tech/investor-stages">Investor Stages</a> &nbsp;
+      <a href="https://help.dealmaker.tech/who-is-responsible-for-what-during-a-deal-on-dealmaker">Responsibility Matrix</a> &nbsp;
+      <a href="https://www.dealmaker.tech/pricing">Pricing</a><br>
+      <a href="https://drive.google.com/drive/folders/1uoG-KorUagdHf_Vl0OmnX1vnvPMMQKjG">TSK DealMaker Folder</a> &nbsp;
+      <a href="https://drive.google.com/file/d/1myQPsGJYt0GUy_YAh031OnmbX1om0KFu/view">DealMaker Onboarding Kickoff PDF</a><br>
+      <a href="https://start.dealmaker.tech/plans/faa32663">DealMaker Onboarding Portal</a> &mdash; Full 35-task onboarding plan, 4 phases, task-by-task status
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    TSK COO Weekly Briefing &mdash; Confidential &mdash; Prepared March 1, 2026<br>
+    Zero Fabrication Rule: Every fact in this report is traceable to the sources listed above.
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.prep-card-header').forEach(function(header) {
+  header.addEventListener('click', function() {
+    this.parentElement.classList.toggle('open');
+  });
+});
+// Open all links in new tabs (skip anchor links and back-link)
+document.querySelectorAll('a[href]').forEach(function(link) {
+  if (!link.getAttribute('href').startsWith('#') && !link.classList.contains('back-link')) {
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener');
+  }
+});
+// Scroll-spy
+(function() {
+  var nav = document.getElementById('sectionNav');
+  if (!nav) return;
+  var links = nav.querySelectorAll('a');
+  var sections = [];
+  links.forEach(function(link) {
+    var id = link.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        var match = sections.find(function(s) { return s.id === entry.target.id; });
+        if (match) match.link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-10% 0px -80% 0px' });
+  sections.forEach(function(s) { observer.observe(s.el); });
+  links.forEach(function(link) {
+    link.addEventListener('click', function() { nav.classList.remove('open'); });
+  });
+})();
+</script>
+<script src="interactive.js"></script>
+<script>(function(){var t=document.querySelector('body>.tsk-toolbar'),s=document.getElementById('header-toolbar-slot');if(t&&s){t.style.cssText='';s.appendChild(t)}})()</script>
+</body>
+</html>

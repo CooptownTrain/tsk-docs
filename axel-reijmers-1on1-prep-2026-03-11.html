@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Axel Reijmers 1:1 Prep | Mar 11, 2026</title>
+    <style>
+      :root {
+        --bg: #f8f7f4;
+        --surface: #ffffff;
+        --surface-2: #f0efec;
+        --surface-3: #e8e7e3;
+        --border: #d8d6d0;
+        --border-light: #eae8e4;
+        --text: #1a1a1a;
+        --text-muted: #5c5c5c;
+        --text-dim: #8a8a8a;
+        --accent: #2c5282;
+        --accent-light: #ebf2fa;
+        --accent-dim: #d4e2f0;
+        --red: #c53030;
+        --red-bg: #fff5f5;
+        --red-border: #fcc;
+        --amber: #b7791f;
+        --amber-bg: #fefcf3;
+        --amber-border: #f0e0a0;
+        --green: #276749;
+        --green-bg: #f0fff4;
+        --green-border: #b2e0c0;
+        --gold: #8b6914;
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+
+      .header { border-bottom: 2px solid var(--border); padding-bottom: 24px; margin-bottom: 32px; }
+      .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+      .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+      .header h1 span { color: var(--gold); }
+      .header .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+      .header .date-badge { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 13px; color: var(--text-muted); white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+      .header .date-badge strong { color: var(--text); display: block; font-size: 15px; }
+
+      .src { font-size: 11px; color: var(--accent); background: var(--accent-light); padding: 1px 6px; border-radius: 3px; white-space: nowrap; vertical-align: middle; }
+      .src:hover { background: var(--accent-dim); }
+
+      .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 36px; }
+      .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+      .stat-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-dim); margin-bottom: 6px; }
+      .stat-card .value { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+      .stat-card .sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+      .stat-card.neutral .value { color: var(--text-muted); }
+      .stat-card.good { border-color: var(--green-border); background: var(--green-bg); }
+      .stat-card.good .value { color: var(--green); }
+      .stat-card.warning { border-color: var(--amber-border); background: var(--amber-bg); }
+      .stat-card.warning .value { color: var(--amber); }
+
+      .section { margin-bottom: 36px; }
+      .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+      .section-number { background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 700; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+      .section-title { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
+
+      .detail-card { background: var(--surface); border: 1px solid var(--border-light); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; }
+      .detail-label { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+
+      .data-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+      .data-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); padding: 8px 12px; border-bottom: 2px solid var(--border); }
+      .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+      .data-table tr:last-child td { border-bottom: none; }
+
+      .q-list { list-style: none; padding: 0; }
+      .q-list li { position: relative; padding-left: 18px; margin-bottom: 8px; font-size: 14px; }
+      .q-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-light); border: 2px solid var(--accent); }
+      .watch-list li::before { background: var(--amber-bg); border-color: var(--amber); }
+
+      .risk-item { display: grid; grid-template-columns: 80px 1fr; gap: 12px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border-light); border-radius: 10px; margin-bottom: 8px; align-items: start; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+      .risk-badge { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 4px 0; text-align: center; border-radius: 6px; }
+      .risk-critical { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+      .risk-high { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+      .risk-medium { background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border); }
+      .risk-text { font-size: 14px; }
+      .risk-text strong { color: var(--text); }
+
+      .alert { padding: 14px 18px; border-radius: 10px; font-size: 14px; margin-bottom: 12px; }
+      .alert.amber { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber); }
+      .alert.red { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+      .alert strong { color: var(--text); }
+
+      .guardrail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .guardrail-card { padding: 16px; border-radius: 10px; }
+      .guardrail-card.left { background: var(--accent-light); border: 1px solid var(--accent-dim); }
+      .guardrail-card.right { background: var(--surface); border: 1px solid var(--border-light); }
+      .guardrail-card h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; color: var(--accent); }
+      .guardrail-card.right h4 { color: var(--text-muted); }
+      .guardrail-card li { font-size: 13px; color: var(--text-muted); padding: 3px 0; list-style: none; padding-left: 16px; position: relative; }
+      .guardrail-card li::before { content: '\2022'; position: absolute; left: 0; color: var(--accent); }
+      .guardrail-card.right li::before { color: var(--text-dim); }
+
+      .timeline-item { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; }
+      .timeline-item:last-child { border-bottom: none; }
+      .timeline-date { font-size: 12px; color: var(--text-dim); font-weight: 500; padding-top: 2px; }
+      .timeline-role { font-weight: 600; }
+      .timeline-org { color: var(--text-muted); }
+
+      @media (max-width: 600px) {
+        .header-top { flex-direction: column; gap: 12px; }
+        .dashboard { grid-template-columns: 1fr 1fr; }
+        .guardrail-grid { grid-template-columns: 1fr; }
+        .timeline-item { grid-template-columns: 1fr; gap: 2px; }
+      }
+
+      @media print { #doc-toolbar { display: none !important; } }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+      <!-- HEADER -->
+      <div class="header">
+        <div class="header-top">
+          <div>
+            <h1>Axel Reijmers <span>1:1 Prep</span></h1>
+            <div class="subtitle">CFO (Designate), The Sovereign Kingdom</div>
+          </div>
+          <div class="date-badge">
+            <strong>Wed Mar 11, 2026</strong>
+            9:00 - 9:30 AM ET
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK FACTS -->
+      <div class="dashboard">
+        <div class="stat-card warning">
+          <div class="label">TSK Title</div>
+          <div class="value" style="font-size:16px">CFO, Designate</div>
+          <div class="sub">Not "CFO" per ZoomInfo</div>
+        </div>
+        <div class="stat-card warning">
+          <div class="label">Engagement</div>
+          <div class="value" style="font-size:16px">Fractional</div>
+          <div class="sub">5+ concurrent roles</div>
+        </div>
+        <div class="stat-card good">
+          <div class="label">FINRA</div>
+          <div class="value" style="font-size:16px">Clean</div>
+          <div class="sub">No disclosures</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Primary Job</div>
+          <div class="value" style="font-size:16px">Castle Placement</div>
+          <div class="sub">MD, since Oct 2023</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Location</div>
+          <div class="value" style="font-size:16px">Fort Lee, NJ</div>
+          <div class="sub">Was in Japan last week</div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: BACKGROUND -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">1</div>
+          <div class="section-title">Professional Background</div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Education</div>
+          <p>Master's in Economics, University of Groningen (Netherlands). Additional studies at Leiden University.</p>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Career Timeline</div>
+          <div class="timeline-item">
+            <div class="timeline-date">2007 - 2008</div>
+            <div><span class="timeline-role">Managing Director, M&A</span><br><span class="timeline-org">ABN AMRO Incorporated, New York</span><br>Co-established North America Corporate Finance M&A department. Earlier career at ABN AMRO started in Japan.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2008 - 2012</div>
+            <div><span class="timeline-role">MD, Head of M&A Execution Americas</span><br><span class="timeline-org">RBS Securities, Stamford CT</span><br>Transitioned when RBS acquired ABN AMRO. Cross-border M&A across energy, financial services, food &amp; agriculture. Covered US, LatAm, Europe, Japan.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2013 - 2021</div>
+            <div><span class="timeline-role">Head of Investment Banking &amp; Corp Dev</span><br><span class="timeline-org">Accendo Banco, Mexico City</span><br>Led the management buyout of RBS Bank Mexico. Transformed it into a Banking-as-a-Service provider. Won "Best Fintech Bank Mexico 2019" (CFI.co). <strong style="color:var(--red)">License revoked by CNBV in Sept 2021</strong> after capitalization index fell. Bank shut down by regulators.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2019 - Present</div>
+            <div><span class="timeline-role">Owner / Operator (Multiple)</span><br><span class="timeline-org">Fremouw LLC (consulting), Alps Dental LLC, Miamerkato Inc., GF LNG LP</span><br>All listed as "variable hours" on FINRA filings. Dental practice management, online produce marketplace, natural gas/LNG trading.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">Oct 2023 - Present</div>
+            <div><span class="timeline-role">Managing Director</span><br><span class="timeline-org">Castle Placement, LLC (FINRA/SIPC)</span><br>Boutique investment bank focused on private capital raising. This appears to be his primary role. Posts actively on LinkedIn about capital raises in real estate tech and data centers.</div>
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Online Profiles</div>
+          <p>
+            <a href="https://www.linkedin.com/in/axel-reijmers-79295a/" target="_blank" rel="noopener noreferrer">LinkedIn</a> &middot;
+            <a href="https://brokercheck.finra.org/individual/summary/5208576" target="_blank" rel="noopener noreferrer">FINRA BrokerCheck</a> &middot;
+            <a href="https://castleplacement.com/team/" target="_blank" rel="noopener noreferrer">Castle Placement Team</a> &middot;
+            <a href="https://twitter.com/areijmers1" target="_blank" rel="noopener noreferrer">X/Twitter</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- SECTION 2: STRATEGIC ASSESSMENT -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">2</div>
+          <div class="section-title">Strategic Assessment</div>
+        </div>
+
+        <div class="alert amber">
+          <strong>Key finding:</strong> ZoomInfo lists Axel as "CFO, <em>Designate</em>" at TSK. Not simply "CFO." This may mean his role is contingent on the raise closing, similar to your arrangement.
+        </div>
+
+        <div class="risk-item">
+          <div class="risk-badge risk-high">Question</div>
+          <div class="risk-text"><strong>Castle Placement connection.</strong> Castle Placement is a capital-raising firm. Is it involved in TSK's raise? Is that why Axel is in the CFO seat? This would explain the "Designate" qualifier and his level of engagement.</div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-badge risk-high">Question</div>
+          <div class="risk-text"><strong>Accendo Banco collapse.</strong> He led the MBO and grew it into an award-winning bank. Then regulators shut it down. What happened with the capitalization? What was his role in the failure? This is real operational history you should understand.</div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-badge risk-medium">Signal</div>
+          <div class="risk-text"><strong>Fractional engagement pattern.</strong> Five concurrent businesses plus TSK. All listed as "variable hours." He's not a full-time CFO anywhere. This is advisory-level involvement, not an operator building financial infrastructure.</div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-badge risk-medium">Positive</div>
+          <div class="risk-text"><strong>Legitimate M&A pedigree.</strong> ABN AMRO and RBS at Managing Director level is real bulge-bracket experience. Cross-border LatAm, energy, and financial services. He knows capital markets.</div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: CONVERSATION GUIDE -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">3</div>
+          <div class="section-title">Conversation Guide</div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Primary Objective</div>
+          <p style="font-size:15px; font-weight:500;">Assess whether Axel is a competent financial operator or a placeholder. Build the working relationship. Come away understanding his actual role and the raise timeline.</p>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Opener (2 min)</div>
+          <p>Ask about Japan. Was it personal or TSK business? Establishes rapport and may reveal whether he's doing deal work abroad.</p>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Topic 1: His Role &amp; Engagement (5 min)</div>
+          <ul class="q-list">
+            <li>What does your week-to-week look like for TSK right now?</li>
+            <li>Are you full-time on this or splitting time with Castle Placement and other things?</li>
+            <li>What's the plan once the raise closes? Does your role change?</li>
+          </ul>
+          <p style="margin-top:10px; font-size:13px; color:var(--text-muted);"><strong>Why:</strong> Establishes the baseline. You need to know if he's in the same boat as you (contingent on raise) or operating differently.</p>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Topic 2: DealMaker / Reg CF Raise (8 min)</div>
+          <ul class="q-list">
+            <li>Where does the DealMaker campaign brief stand? Was it delivered on time?</li>
+            <li>What's your role in the raise process? Are you building the financial projections for the offering docs?</li>
+            <li>Is Castle Placement involved in the raise at all?</li>
+            <li>What's the realistic timeline to close the first $5M tranche?</li>
+          </ul>
+          <p style="margin-top:10px; font-size:13px; color:var(--text-muted);"><strong>Why:</strong> The $5M trigger is everything. Axel should have the clearest view of where the money is coming from and when. If he doesn't have specifics, that tells you something.</p>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Topic 3: Financial Model &amp; Projections (5 min)</div>
+          <ul class="q-list">
+            <li>Does a bottom-up financial model exist, or are we still working from top-down?</li>
+            <li>The $84M Year 1 projection on $20M raised. How does that math work in practice?</li>
+            <li>What's the use-of-proceeds breakdown you're building for Reg CF?</li>
+          </ul>
+          <p style="margin-top:10px; font-size:13px; color:var(--text-muted);"><strong>Why:</strong> This is where you find out if Axel is a real CFO. If he has a model, ask to see it. If he doesn't, that's a major gap.</p>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Topic 4: Partnerships &amp; Revenue (5 min)</div>
+          <ul class="q-list">
+            <li>Have you reviewed the Tripwix rev-share numbers? The $30M figure. Is that GMV or actual revenue?</li>
+            <li>Are you looped in on the Joy/withjoy.com partnership discussions?</li>
+            <li>What's TSK's current burn rate and who's funding operations pre-raise?</li>
+          </ul>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-label">Topic 5: Equity &amp; Valuation (if time allows)</div>
+          <ul class="q-list">
+            <li>What's the equity valuation methodology? What hurdle are we working against?</li>
+            <li>Where does the cap table stand today?</li>
+          </ul>
+          <p style="margin-top:10px; font-size:13px; color:var(--text-muted);"><strong>Why:</strong> You have equity in this deal but no visibility into what it's worth. Axel is the right person to ask. If he deflects, note it.</p>
+        </div>
+      </div>
+
+      <!-- SECTION 4: WHAT TO WATCH FOR -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">4</div>
+          <div class="section-title">What to Watch For</div>
+        </div>
+
+        <div class="guardrail-grid">
+          <div class="guardrail-card left">
+            <h4>Positive Signals</h4>
+            <ul>
+              <li>Has specific numbers and timelines for the raise</li>
+              <li>Can walk through a financial model or is building one</li>
+              <li>Pushes back on TSK's top-down projections</li>
+              <li>Asks you smart questions about operations</li>
+              <li>Knows partnership economics (Tripwix, Joy)</li>
+              <li>Transparent about his engagement level</li>
+            </ul>
+          </div>
+          <div class="guardrail-card right">
+            <h4>Red Flags</h4>
+            <ul>
+              <li>Speaks in generalities about the raise with no specifics</li>
+              <li>Can't explain the $84M Year 1 projection</li>
+              <li>Doesn't know about DealMaker status</li>
+              <li>Deflects equity/valuation questions</li>
+              <li>Treats TSK as a minor side engagement</li>
+              <li>No financial infrastructure built (no model, no reporting)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: GUARDRAILS -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">5</div>
+          <div class="section-title">Your Guardrails</div>
+        </div>
+
+        <div class="detail-card">
+          <ul class="q-list watch-list">
+            <li><strong>Don't reveal your own skepticism about the raise.</strong> You're building a relationship. Ask questions, listen to his answers, form your assessment afterward.</li>
+            <li><strong>Don't mention FYJ.</strong> If he asks about your other work, keep it vague. "I have other business interests" is enough.</li>
+            <li><strong>Don't volunteer that you've researched him.</strong> Let the conversation flow naturally. Use what you know to ask better questions, not to show your hand.</li>
+            <li><strong>Don't agree to any financial commitments or representations.</strong> You're at $0 until the raise closes. Keep it that way.</li>
+            <li><strong>Do take notes.</strong> This is your first real data point on the CFO. Document what he says, especially about timelines and numbers.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Doc Toolbar -->
+    <div id="doc-toolbar" style="position:fixed;top:16px;right:16px;z-index:9999;display:flex;gap:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;opacity:0.45;transition:opacity 0.2s" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.45'">
+      <button onclick="navigator.clipboard.writeText(document.body.innerText).then(function(){var b=event.target;b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Copy</button>
+      <button onclick="window.print()" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Save PDF</button>
+      <button onclick="window.print()" style="padding:6px 14px;font-size:12px;font-weight:500;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)">Print</button>
+    </div>
+    <style media="print">#doc-toolbar{display:none!important}</style>
+    <!-- /Doc Toolbar -->
+
+  </body>
+</html>

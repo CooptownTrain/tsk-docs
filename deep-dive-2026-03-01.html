@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TSK Chief of Staff Deep Dive | March 1, 2026</title>
+<style>
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --surface-2: #f0efec;
+    --surface-3: #e8e7e3;
+    --border: #d8d6d0;
+    --border-light: #eae8e4;
+    --text: #1a1a1a;
+    --text-muted: #5c5c5c;
+    --text-dim: #8a8a8a;
+    --accent: #2c5282;
+    --accent-light: #ebf2fa;
+    --accent-dim: #d4e2f0;
+    --red: #c53030;
+    --red-bg: #fff5f5;
+    --red-border: #fcc;
+    --amber: #b7791f;
+    --amber-bg: #fefcf3;
+    --amber-border: #f0e0a0;
+    --green: #276749;
+    --green-bg: #f0fff4;
+    --green-border: #b2e0c0;
+    --gold: #8b6914;
+    --blue-bg: #ebf8ff;
+    --blue-border: #bee3f8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    padding: 48px 24px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .header-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .header .subtitle {
+    font-size: 16px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .header .date {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 12px;
+  }
+  .classification {
+    display: inline-block;
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border: 1px solid var(--red-border);
+    border-radius: 3px;
+    margin-top: 16px;
+  }
+
+  /* SECTIONS */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-number {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    background: var(--surface-2);
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .section-body { padding: 24px; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface-2);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card:last-child { margin-bottom: 0; }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* STATUS BADGES */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+  .badge-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .badge-blue { background: var(--blue-bg); color: var(--accent); border: 1px solid var(--blue-border); }
+  .badge-gray { background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border); }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface-2);
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* METRIC BOXES */
+  .metric-box {
+    background: var(--surface-2);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+  }
+  .metric-value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.2;
+  }
+  .metric-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  /* LISTS */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-icon { font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+
+  /* CALLOUTS */
+  .callout {
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    border-left: 4px solid;
+  }
+  .callout-red { background: var(--red-bg); border-color: var(--red); }
+  .callout-amber { background: var(--amber-bg); border-color: var(--amber); }
+  .callout-green { background: var(--green-bg); border-color: var(--green); }
+  .callout-blue { background: var(--blue-bg); border-color: var(--accent); }
+  .callout-title { font-weight: 600; margin-bottom: 4px; }
+
+  /* TIMELINE */
+  .timeline-item {
+    position: relative;
+    padding-left: 24px;
+    padding-bottom: 20px;
+    border-left: 2px solid var(--border);
+  }
+  .timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--surface);
+  }
+  .timeline-date {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* COLLAPSIBLE */
+  details { margin-bottom: 8px; }
+  details summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 12px 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  details summary::before { content: '\25B6'; font-size: 10px; transition: transform 0.2s; }
+  details[open] summary::before { transform: rotate(90deg); }
+  details summary::-webkit-details-marker { display: none; }
+  details .detail-body {
+    padding: 16px;
+    border: 1px solid var(--border-light);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    background: var(--surface);
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    margin-top: 40px;
+    border-top: 2px solid var(--border);
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  /* PRINT */
+  @media print {
+    body { font-size: 12px; }
+    .section { break-inside: avoid; }
+    details[open] summary ~ * { display: block; }
+  }
+
+  .highlight { background: #fff3cd; padding: 2px 4px; border-radius: 2px; }
+  .strike { text-decoration: line-through; color: var(--text-dim); }
+  .bold { font-weight: 700; }
+  p { margin-bottom: 12px; }
+  p:last-child { margin-bottom: 0; }
+  ul, ol { margin-bottom: 12px; padding-left: 20px; }
+  li { margin-bottom: 4px; }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; margin-top: 20px; }
+  h3:first-child { margin-top: 0; }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 8px; margin-top: 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  hr { border: none; border-top: 1px solid var(--border-light); margin: 20px 0; }
+
+  /* SECTION NAV */
+  .back-link {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--accent); text-decoration: none; }
+
+  .section-nav {
+    position: fixed;
+    top: 80px;
+    left: 16px;
+    width: 180px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 12px 0;
+  }
+  .section-nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    line-height: 1.3;
+  }
+  .section-nav a:hover {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .section-nav a.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+  .section-nav .nav-num {
+    font-weight: 700;
+    font-size: 10px;
+    min-width: 22px;
+    color: inherit;
+  }
+  .section-nav .nav-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Shift main content right to make room for nav */
+  @media (min-width: 1400px) {
+    .header, .container, .footer { margin-left: 210px; }
+  }
+
+  /* Mobile: hide sidebar, show toggle */
+  .nav-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 200;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  @media (max-width: 1200px) {
+    .section-nav {
+      display: none;
+      position: fixed;
+      top: auto;
+      bottom: 60px;
+      left: 20px;
+      width: 220px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      padding: 12px 0;
+      max-height: 60vh;
+    }
+    .section-nav.open { display: block; }
+    .nav-toggle { display: block; }
+  }
+
+  @media print {
+    .section-nav, .nav-toggle, .back-link { display: none !important; }
+  }
+</style>
+<link rel="stylesheet" href="interactive.css">
+</head>
+<body>
+
+<a href="index.html" class="back-link">&larr; Briefings</a>
+
+<nav class="section-nav" id="sectionNav">
+  <a href="#s01"><span class="nav-num">01</span><span class="nav-label">Summary</span></a>
+  <a href="#s02"><span class="nav-num">02</span><span class="nav-label">Company Status</span></a>
+  <a href="#s03"><span class="nav-num">03</span><span class="nav-label">Calendar Gap</span></a>
+  <a href="#s04"><span class="nav-num">04</span><span class="nav-label">Direction Given</span></a>
+  <a href="#s05"><span class="nav-num">05</span><span class="nav-label">Know / Don't Know</span></a>
+  <a href="#s06"><span class="nav-num">06</span><span class="nav-label">Commitments</span></a>
+  <a href="#s06b"><span class="nav-num">06B</span><span class="nav-label">Hidden Timeline</span></a>
+  <a href="#s07"><span class="nav-num">07</span><span class="nav-label">The Team</span></a>
+  <a href="#s08"><span class="nav-num">08</span><span class="nav-label">JD Gaps</span></a>
+  <a href="#s09"><span class="nav-num">09</span><span class="nav-label">Market Context</span></a>
+  <a href="#s10"><span class="nav-num">10</span><span class="nav-label">DealMaker</span></a>
+  <a href="#s11"><span class="nav-num">11</span><span class="nav-label">Decisions</span></a>
+  <a href="#s12"><span class="nav-num">12</span><span class="nav-label">Risk Dashboard</span></a>
+  <a href="#s13"><span class="nav-num">13</span><span class="nav-label">Action Plan</span></a>
+  <a href="#s14"><span class="nav-num">14</span><span class="nav-label">Protections</span></a>
+</nav>
+
+<button class="nav-toggle" id="navToggle" onclick="document.getElementById('sectionNav').classList.toggle('open')">Sections</button>
+
+<div class="header">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:8px"><div id="header-toolbar-slot"></div></div>
+  <div class="header-label">TSK COO &mdash; Chief of Staff Deep Dive</div>
+  <h1>State of the Company</h1>
+  <div class="subtitle">Where we are, what we know, what we don't, and what needs to happen next</div>
+  <div class="date">Prepared March 1, 2026 &bull; Based on all available data sources</div>
+  <div class="classification">Confidential &mdash; Steve Cooper Only</div>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- SECTION 1: EXECUTIVE SUMMARY -->
+<!-- ============================================================ -->
+<div class="section" id="s01">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <span class="section-title">Executive Summary</span>
+  </div>
+  <div class="section-body">
+    <div class="callout callout-red">
+      <div class="callout-title">Bottom Line</div>
+      <p>You are 7 days into a role where your obligations are legally binding but TSK's are not. The company has no revenue, no customers, no signed agreement with you, and a $5M raise that hasn't closed in 2.5 years. All 10 expected meetings are on the calendar (primary + transferred). You have email access but no operational authority, no budget, and no team reporting to you. The direction you've received is to "establish your presence" and prepare for a DealMaker institutional launch &mdash; but DealMaker is still asking TSK basic questions about its revenue model.</p>
+    </div>
+    <div class="grid-3">
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--red);">7</div>
+        <div class="metric-label">Days Since Steve Signed</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--red);">0</div>
+        <div class="metric-label">Days Since TSK Signed</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--amber);">723</div>
+        <div class="metric-label">Days Until Sunset</div>
+      </div>
+    </div>
+    <div style="margin-top: 16px;" class="grid-3">
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--red);">$0</div>
+        <div class="metric-label">Capital Raised (of $5M trigger)</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--red);">$0</div>
+        <div class="metric-label">Compensation to Date</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--green);">10 of 10</div>
+        <div class="metric-label">Expected Meetings on Calendar</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: WHERE THE COMPANY ACTUALLY IS -->
+<!-- ============================================================ -->
+<div class="section" id="s02">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <span class="section-title">Where the Company Actually Is</span>
+  </div>
+  <div class="section-body">
+
+    <h3>Company Stage: Pre-Everything</h3>
+    <table>
+      <tr><th style="width:30%">Dimension</th><th>Reality</th><th style="width:15%">Status</th></tr>
+      <tr>
+        <td class="bold">Revenue</td>
+        <td>$0. No bookings, no customers, no disclosed traction. The "10K daily visitors" claim is from a 2021 pilot &mdash; 5 years ago.</td>
+        <td><span class="badge badge-red">ZERO</span></td>
+      </tr>
+      <tr>
+        <td class="bold">Capital Raised</td>
+        <td>One investor commitment identified: <strong>"Stevan"</strong> (associated with Greenberg Chararg firm) pledged $100K for 10% undiluted equity. Paperwork sent to DealMaker by John (GC) in Jan 2026. K paid DealMaker $15K in Dec 2025 to initiate the engagement. If $100K for 10% is the benchmark, <strong>TSK is implicitly valued at ~$1M</strong> &mdash; Steve's 1.5% profits interest would be worth ~$15K at that valuation. SEC filing still shows $0 formally raised. Estimated &lt;15% close probability. <a href="https://docs.google.com/document/d/14UK_J5rGcnrOBSR8cqwXW5n_8-lUjyGdQHz3BGBGY8Q" target="_blank" rel="noopener"><span class="badge badge-gray">Nathan&rsquo;s notes &#8599;</span></a> <a href="https://docs.google.com/document/d/15MUxiarIybhxWpIeyK96BFwO6hyZn8isYNaNNUXthzw" target="_blank" rel="noopener"><span class="badge badge-gray">GC doc &#8599;</span></a></td>
+        <td><span class="badge badge-red">~$0</span></td>
+      </tr>
+      <tr>
+        <td class="bold">Product / Platform</td>
+        <td><strong>No product exists.</strong> Website runs on Magento (legacy e-commerce stack &mdash; not a travel platform). CTO Taiwo Oyeniyi took over from previous CTO "Lance" in June 2025 but does not code himself; he manages one intern. Estimates: $250K (offshore) to $1M+ (stateside) to build, 8&ndash;9 month development + 6 month MVP timeline. Only mockups/Figma designs exist. Fiverr was quoted for prototyping. $8M (40% of raise) allocated to tech in deck. <a href="https://docs.google.com/document/d/165JP5NbwQ5_pjxC_Ss6XY3E5QgepHq12a5_baIy9ODw" target="_blank" rel="noopener"><span class="badge badge-gray">CTO doc &#8599;</span></a> <a href="https://docs.google.com/document/d/14UK_J5rGcnrOBSR8cqwXW5n_8-lUjyGdQHz3BGBGY8Q" target="_blank" rel="noopener"><span class="badge badge-gray">Nathan&rsquo;s notes &#8599;</span></a></td>
+        <td><span class="badge badge-red">NOTHING BUILT</span></td>
+      </tr>
+      <tr>
+        <td class="bold">Properties</td>
+        <td>Claims "2,000 homes across 60+ destinations" in investor deck, but only ~20% exclusive. No acquisition budget in use-of-funds. No property agreements shared.</td>
+        <td><span class="badge badge-amber">UNVERIFIED</span></td>
+      </tr>
+      <tr>
+        <td class="bold">Team</td>
+        <td>9 C-suite / executives, all 1099 at $180K/yr (unpaid until raise closes). Three new hires introduced Feb 25: Steve (COO), Robert Fitzgerald (CRO), Sergei Orel (IP Counsel).</td>
+        <td><span class="badge badge-amber">PRE-REVENUE</span></td>
+      </tr>
+      <tr>
+        <td class="bold">Legal Entity</td>
+        <td>Wyoming LLC. Registered agent is a virtual address in Sheridan used by thousands of shell LLCs. Mandatory arbitration in Wyoming.</td>
+        <td><span class="badge badge-gray">STANDARD</span></td>
+      </tr>
+      <tr>
+        <td class="bold">Fundraising</td>
+        <td><strong>DealMaker is a retail/crowdfunding platform, not institutional capital.</strong> Supports Reg CF ($5M max), Reg A+ ($75M/yr max), and Reg D (accredited). Processed $500M in 2025; $292M in Reg A+ alone (50%+ of all US Reg A+ capital). TSK onboarded Jan 8, 2026. K's language about "institutional launch" is misleading &mdash; this is retail investor infrastructure. DealMaker is still asking TSK basic questions about revenue model as of Mar 2 meeting. <em>Comparable: Pacaso raised $72.5M from 17,500 retail investors via DealMaker &mdash; but had $200M in VC and a working product first.</em></td>
+        <td><span class="badge badge-amber">REG A+ LIKELY</span></td>
+      </tr>
+    </table>
+
+    <hr>
+
+    <h3>What the Google Drive Tells Us</h3>
+    <p>Steve has access to 80+ files spanning 2022&ndash;2026. Here's what the file inventory reveals about company maturity:</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Signs of Activity</div>
+        <ul>
+          <li><strong>8 versions of investor deck</strong> (Draft 2 through Final, Dec 2025) &mdash; significant iteration on fundraising materials</li>
+          <li><strong>DealMaker onboarding</strong> (Jan 8, 2026) &mdash; including kickoff call recording (56MB video)</li>
+          <li><strong>Role docs for all C-suite</strong> &mdash; now readable (converted to Google Docs). Contain Nathan's 1:1 meeting notes for each officer spanning June 2025 &ndash; Jan 2026</li>
+          <li><strong>Prior COO bi-weekly notes</strong> <span class="badge badge-green">NOW READABLE</span> &mdash; Nathan Johnson maintained detailed records. Last entry: Jan 20, 2026. Active engagement through his final weeks. Notes reveal DealMaker timeline, team dynamics, budget discussions, and strategic decisions</li>
+          <li><strong>Brand Guidelines V3.0</strong> (2021) &mdash; professional branding exists</li>
+          <li><strong>Partnership spreadsheets</strong> (current + projected) &mdash; some partnership development work</li>
+          <li><strong>Competitor advantage doc</strong> &mdash; competitive positioning analysis exists</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Signs of Concern <span class="badge badge-red">UPDATED WITH DOC INTEL</span></div>
+        <ul>
+          <li><strong>Budget template from July 2025</strong> &mdash; 9 months old. Nathan's notes confirm departments never submitted budgets despite repeated requests. CFO was "waiting on departments" as of July 2025</li>
+          <li><strong>Projections from June 2025</strong> &mdash; 9 months old, never grounded in real data</li>
+          <li><strong>Data room was empty</strong> &mdash; CFO Axel was building it but had "no data" as of July 2025. NDA bottleneck was blocking investor outreach <a href="https://docs.google.com/document/d/1Kc4PrLwXzGbS18SVN3F3g5Sn_cHHj_s5TaasNfGAbRs" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: CFO doc &#8599;</span></a></li>
+          <li><strong>GC (John) consistently no-showed meetings</strong> &mdash; missed scheduled calls on July 29, Sep 9, Nov 4, and Dec 2. Multiple emails and texts went unanswered <a href="https://docs.google.com/document/d/15MUxiarIybhxWpIeyK96BFwO6hyZn8isYNaNNUXthzw" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: GC doc &#8599;</span></a></li>
+          <li><strong>CMO "unclear about what is needed"</strong> &mdash; Jake's last entry (Jan 5, 2026): unable to make team call, needs "clear direction on what is required/expected from Marketing for the deal" <a href="https://docs.google.com/document/d/1V_dhw2Ssm58pb0V9ruKv_MU3Nv5GTD4wJLaNaC_GGNI" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: CMO doc &#8599;</span></a></li>
+          <li><strong>IP Counsel "stepped aside"</strong> &mdash; Jalyn left July 22, 2025. Position unfilled for 7 months until Sergei Orel (Feb 2026) <a href="https://docs.google.com/document/d/1RfPMPqHz9eSV1PCaTBLcxrnkYlIvXk-sSRd9pWI8dE4" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: IP doc &#8599;</span></a></li>
+          <li><strong>No customer data files</strong> &mdash; zero bookings, pipelines, CRM exports</li>
+          <li><strong>No COO role doc</strong> &mdash; every other C-suite has one in Drive. Steve doesn't.</li>
+          <li><strong>Oldest files from 2022</strong> (Roombeast Agreement, Affiliate Agreement, Privacy/Terms) &mdash; 4 years of existence, still pre-revenue</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+
+    <h3>What the Emails Tell Us (Feb 25 &ndash; Mar 1)</h3>
+    <p>Steve has received 20 substantive emails in his first week. Here's what the communication pattern reveals:</p>
+
+    <div class="callout callout-blue">
+      <div class="callout-title">Communication Map</div>
+      <p>Steve has communicated with exactly <strong>3 people</strong>: K (CEO), Allison Cooper (Admin), and Riley Stanton (DealMaker). Zero communication with any other C-suite member despite having 5 scheduled 1:1s next week. No one has proactively reached out to Steve.</p>
+    </div>
+
+    <table>
+      <tr><th>Signal</th><th>Source</th><th>Implication</th></tr>
+      <tr>
+        <td>K's welcome email sent to <code>support@</code>, not individual C-suite addresses</td>
+        <td>Email, Feb 25</td>
+        <td>Either a distribution list, or K doesn't have individual C-suite emails readily at hand. Minor but notable.</td>
+      </tr>
+      <tr>
+        <td>Three executives introduced simultaneously (Steve, Robert, Sergei)</td>
+        <td>K's welcome email</td>
+        <td>Batch hiring. CRO and IP Counsel are as new as Steve. They don't have context either.</td>
+      </tr>
+      <tr>
+        <td>Email signature forwarded to "Lance" at <code>cto@</code> <span class="badge badge-green">RESOLVED</span></td>
+        <td>Allison's email, Feb 25</td>
+        <td><strong>Lance was the previous CTO.</strong> Taiwo transitioned from Lance in June 2025. The cto@ account still carries Lance's display name. Not an identity discrepancy &mdash; a holdover. <a href="https://docs.google.com/document/d/165JP5NbwQ5_pjxC_Ss6XY3E5QgepHq12a5_baIy9ODw" target="_blank" rel="noopener"><span class="badge badge-gray">CTO doc &#8599;</span></a> <a href="https://docs.google.com/document/d/1edXtDwzvQY9sby6rrFN5nocBeHR372aHAoM75A0ACGE" target="_blank" rel="noopener"><span class="badge badge-gray">Bi-weekly notes &#8599;</span></a></td>
+      </tr>
+      <tr>
+        <td>K refers to monthly team meeting "March 3 at 1:00 PM ET"</td>
+        <td>Welcome email</td>
+        <td>This meeting is <strong>NOT on Steve's calendar</strong>. Either it hasn't been created or Steve wasn't added.</td>
+      </tr>
+      <tr>
+        <td>Allison says K will "stay behind after Monday meeting to provide specific direction"</td>
+        <td>Email, Feb 27</td>
+        <td>Direction has not yet been given. K's engagement is scheduled, not spontaneous.</td>
+      </tr>
+      <tr>
+        <td>Riley's deliverables for Wednesday meeting &mdash; Steve asked, no response</td>
+        <td>Email, Feb 27</td>
+        <td>DealMaker deliverables requested but not confirmed received. Potential gap heading into Mar 2 meeting.</td>
+      </tr>
+      <tr>
+        <td>CFO (Axel Reijmers) declined the DealMaker meeting</td>
+        <td>Calendar, Mar 2</td>
+        <td>The CFO declined a meeting about TSK's revenue model with the fundraising platform. Why?</td>
+      </tr>
+      <tr>
+        <td>K added Steve to "COO WhatsApp group" via management@</td>
+        <td>Email, Feb 25</td>
+        <td>A "COO WhatsApp group" existed before Steve &mdash; from Nathan Johnson's tenure. Who else is in it?</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: THE CALENDAR GAP -->
+<!-- ============================================================ -->
+<div class="section" id="s03">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <span class="section-title">Calendar: All 10 Meetings Confirmed</span>
+  </div>
+  <div class="section-body">
+    <div class="callout callout-green" style="margin-bottom: 16px;">
+      <div class="callout-title">Correction (Mar 2): All 10 Meetings Are on Calendar</div>
+      <p>An earlier version of this briefing reported 8 meetings as "MISSING." <strong>This was wrong.</strong> All meetings exist on the <em>transferred calendar</em> (Nathan's old calendar, transferred to Steve's account on Feb 25). The error was caused by only querying Steve's primary calendar &mdash; the same bug that was found and fixed in the daily briefing email system.</p>
+    </div>
+
+    <p>K told Steve he was scheduled for 10 recurring meetings. <strong>All 10 are confirmed</strong> across the primary calendar and the transferred calendar.</p>
+
+    <table>
+      <tr><th>Meeting</th><th>Next Dates</th><th>Calendar</th><th>Status</th></tr>
+      <tr>
+        <td class="bold">CMO x COO (bi-weekly)</td>
+        <td>Mar 2, 16, 30</td>
+        <td>Transferred</td>
+        <td><span class="badge badge-green">CONFIRMED</span></td>
+      </tr>
+      <tr>
+        <td class="bold">DealMaker (Riley Stanton)</td>
+        <td>Mar 2, 2:30&ndash;3pm ET</td>
+        <td>Primary</td>
+        <td><span class="badge badge-amber">CFO DECLINED</span></td>
+      </tr>
+      <tr>
+        <td class="bold">Monthly Team Meeting</td>
+        <td>Mar 3, 1:00&ndash;2:00 PM ET</td>
+        <td>Primary</td>
+        <td><span class="badge badge-green">CONFIRMED</span> (Steve created)</td>
+      </tr>
+      <tr>
+        <td class="bold">CTO x COO (bi-weekly)</td>
+        <td>Mar 3, 17, 31</td>
+        <td>Both (duplicated)</td>
+        <td><span class="badge badge-green">CONFIRMED</span></td>
+      </tr>
+      <tr>
+        <td class="bold">IP Counsel x COO (bi-weekly)</td>
+        <td>Mar 5, 19</td>
+        <td>Transferred</td>
+        <td><span class="badge badge-green">CONFIRMED</span></td>
+      </tr>
+      <tr>
+        <td class="bold">CRO x COO (bi-weekly)</td>
+        <td>Mar 5, 19</td>
+        <td>Transferred</td>
+        <td><span class="badge badge-green">CONFIRMED</span></td>
+      </tr>
+      <tr>
+        <td class="bold">CCO + COO (bi-weekly)</td>
+        <td>Mar 6, 20</td>
+        <td>Transferred</td>
+        <td><span class="badge badge-green">CONFIRMED</span></td>
+      </tr>
+      <tr>
+        <td class="bold">CFO x COO (bi-weekly)</td>
+        <td>Mar 10, 24</td>
+        <td>Transferred</td>
+        <td><span class="badge badge-green">CONFIRMED</span></td>
+      </tr>
+      <tr>
+        <td class="bold">GC x COO (bi-weekly)</td>
+        <td>Mar 10, 24</td>
+        <td>Transferred</td>
+        <td><span class="badge badge-green">CONFIRMED</span></td>
+      </tr>
+      <tr>
+        <td class="bold">CEO x COO + DealMaker (bi-weekly)</td>
+        <td>Mar 17, 31</td>
+        <td>Primary</td>
+        <td><span class="badge badge-green">CONFIRMED</span></td>
+      </tr>
+    </table>
+
+    <div class="callout callout-amber" style="margin-top: 16px;">
+      <div class="callout-title">Details Worth Noting</div>
+      <ul>
+        <li><strong>GC meeting still shows "Nathan Johnson"</strong> as the display name for coo@ &mdash; the invite was transferred without updating the name. John's personal email <code>jik118@gmail.com</code> is also on the invite.</li>
+        <li><strong>CTO meeting is duplicated</strong> &mdash; exists on both the primary calendar and the transferred calendar for the same time slot.</li>
+        <li><strong>All transferred meetings</strong> originated from Nathan's tenure (created June&ndash;Oct 2025). The calendar transfer preserved them correctly.</li>
+        <li><strong>Allison's calendar transition</strong> was actually comprehensive &mdash; she transferred all of Nathan's recurring meetings, not just 2 as previously reported.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: DIRECTION ALREADY GIVEN -->
+<!-- ============================================================ -->
+<div class="section" id="s04">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <span class="section-title">Direction Already Given</span>
+  </div>
+  <div class="section-body">
+    <p>Here is every piece of direction Steve has received, who gave it, and what it actually means.</p>
+
+    <div class="timeline-item">
+      <div class="timeline-date">Feb 25 &mdash; K (CEO), Welcome Email</div>
+      <p><strong>Direction:</strong> <em>"Stephen will be reaching out to each of you (executive level) to ensure your respective bi-weekly meetings are properly scheduled. This level of solid coordination is essential as we prepare for our upcoming institutional launch with DealMaker."</em></p>
+      <p><strong>Translation:</strong> K is positioning Steve as the meeting coordinator, not the operational leader. The stated priority is the DealMaker launch (fundraising), not operations. K has delegated scheduling work to Steve as his first visible task.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">Feb 25 &mdash; K (CEO), WhatsApp Request</div>
+      <p><strong>Direction:</strong> Add Steve to "COO WhatsApp group."</p>
+      <p><strong>Translation:</strong> K communicates via WhatsApp in addition to email. A "COO WhatsApp group" pre-existed from Nathan Johnson. This is likely where real-time coordination happens. Steve should check this group for historical context.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">Feb 26 &mdash; Allison (Admin), Calendar Transition</div>
+      <p><strong>Direction:</strong> Accept calendar transfers, verify meeting links, reach out to C-suite to confirm schedules, use Google Gemini for workspace questions.</p>
+      <p><strong>Translation:</strong> Allison is the operational gatekeeper. She manages scheduling, calendar, and workspace. She's helpful but also creates a layer between Steve and K. The suggestion to "use Gemini" rather than ask Allison is notable &mdash; she's setting boundaries on her support bandwidth.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">Feb 27 &mdash; Allison (Admin), 1:1 Advice</div>
+      <p><strong>Direction:</strong> <em>"Keep those meetings... vital for establishing your presence. I've asked Kaye to stay behind after your Monday meeting to provide specific direction on how to engage with the rest of the team."</em></p>
+      <p><strong>Translation:</strong> Steve's first week is about relationship building, not operations. K will give specific direction after the Monday meeting (which would be the next CMO 1:1 day, but that meeting is not on the calendar). Allison also recommended "securing everyone's direct contact info" as a priority.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">Feb 27 &mdash; DealMaker Meeting Invite (Mar 2)</div>
+      <p><strong>Direction:</strong> Meeting description includes specific questions for Robert (CRO) about revenue model, % of revenue by stream, growth roadmap, partnerships, and additional revenue streams.</p>
+      <p><strong>Translation:</strong> DealMaker is still in discovery mode with TSK. They're asking foundational business questions &mdash; "how does TSK generate revenue?" This is not a company about to launch a capital raise. This is a company still assembling its narrative for a Reg A+ retail investor offering. Note: DealMaker is a retail/crowdfunding platform, not institutional capital &mdash; K's "institutional launch" framing is aspirational.</p>
+    </div>
+
+    <div class="callout callout-red" style="margin-top: 16px;">
+      <div class="callout-title">The Direction Gap</div>
+      <p>Total operational direction Steve has received in 7 days: schedule meetings, accept calendar transfers, introduce yourself, and attend a DealMaker meeting. No strategic priorities, no operational goals, no KPIs, no 30/60/90 plan from TSK, no onboarding deck, no product demo, no financial walkthrough, no team org chart with reporting lines. The heaviest direction came from Allison (admin), not K (CEO).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: WHAT WE KNOW VS. WHAT WE DON'T KNOW -->
+<!-- ============================================================ -->
+<div class="section" id="s05">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <span class="section-title">What We Know vs. What We Don't Know</span>
+  </div>
+  <div class="section-body">
+
+    <h3>What We Know (Verified)</h3>
+    <table>
+      <tr><th style="width:5%">#</th><th>Fact</th><th style="width:20%">Source</th></tr>
+      <tr><td>1</td><td>TSK is a Wyoming LLC targeting UHNWI luxury travel. Pre-revenue, pre-raise.</td><td>SEC filing, deck, research</td></tr>
+      <tr><td>2</td><td>Steve signed the 2nd Amended Agreement on Feb 22, 2026. TSK has not countersigned. Addendum also unsigned by TSK.</td><td>Deal records, Dropbox Sign</td></tr>
+      <tr><td>3</td><td>No compensation until $5M first tranche closes. $15K/month consulting fee, 1.5% profits interest (4-year vest, 1-year cliff).</td><td>2AA terms</td></tr>
+      <tr><td>4</td><td>Steve has active email access at coo@thesovereignkingdom.com and Google Drive access with 80+ shared files.</td><td>Email, Drive verification</td></tr>
+      <tr><td>5</td><td>DealMaker (retail capital-raising platform, NOT institutional) was onboarded Jan 8, 2026. Supports Reg CF/A+/D. Processed $500M in 2025. TSK's raise is almost certainly Reg A+ (retail investors, up to $75M/yr). K's "institutional launch" language is misleading.</td><td>Drive files, calendar, dealmaker.tech</td></tr>
+      <tr><td>6</td><td>Three new C-suite members were introduced simultaneously on Feb 25: Steve (COO), Robert Fitzgerald (CRO), Sergei Orel (IP Counsel).</td><td>K's welcome email</td></tr>
+      <tr><td>7</td><td>A prior COO (Nathan Johnson) existed. Calendar data transferred from his account. His bi-weekly meeting notes (41KB) are in Drive.</td><td>Calendar transfer, Drive</td></tr>
+      <tr><td>8</td><td>K refers to "upcoming institutional launch with DealMaker" as the immediate priority.</td><td>Welcome email</td></tr>
+      <tr><td>9</td><td>The investor deck has gone through 8+ iterations (Draft 2 through Final, Dec 2025).</td><td>Drive file history</td></tr>
+      <tr><td>10</td><td>Steve's confidentiality, IP assignment, and non-solicitation obligations are active NOW, regardless of whether TSK countersigns.</td><td>2AA terms</td></tr>
+      <tr><td>11</td><td>The 730-day sunset clock started when the raise window began. If $5M is not raised, the deal expires.</td><td>2AA terms</td></tr>
+      <tr><td>12</td><td>K uses multiple email addresses: ceo@, tskceo@. Allison also refers to K as "Kaye."</td><td>Email headers</td></tr>
+    </table>
+
+    <hr>
+
+    <h3>What We Don't Know (Gaps)</h3>
+    <table>
+      <tr><th style="width:5%">#</th><th>Unknown</th><th style="width:15%">Priority</th><th style="width:25%">How to Find Out</th></tr>
+      <tr>
+        <td>1</td><td><strong>Why Nathan Johnson left (or was removed).</strong> <span class="badge badge-amber">PARTIALLY ANSWERED</span> His notes are now readable. Last documented meeting: Jan 20, 2026 &mdash; he was actively filling roles (GC, CRO, IP, CCO, CEO) and managing DealMaker process in his final weeks. Notes show engagement, not disengagement. Steve signed Feb 22, one month later. <strong>The departure itself remains unexplained.</strong></td>
+        <td><span class="badge badge-red">CRITICAL</span></td>
+        <td>Ask K directly. Nathan's notes suggest he was invested through his last day &mdash; which makes the departure stranger, not less concerning.</td>
+      </tr>
+      <tr>
+        <td>2</td><td><strong>Raise progress.</strong> How much has been raised? How close to the $5M trigger? Any committed investors?</td>
+        <td><span class="badge badge-red">CRITICAL</span></td>
+        <td>Ask K at next CEO meeting. Monitor for DealMaker signals.</td>
+      </tr>
+      <tr>
+        <td>3</td><td><strong>Platform status.</strong> <span class="badge badge-amber">PARTIALLY ANSWERED</span> Website on Magento (legacy e-commerce, not a travel platform). CTO Taiwo does not code; manages one intern. Estimated $250K&ndash;$1M+ to build, 8&ndash;9 months dev + 6 month MVP. Only mockups/Figma exist. Fiverr was quoted for prototyping. <strong>Still need: What has been built since Jan 2026? Has any dev budget been allocated?</strong></td>
+        <td><span class="badge badge-red">CRITICAL</span></td>
+        <td>CTO 1:1 &mdash; confirm current state. Has anything changed since Nathan's notes?</td>
+      </tr>
+      <tr>
+        <td>4</td><td><strong>Who "Lance" is at cto@.</strong> <span class="badge badge-green">RESOLVED</span> Lance was the <strong>previous CTO</strong>. Taiwo Oyeniyi transitioned from Lance in June 2025. The cto@ email account still shows Lance's display name.</td>
+        <td><span class="badge badge-gray">CLOSED</span></td>
+        <td>No action needed. Source: CTO role doc, bi-weekly notes.</td>
+      </tr>
+      <tr>
+        <td>5</td><td><strong>Whether any C-suite members are producing actual work.</strong> <span class="badge badge-red">NOW ANSWERED &mdash; MOSTLY NO</span> Nathan's notes reveal: GC (John) no-showed 4 meetings in 6 months. CMO (Jake) "unclear what is needed" as of Jan 2026. CRO (Sam) couldn't attend meetings due to "work constraints," stopped appearing after July 2025. CCO (Kamrul) did policy work and LinkedIn outreach. CFO (Axel) worked on placement agencies and deck iterations but data room remained empty. CTO had surgery Nov 2025 and needs full dev team to build anything.</td>
+        <td><span class="badge badge-red">CRITICAL</span></td>
+        <td>1:1 meetings. Verify current engagement levels vs. Nathan-era patterns.</td>
+      </tr>
+      <tr>
+        <td>6</td><td><strong>Equity valuation, hurdle rate, cap table.</strong> Steve's 1.5% profits interest is meaningless without these numbers. TSK has deflected when asked.</td>
+        <td><span class="badge badge-amber">HIGH</span></td>
+        <td>Blocked by unsigned Addendum (which requires disclosure within 10 biz days).</td>
+      </tr>
+      <tr>
+        <td>7</td><td><strong>Content of C-suite role docs.</strong> <span class="badge badge-green">RESOLVED</span> All now converted to Google Docs and readable. These are Nathan's 1:1 meeting notes with each officer, not formal job descriptions. Contain operational intelligence spanning June 2025 &ndash; Jan 2026. Key findings integrated throughout this briefing.</td>
+        <td><span class="badge badge-gray">CLOSED</span></td>
+        <td>Done. Content reviewed and synthesized.</td>
+      </tr>
+      <tr>
+        <td>8</td><td><strong>Budget details.</strong> The budget template (July 2025) and projections (June 2025) are in XLSX format, unreadable through current tools. Both are 9 months old.</td>
+        <td><span class="badge badge-blue">MEDIUM</span></td>
+        <td>Ask CFO for current budget at 1:1. Download XLSX manually.</td>
+      </tr>
+      <tr>
+        <td>9</td><td><strong>Partnership details.</strong> Partnership spreadsheets exist but content unknown (XLSX format). Are there real partnerships, or just targets?</td>
+        <td><span class="badge badge-blue">MEDIUM</span></td>
+        <td>Review partnership files. Ask CRO about signed deals.</td>
+      </tr>
+      <tr>
+        <td>10</td><td><strong>DealMaker engagement terms.</strong> What did TSK commit to in the DealMaker relationship? Onboarding docs exist but are binary PDFs.</td>
+        <td><span class="badge badge-blue">MEDIUM</span></td>
+        <td>Download and read DealMaker onboarding PDFs from Drive.</td>
+      </tr>
+      <tr>
+        <td>11</td><td><strong>Reporting structure.</strong> Does anyone report to Steve? The agreement says COO, but Steve has zero direct reports and no one has been told to report to him.</td>
+        <td><span class="badge badge-amber">HIGH</span></td>
+        <td>Clarify with K at next meeting.</td>
+      </tr>
+      <tr>
+        <td>12</td><td><strong>What the 2021 pilot actually was.</strong> "10K+ daily visitors" is claimed. What was the platform? What happened to it? Why did it stop?</td>
+        <td><span class="badge badge-blue">MEDIUM</span></td>
+        <td>Ask CTO or K. Check if brand guidelines reference it.</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 6: COMMITMENT ASYMMETRY -->
+<!-- ============================================================ -->
+<div class="section" id="s06">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <span class="section-title">The Commitment Asymmetry</span>
+  </div>
+  <div class="section-body">
+    <div class="callout callout-red">
+      <div class="callout-title">Core Problem</div>
+      <p>Steve's obligations are legally binding right now. TSK's are not. Steve has delivered on every commitment. TSK has delivered on zero.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Steve Has Delivered <span class="badge badge-green">FULFILLED</span></div>
+        <ul>
+          <li>Signed 2nd Amended Agreement (Feb 22)</li>
+          <li>Signed Addendum No. 1 (Feb 20)</li>
+          <li>Accepted calendar transfers</li>
+          <li>Set up email, verified meetings</li>
+          <li>Asked about scheduling 1:1s</li>
+          <li>Responded promptly to all emails</li>
+        </ul>
+        <p style="margin-top:12px"><strong>Active obligations RIGHT NOW:</strong></p>
+        <ul>
+          <li>Confidentiality (Section 3) &mdash; binding from signing</li>
+          <li>IP assignment (Section 4) &mdash; binding from signing</li>
+          <li>Non-solicitation, 12 months (Section 5) &mdash; binding from signing</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">TSK Has Delivered <span class="badge badge-red">ZERO</span></div>
+        <ul>
+          <li class="strike">Countersign 2nd Amended Agreement &mdash; 7 days pending</li>
+          <li class="strike">Countersign Addendum No. 1 &mdash; 9 days pending</li>
+          <li class="strike">Equity transparency disclosure &mdash; blocked by unsigned Addendum</li>
+          <li class="strike">Payment start confirmation &mdash; blocked by raise</li>
+          <li class="strike">Cap table reporting &mdash; blocked by unsigned Addendum</li>
+        </ul>
+        <p style="margin-top:12px"><strong>Partially delivered:</strong></p>
+        <ul>
+          <li>Email access (coo@) &mdash; working</li>
+          <li>Google Drive access &mdash; working</li>
+          <li>Calendar setup &mdash; 10 of 10 meetings (via transferred calendar)</li>
+          <li>1:1 setup per K's verbal commitment &mdash; all transferred from Nathan's calendar</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 6B: OPERATIONAL TIMELINE (FROM NATHAN'S NOTES) -->
+<!-- ============================================================ -->
+<div class="section" id="s06b">
+  <div class="section-header">
+    <span class="section-number">06B</span>
+    <span class="section-title">The Hidden Timeline: What Nathan's Notes Reveal</span>
+  </div>
+  <div class="section-body">
+    <div class="callout callout-blue">
+      <div class="callout-title">Source</div>
+      <p>This timeline is reconstructed entirely from Nathan Johnson's 1:1 meeting notes with each C-suite officer, now readable after conversion to Google Docs. These notes span June 24, 2025 through January 20, 2026 &mdash; the 7 months preceding Steve's arrival.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">June 24, 2025 &mdash; Nathan starts as COO</div>
+      <p>First documented bi-weekly meeting with K. Team structure: K (CEO), Lance (CTO), Axel (CFO), Sam (CRO), Jake (CMO, agreement "pending signing"), John (GC, first connected July 1), Kamrul (CCO), Jalyn (IP Counsel, first connected July 8). Nathan initiates 1:1 cadence with all officers.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">June&ndash;July 2025 &mdash; CTO transition</div>
+      <p><strong>Taiwo Oyeniyi replaces Lance as CTO.</strong> Nathan facilitates transition. Taiwo inherits Magento-based website, no product. Taiwo does not code &mdash; manages one intern. Apple and Google account recovery begins (accounts were under Lance's control).</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">July 2025 &mdash; Budget requests go out</div>
+      <p>Nathan asks all departments for budgets. <strong>None are submitted.</strong> Sam (CRO) promises his "over the weekend" of July 26&ndash;27. John (GC) promises by EOD July 30. Axel (CFO) says he's "waiting on departments." The budget template sits empty. K needs to upload client profiles, locations, and property data &mdash; Nathan reminds her, marked "COMPLETED" but unclear if docs materialized.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">July 22, 2025 &mdash; IP Counsel exits</div>
+      <p><strong>Jalyn "stepped aside."</strong> Trademark case with TTAB (Airbnb genericness argument) left in limbo. Prior IP counsel was Delphine. Position unfilled for 7 months until Sergei Orel (Feb 2026).</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">July 23, 2025 &mdash; CRO disengages</div>
+      <p><strong>Sam Shah can't attend bi-weekly "due to work constraints."</strong> Last documented activity. He had explored a Marriott licensing model with his PE partner and done outbound research. After this date: silence. K later assigns Sam's prospecting work (LinkedIn outreach, "email scrapes") to Kamrul and Jake.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">August 2025 &mdash; Corporate structure discussed</div>
+      <p>Aug 14: K, Nathan, Axel, John discuss converting LLC to Corp. Consensus: hold off, be transparent with investors. John and Axel assigned cap table work. <strong>John goes OOO for 2 weeks</strong> (July 29) then returns for Aug 14 meeting. Apple letter finally sent to Apple; Apple responds. Jake assigned social media audit &mdash; never completed. K mentions contact named "Stephen" for co-lead investor term sheet.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">September 2025 &mdash; Engagement drops</div>
+      <p>Sep 9: <strong>John (GC) no-shows 1:1. Multiple emails and texts sent &mdash; no response.</strong> Sep 16 meeting with K: CMO Jake has "nothing to note." Action items pile up: Deer Aisle contract redlines, Google account recovery, Kamrul's policies awaiting John's legal review. Nathan is the only person consistently tracking deliverables.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">October 2025 &mdash; DealMaker discussions begin</div>
+      <p>Oct 21: John focused on getting paperwork to <strong>"Stevan" and his attorney</strong> (Greenberg Chararg firm) for initial investment. DealMaker discussed as raise platform &mdash; minimum commitment discussed at $140K. K assigns Kamrul to explore DealMaker. "Chad" emerges as potential CEO candidate. Jake waiting on "Chad" for deck number updates.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">November 2025 &mdash; CTO surgery, GC silent</div>
+      <p><strong>Taiwo (CTO) has surgery</strong> &mdash; out of action for weeks. Nov 4: <strong>John (GC) no-shows 1:1 again.</strong> Nathan texts follow-up about Stevan paperwork. Nov 24: Jake (CMO) still waiting on numbers from Axel. Jake offers to repurpose a DealMaker webpage from another deal for TSK. Portugal M&A opportunity discussed &mdash; K negotiating term sheet for competitor acquisition.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">December 2025 &mdash; DealMaker paid</div>
+      <p>Dec 2: <strong>John (GC) no-shows 1:1 again.</strong> K pays DealMaker $15K to initiate the engagement. DealMaker agreement signed. Investor deck reaches "Final" version.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">January 2026 &mdash; Nathan's final month</div>
+      <p>Jan 5: Jake (CMO) "unclear about what is needed from him with movement on DealMaker." Unable to make team call. <strong>Stevan's $100K for 10% undiluted equity &mdash; signed and sent to DealMaker.</strong> Jan 8: DealMaker onboarding kickoff call. K actively filling roles: GC, CRO ("Matthew Smith"), IP Counsel, CCO, and CEO ("Chad"). HESS Law Firm recommended by DealMaker for external counsel. Revenue model still debated: lead gen vs. property operator. Nathan warns "trying to be both will be extremely tough."</p>
+    </div>
+
+    <div class="timeline-item" style="border-left-color: var(--red);">
+      <div class="timeline-date" style="color: var(--red);">January 20, 2026 &mdash; Nathan's last documented meeting</div>
+      <p>Active engagement to the end. Was managing DealMaker timeline, recruiting for 5+ roles, coordinating budget requests, mediating between K and the team. <strong>One month later, Steve signs (Feb 22).</strong> What happened in between is unknown.</p>
+    </div>
+
+    <div class="callout callout-red" style="margin-top: 16px;">
+      <div class="callout-title">What This Timeline Tells Steve</div>
+      <p>Nathan ran this organization for 7 months with the same tools Steve now has: bi-weekly meetings, action items, follow-ups. <strong>The pattern is clear: K sets vision and delegates; officers disengage over time; documents are promised but don't arrive; the GC is unreliable; budgets never materialize; the platform doesn't get built.</strong> Nathan was the connective tissue &mdash; when he left, the action items he was tracking presumably went dark. Steve is inheriting this exact dynamic. The question isn't whether the team is capable &mdash; it's whether 7 months of inertia can be reversed with the same structure and the same people.</p>
+    </div>
+
+    <h3 style="margin-top: 20px;">Source Documents &mdash; Read Them Yourself</h3>
+    <table>
+      <tr><th>Document</th><th>Contents</th><th style="width:15%">Link</th></tr>
+      <tr>
+        <td class="bold">Nathan&rsquo;s Master Notes (CEO doc)</td>
+        <td>Nathan's meeting notes with K spanning June 2025 &ndash; Jan 2026. DealMaker timeline, revenue model debate, M&amp;A opportunity, Stevan investment, role recruitment. <strong>The most important document.</strong></td>
+        <td><a href="https://docs.google.com/document/d/14UK_J5rGcnrOBSR8cqwXW5n_8-lUjyGdQHz3BGBGY8Q" target="_blank" rel="noopener">Open &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="bold">Bi-Weekly Meeting Notes</td>
+        <td>Structured bi-weekly meeting template. June 24, 2025 snapshot of all departments.</td>
+        <td><a href="https://docs.google.com/document/d/1edXtDwzvQY9sby6rrFN5nocBeHR372aHAoM75A0ACGE" target="_blank" rel="noopener">Open &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="bold">CTO Notes (Taiwo)</td>
+        <td>Platform status, Magento stack, dev cost estimates, Lance transition, surgery timeline, intern management.</td>
+        <td><a href="https://docs.google.com/document/d/165JP5NbwQ5_pjxC_Ss6XY3E5QgepHq12a5_baIy9ODw" target="_blank" rel="noopener">Open &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="bold">CFO Notes (Axel)</td>
+        <td>Placement agencies, deck iterations, empty data room, NDA bottleneck, budget requests.</td>
+        <td><a href="https://docs.google.com/document/d/1Kc4PrLwXzGbS18SVN3F3g5Sn_cHHj_s5TaasNfGAbRs" target="_blank" rel="noopener">Open &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="bold">CRO Notes (Sam)</td>
+        <td>Sam's outbound research, Marriott model, PE partner interest, disengagement after July 2025.</td>
+        <td><a href="https://docs.google.com/document/d/1hE_kLBcvHspWxIa1wtayRG-BlSzEAOIakugZ_bOxBOM" target="_blank" rel="noopener">Open &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="bold">CMO Notes (Jake)</td>
+        <td>Deck design, social media audit (never done), investor outreach, DealMaker confusion.</td>
+        <td><a href="https://docs.google.com/document/d/1V_dhw2Ssm58pb0V9ruKv_MU3Nv5GTD4wJLaNaC_GGNI" target="_blank" rel="noopener">Open &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="bold">CCO Notes (Kamrul)</td>
+        <td>Policy work, LinkedIn investor outreach, DealMaker exploration assigned Oct 2025.</td>
+        <td><a href="https://docs.google.com/document/d/1Sj0W2rCFeNV9Oo3uRuLofxQ1aGjj2_nEq_l6OXjYgak" target="_blank" rel="noopener">Open &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="bold">GC Notes (John)</td>
+        <td>Finders Agreement, Apple letter saga, Stevan paperwork, cap table assignment, serial no-shows.</td>
+        <td><a href="https://docs.google.com/document/d/15MUxiarIybhxWpIeyK96BFwO6hyZn8isYNaNNUXthzw" target="_blank" rel="noopener">Open &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="bold">IP Counsel Notes (Jalyn)</td>
+        <td>TTAB trademark case, Delphine transition, Jalyn's exit July 2025.</td>
+        <td><a href="https://docs.google.com/document/d/1RfPMPqHz9eSV1PCaTBLcxrnkYlIvXk-sSRd9pWI8dE4" target="_blank" rel="noopener">Open &#8599;</a></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 7: THE TEAM -->
+<!-- ============================================================ -->
+<div class="section" id="s07">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <span class="section-title">The Team: What We Can See</span>
+  </div>
+  <div class="section-body">
+    <div class="callout callout-red" style="margin-bottom: 16px;">
+      <div class="callout-title">New Intelligence: Nathan's Meeting Notes Now Readable</div>
+      <p>The "role docs" in Google Drive are actually Nathan Johnson's 1:1 meeting notes with each officer, spanning June 2025 &ndash; January 2026. This transforms the team picture from speculation to documented history. Every entry below now includes Nathan-era engagement data.</p>
+    </div>
+
+    <table>
+      <tr><th>Person</th><th>Role</th><th>Activity Level</th><th>Nathan-Era Intel</th></tr>
+      <tr>
+        <td class="bold">K (Kanayo Derhem)</td>
+        <td>CEO / Founder</td>
+        <td><span class="badge badge-green">ACTIVE</span> &mdash; sent welcome email, set up WhatsApp, delegated to Allison</td>
+        <td>Repeatedly promised to upload documents to shared folders (client profiles, locations, property types) &mdash; Nathan reminded multiple times. Vision-first; document delivery lagged behind promises. Explored two revenue models: lead gen licensing vs. property operator. Explored Portugal M&A opportunity (Oct&ndash;Nov 2025). Recruited "Chad" as potential CEO and "Matthew Smith" as CRO. Has not countersigned Steve's agreement.</td>
+      </tr>
+      <tr>
+        <td class="bold">Allison Cooper</td>
+        <td>Admin / Deal Contact</td>
+        <td><span class="badge badge-green">ACTIVE</span> &mdash; most responsive person. Handles scheduling, calendar, workspace, onboarding</td>
+        <td>Not mentioned in Nathan's notes. Appears to have been added after his tenure or operated separately from C-suite meetings.</td>
+      </tr>
+      <tr>
+        <td class="bold">Taiwo Oyeniyi</td>
+        <td>CTO</td>
+        <td><span class="badge badge-amber">LIMITED</span></td>
+        <td><strong>Transitioned from previous CTO "Lance" in June 2025.</strong> Does not code himself &mdash; manages one intern. Had surgery Nov 2025, out of action for weeks. Needs $250K (offshore) to $1M+ (stateside) for dev team. Estimated 8&ndash;9 month build + 6 month MVP. Got Fiverr quotes for prototyping. Platform runs on Magento (legacy e-commerce stack). Apple/Google account recovery ongoing saga (needed letters from GC). <a href="https://docs.google.com/document/d/165JP5NbwQ5_pjxC_Ss6XY3E5QgepHq12a5_baIy9ODw" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: CTO doc &#8599;</span></a></td>
+      </tr>
+      <tr>
+        <td class="bold">Axel Reijmers</td>
+        <td>CFO</td>
+        <td><span class="badge badge-amber">MODERATE</span></td>
+        <td>Worked with placement agencies on success-fee basis for the raise. Iterated on investor deck versions. <strong>Data room was empty as of July 2025</strong> &mdash; "no data." NDA bottleneck blocking investor meetings. Budget consolidation request sent to all departments but none responded. Cap table work assigned with John (GC) in Aug 2025 &mdash; status unknown. Was preparing to pursue "Stephen" (investor) with K for co-lead term sheet. Declined the Mar 2 DealMaker meeting. <a href="https://docs.google.com/document/d/1Kc4PrLwXzGbS18SVN3F3g5Sn_cHHj_s5TaasNfGAbRs" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: CFO doc &#8599;</span></a></td>
+      </tr>
+      <tr>
+        <td class="bold">Robert Fitzgerald</td>
+        <td>CRO (current)</td>
+        <td><span class="badge badge-amber">NEW</span> &mdash; introduced Feb 25, 2026. Accepted DealMaker meeting.</td>
+        <td>Not mentioned in Nathan's notes. K was recruiting "Matthew Smith" for CRO as of Jan 2026 &mdash; Robert may have been selected instead, or after. As new as Steve. DealMaker questions are directed at him (revenue model) but he's been on the job &lt;1 week.</td>
+      </tr>
+      <tr>
+        <td class="bold">Sam Shah</td>
+        <td>CRO (former) <span class="badge badge-red">DEPARTED</span></td>
+        <td><span class="badge badge-red">CONFIRMED GONE</span></td>
+        <td><strong>Mystery resolved.</strong> Sam was CRO from June 2025. Did outbound research, reached contacts, explored Marriott licensing model with his PE partner. By July 23, 2025: "unable to attend bi-weekly meeting due to work constraints." Promised budget over weekend of July 26&ndash;27 &mdash; no further documented activity. <strong>Appears to have disengaged after ~1 month.</strong> K told Nathan and Jake to do "email scrapes" from VentureCapitalArchive.com &mdash; work that should have been CRO's. <a href="https://docs.google.com/document/d/1hE_kLBcvHspWxIa1wtayRG-BlSzEAOIakugZ_bOxBOM" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: CRO doc &#8599;</span></a></td>
+      </tr>
+      <tr>
+        <td class="bold">Jake Wall</td>
+        <td>CMO</td>
+        <td><span class="badge badge-red">CONCERN</span></td>
+        <td>Agreement was "pending signing" as of June 2025. Brought up to speed July 7. Assigned: deck design updates, social media audit, LinkedIn investor outreach. Social media audit discussed Aug 5 &mdash; <strong>never completed</strong>. Sep 16: "Nothing to note." Oct 27: waiting on "Chad" for deck numbers. Nov 24: still waiting on numbers from Axel. <strong>Jan 5, 2026: "unclear about what is needed from him with movement on DealMaker." Unable to make team call.</strong> Offered to take a DealMaker webpage from another deal and swap content. <a href="https://docs.google.com/document/d/1V_dhw2Ssm58pb0V9ruKv_MU3Nv5GTD4wJLaNaC_GGNI" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: CMO doc &#8599;</span></a></td>
+      </tr>
+      <tr>
+        <td class="bold">Kamrul Khan</td>
+        <td>CCO</td>
+        <td><span class="badge badge-amber">MODERATE</span></td>
+        <td>Assigned policy and compliance work. Did investor outreach via LinkedIn. Assigned DealMaker exploration in Oct 2025. Needed documents from GC (John) for final policy approval. Policies drafted but waiting on John's redlines &mdash; which never came. <a href="https://docs.google.com/document/d/1Sj0W2rCFeNV9Oo3uRuLofxQ1aGjj2_nEq_l6OXjYgak" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: CCO doc &#8599;</span></a></td>
+      </tr>
+      <tr>
+        <td class="bold">John Khalil</td>
+        <td>General Counsel</td>
+        <td><span class="badge badge-red">SERIOUS CONCERN</span></td>
+        <td><strong>Consistently no-showed meetings:</strong> July 29 (said OOO 2 weeks), Sep 9 (multiple emails/texts unanswered), Nov 4 (no-show, text follow-up), Dec 2 (no-show). When present: sent Finders Agreement (July), worked on Apple account recovery letter, reviewed Stevan's $100K investment paperwork (Oct 2025). Assigned cap table work with Axel (Aug 14) &mdash; status unknown. Policies from Kamrul waiting on his redlines. "Deer Aisle" contract redlines outstanding. Phone: 917-690-8032. <a href="https://docs.google.com/document/d/15MUxiarIybhxWpIeyK96BFwO6hyZn8isYNaNNUXthzw" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: GC doc &#8599;</span></a></td>
+      </tr>
+      <tr>
+        <td class="bold">Sergei Orel</td>
+        <td>IP Counsel (current)</td>
+        <td><span class="badge badge-amber">NEW</span> &mdash; introduced Feb 25, 2026.</td>
+        <td>Replaces <strong>Jalyn</strong>, who "stepped aside" July 22, 2025. Position unfilled for 7 months. Prior to Jalyn: <strong>Delphine</strong> was IP counsel. Trademark case with TTAB (arguing Airbnb genericness). Notice of representation needed. Federal court vs. TTAB strategy undecided when Jalyn left. <a href="https://docs.google.com/document/d/1RfPMPqHz9eSV1PCaTBLcxrnkYlIvXk-sSRd9pWI8dE4" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: IP doc &#8599;</span></a></td>
+      </tr>
+      <tr>
+        <td class="bold">Nathan Johnson</td>
+        <td>Former COO <span class="badge badge-red">DEPARTED</span></td>
+        <td><span class="badge badge-red">ENGAGED UNTIL END</span></td>
+        <td><strong>Last documented meeting: Jan 20, 2026.</strong> Notes show active engagement: running bi-weekly calls with all officers, managing DealMaker timeline, recruiting roles (GC, CRO, IP, CEO candidates), coordinating budget requests, mediating between K and the team. Was filling CEO, CRO, and IP counsel vacancies in his final weeks. <strong>Departure remains unexplained</strong> &mdash; his notes show no signs of disengagement, which makes the departure stranger. Steve signed exactly one month later. <span class="badge badge-gray">SOURCE: CEO doc (Nathan&rsquo;s notes)</span></td>
+      </tr>
+    </table>
+
+    <div class="callout callout-red" style="margin-top: 16px;">
+      <div class="callout-title">Team Pattern: Confirmed by 8 Months of Data</div>
+      <p>Nathan's notes reveal a consistent pattern across 8 months: <strong>K promises documents and direction that arrive late or not at all. Officers disengage over time.</strong> Sam (CRO) lasted ~1 month of active engagement. Jake (CMO) went from updating the deck to "unclear what is needed." John (GC) went from responsive to serial no-shows. The officers who stayed moderately engaged (Axel, Kamrul, Taiwo) were blocked by dependencies &mdash; budgets that never came, documents that never arrived, a dev team that doesn't exist.</p>
+      <p style="margin-top: 8px;"><strong>Additional people discovered in notes:</strong> "Chad" (CEO candidate, Oct&ndash;Nov 2025), "Matthew Smith" (CRO candidate, Jan 2026), "Delphine" (IP counsel before Jalyn), "Stevan" (investor, $100K pledge). K was actively filling 5+ roles simultaneously while the existing team was already struggling with engagement.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 8: JOB DESCRIPTION GAPS -->
+<!-- ============================================================ -->
+<div class="section" id="s08">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <span class="section-title">Job Description vs. Reality: The Gaps</span>
+  </div>
+  <div class="section-body">
+    <p>The job description (from research) describes three phases. Here's how each maps to available information:</p>
+
+    <details open>
+      <summary><span class="badge badge-red" style="margin-left:4px">GAP</span> Phase 1: "Deep Dive Into Existing Order of Operations"</summary>
+      <div class="detail-body">
+        <table>
+          <tr><th style="width:40%">JD Says</th><th>Reality Based on Available Data</th></tr>
+          <tr>
+            <td>Audit existing operations</td>
+            <td>There are <strong>no existing operations</strong> to audit. No SOPs, no vendor contracts, no property agreements, no customer workflows in Drive. The company has never booked a guest.</td>
+          </tr>
+          <tr>
+            <td>Assess operational efficiency</td>
+            <td>Nothing to assess. There is no operational throughput &mdash; zero revenue, zero bookings, zero guests served.</td>
+          </tr>
+          <tr>
+            <td>Map current order of operations</td>
+            <td>The current operation is: (1) iterate on investor deck, (2) engage DealMaker, (3) schedule meetings. That's it. There is no "order of operations" for the actual business.</td>
+          </tr>
+        </table>
+        <div class="callout callout-amber">
+          <p><strong>What Steve can actually do:</strong> Audit the <em>readiness</em> of the organization &mdash; does a real business plan exist? Can this team execute post-raise? What needs to be true before Day 1 of operations? This is valuable, but it's not what the JD describes.</p>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="badge badge-red" style="margin-left:4px">GAP</span> Phase 2: "Finalize Operational Budget and Resource Allocation"</summary>
+      <div class="detail-body">
+        <table>
+          <tr><th style="width:40%">JD Says</th><th>Reality Based on Available Data</th></tr>
+          <tr>
+            <td>Finalize operational budget</td>
+            <td>The budget template in Drive is <strong>from July 2025</strong> (9 months old). The projections are from June 2025. Both are pre-Steve, pre-DealMaker, and likely prepared by Nathan Johnson or K. Steve has not been asked to update them.</td>
+          </tr>
+          <tr>
+            <td>Resource allocation</td>
+            <td>There are no resources to allocate. No capital, no properties, no employees (all 1099). The $20M use-of-funds in the deck allocates $8M to tech, $4M to ops, $2M to sales &mdash; but this money doesn't exist yet.</td>
+          </tr>
+          <tr>
+            <td>Flagship property acquisitions</td>
+            <td>Mentioned 3 times in JD. <strong>No acquisition budget exists</strong> in the use-of-funds breakdown. $20M is barely enough for 1-2 luxury properties. No property targets identified in any accessible document.</td>
+          </tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="badge badge-red" style="margin-left:4px">GAP</span> Phase 3: "Standardize Guest Experience for First Three Acquisitions"</summary>
+      <div class="detail-body">
+        <table>
+          <tr><th style="width:40%">JD Says</th><th>Reality Based on Available Data</th></tr>
+          <tr>
+            <td>Standardize guest experience</td>
+            <td>Zero guests have been served. No guest experience framework, no service standards, no staffing model, no property management procedures exist in any accessible file.</td>
+          </tr>
+          <tr>
+            <td>First three acquisitions</td>
+            <td>Zero acquisitions completed or in pipeline. No property targets, no due diligence files, no LOIs, no closing documents in Drive.</td>
+          </tr>
+          <tr>
+            <td>Quality control systems</td>
+            <td>Nothing to control. This is pure green-field.</td>
+          </tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="badge badge-amber" style="margin-left:4px">GAP</span> Additional JD Items vs. Reality</summary>
+      <div class="detail-body">
+        <table>
+          <tr><th style="width:40%">JD Item</th><th>Reality</th></tr>
+          <tr>
+            <td>"Manage high-stakes relationships with broker-dealers, primary investors"</td>
+            <td>The only visible investor relationship is DealMaker, which is still in discovery (asking basic questions about the revenue model). No broker-dealers identified. No investor pipeline visible.</td>
+          </tr>
+          <tr>
+            <td>"Drive $250K+ decisions across departments"</td>
+            <td>No budget exists. No departments have been created. The $250K number appears in the non-binding W-2 conversion language, not in operational authority.</td>
+          </tr>
+          <tr>
+            <td>"Oversee multi-location operations"</td>
+            <td>Zero locations are operational. "60+ destinations" is a claim about the property network, not about operational presence.</td>
+          </tr>
+          <tr>
+            <td>No mention of DealMaker coordination</td>
+            <td>Steve was immediately added to a DealMaker meeting. The actual near-term work appears to be fundraising support, which the JD doesn't describe as a COO function.</td>
+          </tr>
+        </table>
+
+        <div class="callout callout-red" style="margin-top: 12px;">
+          <div class="callout-title">The Fundamental JD Gap</div>
+          <p>The JD describes a <strong>post-raise execution role</strong>. Steve is in a <strong>pre-raise coordination role</strong>. The actual work right now is: build relationships, support the DealMaker engagement, and wait for the raise to close. This is a fundamentally different job than what was described.</p>
+          <p style="margin-top:8px">Notably, there is <strong>no COO role doc</strong> in the Google Drive. Every other C-suite position (CEO, CTO, CFO, CRO, CMO, CCO, GC, IP Counsel) has a role document. Steve does not.</p>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 9: MARKET & COMPETITIVE CONTEXT -->
+<!-- ============================================================ -->
+<div class="section" id="s09">
+  <div class="section-header">
+    <span class="section-number">09</span>
+    <span class="section-title">Market & Competitive Context</span>
+  </div>
+  <div class="section-body">
+    <h3>The Market Is Real</h3>
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--green);">510K+</div>
+        <div class="metric-label">Global UHNWIs</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--green);">$1.6T</div>
+        <div class="metric-label">Luxury Travel Market</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--green);">8.5%</div>
+        <div class="metric-label">CAGR Growth Rate</div>
+      </div>
+    </div>
+
+    <h3>But the Execution Track Record Is Brutal</h3>
+    <table>
+      <tr><th>Company</th><th>Model</th><th>Peak/Current</th><th>Time to Scale</th><th>Lesson for TSK</th></tr>
+      <tr>
+        <td class="bold">Inspirato</td>
+        <td>Subscription + leased homes</td>
+        <td>$330M peak &rarr; $59M fire sale</td>
+        <td>11 years</td>
+        <td>Subscription luxury travel is economically unsustainable</td>
+      </tr>
+      <tr>
+        <td class="bold">Exclusive Resorts</td>
+        <td>Membership club, asset-heavy</td>
+        <td>$220M revenue, $1B portfolio</td>
+        <td>22 years</td>
+        <td>Asset-heavy takes decades and billions</td>
+      </tr>
+      <tr>
+        <td class="bold">Onefinestay (Accor)</td>
+        <td>Managed home rentals</td>
+        <td>$22M revenue, $288M write-down</td>
+        <td>Failed in 14 years</td>
+        <td>Accor lost its entire $240M investment</td>
+      </tr>
+      <tr>
+        <td class="bold">Velocity Black</td>
+        <td>AI concierge app</td>
+        <td>$18M revenue, acquired by Capital One</td>
+        <td>9 years, $64M raised</td>
+        <td>Tech-first attracts acquirers, not revenue</td>
+      </tr>
+      <tr>
+        <td class="bold">Aman</td>
+        <td>Hotels + branded residences</td>
+        <td>$1.7B revenue, $3B valuation</td>
+        <td>35 years</td>
+        <td>Ultra-luxury CAN work, but takes 35 years</td>
+      </tr>
+    </table>
+
+    <div class="callout callout-red" style="margin-top: 16px;">
+      <div class="callout-title">TSK's Projections in Context</div>
+      <p>TSK projects <strong>$84M in Year 1</strong> on a $20M raise. Exclusive Resorts took 22 years to reach $220M with a $1B property portfolio. Inspirato peaked at ~$330M after 11 years and $64M+ in capital (then collapsed). TSK's projections are investor theater, not operational planning.</p>
+    </div>
+
+    <h3>This Week's Intelligence</h3>
+    <table>
+      <tr><th style="width:12%">Date</th><th>Headline</th><th style="width:15%">Relevance</th></tr>
+      <tr>
+        <td>Feb 27</td>
+        <td><strong>Exclusive Collective merges three luxury brands</strong> (Exclusive Resorts + Inspirato + onefinestay) into $500M+ platform</td>
+        <td><span class="badge badge-red">HIGH</span> &mdash; Direct competitor consolidation</td>
+      </tr>
+      <tr>
+        <td>Feb 24</td>
+        <td><strong>Exclusive Collective expands Canadian footprint</strong> with new luxury properties</td>
+        <td><span class="badge badge-amber">MEDIUM</span> &mdash; Competitor growth</td>
+      </tr>
+      <tr>
+        <td>Feb 22</td>
+        <td><strong>Aman launches Legends Program</strong> at Amanyara (elite athlete experiences in Turks and Caicos)</td>
+        <td><span class="badge badge-amber">MEDIUM</span> &mdash; Aman expanding experiential offerings</td>
+      </tr>
+      <tr>
+        <td>Feb 26</td>
+        <td><strong>Prism/Belvilla acquires Sonder properties</strong> for US market entry</td>
+        <td><span class="badge badge-blue">LOW</span> &mdash; Mid-luxury segment shift</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 10: DEALMAKER PLATFORM EVALUATION -->
+<!-- ============================================================ -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <span class="section-number">10</span>
+    <span class="section-title">DealMaker Platform Evaluation: What It Is, What It Isn't, and What It's Doing for TSK</span>
+  </div>
+  <div class="section-body">
+
+    <!-- WHAT DEALMAKER IS -->
+    <div class="card" style="border-left: 4px solid var(--accent);">
+      <h3 style="margin-bottom: 12px;">What DealMaker Actually Is</h3>
+      <p><a href="https://www.dealmaker.tech" target="_blank" rel="noopener">DealMaker</a> is <strong>North America's largest retail capital-raising platform</strong>, enabling companies to raise funds directly from individual (retail) investors &mdash; not institutional capital. It is a technology and marketing services company, not a broker-dealer or investment bank.</p>
+      <table class="data-table" style="margin-top: 12px;">
+        <tr><th style="width:180px;">Founded</th><td>2018, by <strong>Rebecca Kacaba</strong> (CEO) &amp; <strong>Mat Goldstein</strong> (Co-Founder), both former securities lawyers</td></tr>
+        <tr><th>HQ</th><td>30 East 23rd St, New York, NY (originally Toronto-based)</td></tr>
+        <tr><th>Own Funding</th><td>$20M raised Nov 2025 from <a href="https://www.newsfilecorp.com/release/273295/DealMaker-Raises-20M-To-Drive-Growth-And-Transform-Capital-Raising" target="_blank" rel="noopener">Information Venture Partners + CIBC Innovation Banking</a> (equity + debt)</td></tr>
+        <tr><th>Total Processed</th><td>$2.3B+ across 900+ offerings, 1.5M+ investments</td></tr>
+        <tr><th>2025 Performance</th><td>$500M total capital raised by customers. $292M in Reg A+ alone &mdash; <strong>&gt;50% of all US Reg A+ capital</strong>. 157% YoY growth in Reg A+.</td></tr>
+        <tr><th>2024 Performance</th><td>61 offerings closed, 34 new Reg A+ campaigns, 20 raises exceeded $1M, $244M+ in Reg A+</td></tr>
+        <tr><th>Repeat Rate</th><td>80%+ of customers complete multiple raises</td></tr>
+        <tr><th>Recognition</th><td>Deloitte Companies to Watch; Kacaba: Lexpert Top 40 Under 40, FT Most Innovative Lawyers; EY Entrepreneur of the Year finalist (2022)</td></tr>
+        <tr><th>Recent Moves</th><td>Acquired Rally On Media (2022, now in-house marketing); launched DealMaker Sports; expanding AI across product line</td></tr>
+      </table>
+      <p style="margin-top: 12px; font-size: 13px; color: var(--text-muted);">Sources: <a href="https://www.dealmaker.tech" target="_blank" rel="noopener">dealmaker.tech</a>, <a href="https://www.newsfilecorp.com/release/273295/DealMaker-Raises-20M-To-Drive-Growth-And-Transform-Capital-Raising" target="_blank" rel="noopener">Newsfilecorp</a>, <a href="https://www.nasdaq.com/press-release/dealmaker-raises-20m-drive-growth-and-transform-capital-raising-2025-11-06" target="_blank" rel="noopener">Nasdaq</a></p>
+    </div>
+
+    <!-- REGULATORY FRAMEWORK -->
+    <div class="card" style="border-left: 4px solid var(--accent);">
+      <h3 style="margin-bottom: 12px;">Regulatory Frameworks Supported</h3>
+      <table class="data-table">
+        <tr><th>Framework</th><th>Max Raise</th><th>Who Can Invest</th><th>SEC Filing Required</th><th>TSK Relevance</th></tr>
+        <tr style="background: var(--red-bg);">
+          <td><strong>Reg CF</strong></td>
+          <td><strong>$5M max</strong></td>
+          <td>Anyone (retail)</td>
+          <td>Form C</td>
+          <td><strong style="color: var(--red);">CONFIRMED: TSK is filing Form C (Reg CF)</strong><br><span style="font-size:12px;">Source: DealMaker onboarding call, Jan 8, 2026</span></td>
+        </tr>
+        <tr>
+          <td><strong>Reg A+</strong></td>
+          <td>$75M/year</td>
+          <td>Anyone (retail + accredited)</td>
+          <td>Form 1-A (SEC qualification required before offering)</td>
+          <td style="color: var(--text-muted);">Not the current path &mdash; may be a future phase</td>
+        </tr>
+        <tr>
+          <td><strong>Reg D 506(c)</strong></td>
+          <td>Unlimited</td>
+          <td>Accredited only</td>
+          <td>Form D (within 15 days of first sale)</td>
+          <td style="color: var(--text-muted);">Not applicable to current raise</td>
+        </tr>
+      </table>
+      <div class="callout callout-red" style="margin-top: 16px;">
+        <div class="callout-title">Critical Finding: No SEC Filing Exists for TSK &mdash; But Form C Is the Plan</div>
+        <p>A comprehensive search of <a href="https://efts.sec.gov/LATEST/search-index" target="_blank" rel="noopener">SEC EDGAR</a> returned <strong>zero filings</strong> for "The Sovereign Kingdom," "Sovereign Kingdom LLC," or "Kanayo Derhem." However, the Jan 8 onboarding call confirms <strong>DealMaker Securities will file Form C</strong> (Regulation CF) on TSK's behalf. This means:</p>
+        <ul style="margin-top: 8px;">
+          <li><strong>Reg CF caps the raise at $5M</strong> &mdash; this aligns with Steve's $5M first tranche trigger, but falls far short of K's $20M target or the $84M Year 1 projection</li>
+          <li>Form C has not been filed yet, nearly 2 months after onboarding began (estimated 60-day timeline from Jan 8 = target ~Mar 9)</li>
+          <li>DealMaker's broker-dealer arm (Ingrid Wong / DealMaker Securities) handles the filing directly, reducing TSK's cost</li>
+          <li>Legal counsel <strong>"Hess and Set Apart"</strong> (not John Khalil or Sergei Orel) is being engaged for offering documents and financial auditing</li>
+          <li>2.5 years of raise discussion with zero regulatory footprint at the federal level</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-amber" style="margin-top: 12px;">
+        <div class="callout-title">Reg CF Implications for Steve's Agreement</div>
+        <p>Steve's Effective Date triggers when <strong>$5M is raised</strong>. If this $5M Reg CF is the mechanism, that means:</p>
+        <ul style="margin-top: 8px;">
+          <li>The $5M must come from <em>retail crowdfunding investors</em>, not institutional placement</li>
+          <li>The 60-day onboarding timeline (from Jan 8) is already past due &mdash; launch was targeted for ~Mar 9, 2026</li>
+          <li>Reg CF raises take months to complete even after launch &mdash; Effective Date is likely Q3 2026 at earliest</li>
+          <li>K confirmed on Feb 25 intro call: plan is to <strong>roll Reg CF into Reg A+</strong>. The $5M CF is Phase 1; a separate Reg A+ (Form 1-A, SEC qualification required) would follow for the larger raise.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ONBOARDING CALL INTELLIGENCE -->
+    <div class="card" style="border-left: 4px solid var(--gold); background: var(--amber-bg);">
+      <h3 style="margin-bottom: 12px;">Onboarding Call Intelligence (Jan 8, 2026)</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Source: DealMaker onboarding kickoff call notes &amp; recording (56MB .mov in Drive)</p>
+
+      <h4>DealMaker Team Assigned to TSK</h4>
+      <table class="data-table" style="margin-top: 8px;">
+        <tr><th>Person</th><th>Role</th><th>Responsibility</th></tr>
+        <tr><td><strong>Riley Stanton</strong></td><td>Account Manager</td><td>Primary POC, communication, coordination throughout raise and beyond</td></tr>
+        <tr><td><strong>Ani Akelyan</strong></td><td>Implementations</td><td>Onboarding to launch, time-to-launch acceleration</td></tr>
+        <tr><td><strong>Ingrid Wong</strong></td><td>Compliance / DealMaker Securities</td><td>Due diligence, Form C filing, SEC EDGAR setup, ongoing amendments</td></tr>
+      </table>
+
+      <h4>TSK Internal POCs (As Designated on the Call)</h4>
+      <table class="data-table" style="margin-top: 8px;">
+        <tr><th>Person</th><th>Role on Call</th><th>Area</th></tr>
+        <tr><td><strong>Jake Wall</strong> (CMO)</td><td>Marketing asset approvals</td><td>Landing page, creative, ads</td></tr>
+        <tr><td><strong>Axel Reijmers</strong> (CFO)</td><td>Finance contact</td><td>Financial approvals, SPV decision</td></tr>
+        <tr><td><strong>"Cam"</strong> (likely Kamrul Khan, CCO)</td><td>Compliance</td><td>Diligence coordination</td></tr>
+        <tr><td><strong>Taiwo Oyeniyi</strong> (CTO)</td><td>Consulted but not on call</td><td>Landing page hosting decision</td></tr>
+      </table>
+
+      <h4>4-Phase Onboarding Process</h4>
+      <table class="data-table" style="margin-top: 8px;">
+        <tr><th>Phase</th><th>Focus</th><th>Status (as of Jan 8)</th></tr>
+        <tr><td><strong>Phase 1</strong></td><td>Diligence documents &amp; onboarding logistics</td><td><span class="badge badge-green">Active on Jan 8</span></td></tr>
+        <tr><td><strong>Phase 2</strong></td><td>Finalizing diligence &amp; marketing assets</td><td>Noted as "typically takes the longest"</td></tr>
+        <tr><td><strong>Phase 3</strong></td><td>Compliance review &amp; Form C filing</td><td>Pending legal counsel engagement</td></tr>
+        <tr><td><strong>Phase 4</strong></td><td>Campaign launch</td><td>Target: ~60 days from Jan 8 = ~Mar 9, 2026</td></tr>
+      </table>
+
+      <h4>Key Decisions &amp; Open Items from the Call</h4>
+      <ul>
+        <li><strong>Filing type: Form C (Reg CF)</strong> &mdash; DealMaker Securities files directly, reducing issuer costs</li>
+        <li><strong>SPV (Special Purpose Vehicle):</strong> Counsel advised unnecessary for current offering type, but beneficial for cap table simplicity. Decision pending. Adding mid-process would cause "significant delays" (Ani warned)</li>
+        <li><strong>Landing page hosting:</strong> Undecided &mdash; DealMaker can host or TSK can host internally. Pending Taiwo's input.</li>
+        <li><strong>Video production:</strong> TSK internal (not DealMaker)</li>
+        <li><strong>Legal counsel:</strong> <strong>"Hess and Set Apart"</strong> &mdash; expected engagement by following week (Jan 15). Critical for diligence completion and offering document finalization.</li>
+        <li><strong>Transfer agent:</strong> Included as DealMaker add-on; handles share issuance internally</li>
+        <li><strong>Document submission:</strong> Via secure SharePoint folder (not Google Drive) for compliance data</li>
+        <li><strong>Diligence status on Jan 8:</strong> Branding assets (logos) submitted; diligence documents NOT yet received</li>
+      </ul>
+
+      <h4>Marketing Plan (DealMaker's Scope)</h4>
+      <ul>
+        <li>Landing page creation and hosting</li>
+        <li>Email campaign creative production</li>
+        <li>Paid media: Google, Facebook, LinkedIn ads</li>
+        <li><strong>Newsletter partnerships:</strong> Morning Brew and 1440 &mdash; estimated to deliver "roughly half of marketing performance"</li>
+        <li>Note: the <a href="https://hntrbrk.com/shark-tank/" target="_blank" rel="noopener">Hunterbrook investigation</a> specifically identified Morning Brew as running crowdfunding ads in 165+ editions in 2025</li>
+      </ul>
+
+      <div class="callout callout-red" style="margin-top: 16px;">
+        <div class="callout-title">Timeline Red Flag</div>
+        <p>The 60-day target from Jan 8 = launch by ~March 9, 2026. As of March 2, <strong>no Form C has been filed</strong>. Diligence documents had not been submitted as of the call. Legal counsel engagement was "expected next week" (Jan 15). The onboarding is behind schedule. Ask Riley for a status update today (Mar 2 meeting).</p>
+      </div>
+
+      <div class="callout callout-amber" style="margin-top: 12px;">
+        <div class="callout-title">Notable: K Referred to as "Kate" on Call</div>
+        <p>The call notes reference the TSK CEO as "Kate" &mdash; not Kanayo or K. This is the first appearance of this name variant in any TSK documents.</p>
+      </div>
+    </div>
+
+    <!-- FEB 25 INTRO CALL INTELLIGENCE -->
+    <div class="card" style="border-left: 4px solid var(--accent); background: var(--accent-light);">
+      <h3 style="margin-bottom: 12px;">COO Intro Call with K &amp; Riley (Feb 25, 2026)</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Source: Steve's notes from first intro call with K and Riley Stanton. Steve's first day as COO.</p>
+
+      <h4>Steve's Role (as defined by K)</h4>
+      <div style="padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px;">
+        <p><strong>Make sure the DealMaker process runs smoothly.</strong> Keep the people responsible for deliverables engaged, motivated, and informed on process objectives and deliverables.</p>
+        <p style="margin-top: 8px; font-size: 13px; color: var(--text-muted);">Translation: Steve is the <strong>process manager / deliverable traffic controller</strong> for the raise. Not strategy, not investor relations &mdash; execution coordination. This aligns with COO function but narrows the scope significantly to DealMaker operational support.</p>
+      </div>
+
+      <h4>DealMaker's Deliverables &amp; Services</h4>
+      <table class="data-table" style="margin-top: 8px;">
+        <tr><th style="width: 35%;">Deliverable</th><th>Owner</th><th>Notes</th></tr>
+        <tr><td>Marketing to investors in marketplace</td><td>DealMaker</td><td>Support or lead &mdash; K's direction</td></tr>
+        <tr><td>Investor landing page</td><td><strong>TSK must create assets</strong></td><td>DealMaker hosts; TSK provides content</td></tr>
+        <tr><td>Paid advertising (Google + Meta)</td><td>DealMaker</td><td>Investor acquisition campaigns</td></tr>
+        <tr><td>Email campaigns</td><td>DealMaker</td><td>Investor outreach sequences</td></tr>
+        <tr><td>Banners &amp; images</td><td>DealMaker</td><td>Creative production for ads</td></tr>
+        <tr><td>Video shoot</td><td>DealMaker (if TSK wants)</td><td>Optional; DealMaker offers this service</td></tr>
+        <tr><td>Newsletter partnerships</td><td>DealMaker</td><td>Morning Brew, 1440, and other publications</td></tr>
+        <tr><td>Compliance &amp; regulatory review</td><td>DealMaker Securities</td><td>Broker-dealer side; ensures regulatory compliance</td></tr>
+        <tr><td>Launch offering</td><td>DealMaker</td><td>Go-live coordination</td></tr>
+      </table>
+
+      <h4 style="margin-top: 16px;">Raise Strategy Confirmed</h4>
+      <div class="callout callout-amber" style="margin-top: 8px;">
+        <div class="callout-title">Two-Phase Raise: Reg CF &rarr; Reg A+</div>
+        <p><strong>Phase 1:</strong> Reg CF (Form C) &mdash; $5M max from retail investors. This is the current DealMaker engagement.</p>
+        <p style="margin-top: 6px;"><strong>Phase 2:</strong> Roll into Reg A+ &mdash; up to $75M/year. This would be a separate filing (Form 1-A) requiring SEC qualification.</p>
+        <p style="margin-top: 8px; font-size: 13px; color: var(--text-muted);">This confirms K's $20M target is <em>not</em> achievable through Reg CF alone. The plan is to use the $5M CF raise as a bridge to a larger Reg A+ offering. This is a common DealMaker playbook (EnergyX, LiquidPiston used similar phased approaches).</p>
+      </div>
+
+      <h4 style="margin-top: 16px;">Open Questions from the Call</h4>
+      <table class="data-table" style="margin-top: 8px;">
+        <tr><th style="width: 50%;">Question</th><th>Context</th></tr>
+        <tr>
+          <td><strong>Marketing:</strong> Who at TSK is doing what?</td>
+          <td>Jake Wall (CMO) was designated as marketing POC on Jan 8 call. Ownership split between TSK and DealMaker is unclear.</td>
+        </tr>
+        <tr>
+          <td><strong>Marketing:</strong> What do the assets need to look like?</td>
+          <td>TSK must create landing page assets. Specs, brand guidelines, and content requirements not yet defined.</td>
+        </tr>
+        <tr>
+          <td><strong>Revenue:</strong> How is TSK making revenue?</td>
+          <td>These are Riley's questions for the CRO (Robert) in the Mar 2 meeting. Revenue model, % per stream, growth roadmap.</td>
+        </tr>
+      </table>
+
+      <h4 style="margin-top: 16px;">COO Implications</h4>
+      <ul>
+        <li><strong>Steve's scope is now defined:</strong> Process coordination for DealMaker deliverables. Keep Jake (marketing), Axel (finance), "Cam" (compliance), and Taiwo (tech) on track.</li>
+        <li><strong>Steve does NOT own strategy, investor relations, or marketing content</strong> &mdash; he owns the process that ensures others deliver on time.</li>
+        <li><strong>The two-phase raise changes the timeline calculus.</strong> Even if Reg CF launches and raises $5M, the Reg A+ filing is a separate 4-6 month process. Steve's Effective Date ($5M trigger) could be met by the CF alone, but K's full vision requires the A+ phase.</li>
+        <li><strong>Critical: Steve should not be named in any filing materials until the agreement is countersigned.</strong> Form C includes officer bios. Reg A+ Form 1-A is even more detailed.</li>
+      </ul>
+    </div>
+
+    <!-- DEALMAKER CLIENT TRACK RECORD -->
+    <div class="card" style="border-left: 4px solid var(--accent);">
+      <h3 style="margin-bottom: 12px;">DealMaker's Notable Clients &amp; Results</h3>
+      <table class="data-table">
+        <tr><th>Company</th><th>Amount Raised</th><th>Investors</th><th>Industry</th><th>Outcome</th></tr>
+        <tr><td>EnergyX</td><td>$75.5M (2024)</td><td>13,000+</td><td>Lithium/Clean Energy</td><td>Pre-revenue ($385K/yr). $2.1B offered valuation at 32.4x book.</td></tr>
+        <tr><td>Miso Robotics</td><td>$90M+ total</td><td>31,000+</td><td>Robotics</td><td>$384K revenue. 14 units deployed. Jack in the Box pilot ended.</td></tr>
+        <tr><td>Pacaso</td><td>$72.5M via Reg A+</td><td>17,500</td><td>Luxury Real Estate</td><td>$126.5M revenue but $214.8M accumulated losses. $1M/8-day burn.</td></tr>
+        <tr><td>LiquidPiston</td><td>$50M+ (5 campaigns)</td><td>17,500+</td><td>Engine Tech</td><td>Ongoing &mdash; no exit</td></tr>
+        <tr><td>Omni</td><td>$19M+</td><td>8,000+</td><td>Gaming</td><td>Ongoing</td></tr>
+        <tr><td>Death &amp; Co</td><td>$9.3M+</td><td>&mdash;</td><td>Hospitality</td><td>Ongoing</td></tr>
+        <tr><td>RYSE</td><td>$11.2M</td><td>&mdash;</td><td>Smart Home</td><td>Ongoing</td></tr>
+      </table>
+      <p style="margin-top: 12px; font-size: 13px; color: var(--text-muted);">Source: <a href="https://www.dealmaker.tech/content/top-crowdfunding-raises-of-2024-dealmaker-successes-industry-lessons-winning-strategies" target="_blank" rel="noopener">DealMaker 2024 Top Raises</a>, <a href="https://www.dealmaker.tech/content/from-200m-in-vc-to-72-5m-in-retail-why-pacaso-opened-their-cap-table-to-17-500-investors" target="_blank" rel="noopener">Pacaso case study</a></p>
+    </div>
+
+    <!-- THE BULL CASE -->
+    <div class="card" style="border-left: 4px solid var(--green);">
+      <h3 style="margin-bottom: 12px;">The Bull Case for DealMaker (What They Sell)</h3>
+      <p>DealMaker's pitch to companies like TSK rests on a compelling narrative backed by real data points:</p>
+      <table class="data-table" style="margin-top: 12px;">
+        <tr><th style="width:250px;">Claim</th><th>Supporting Data</th><th>Source</th></tr>
+        <tr>
+          <td>Customer-shareholders spend more</td>
+          <td>54% more than non-shareholders (Bain &amp; Company)</td>
+          <td><a href="https://www.dealmaker.tech/content/from-200m-in-vc-to-72-5m-in-retail-why-pacaso-opened-their-cap-table-to-17-500-investors" target="_blank" rel="noopener">Pacaso article</a></td>
+        </tr>
+        <tr>
+          <td>Lower failure rate</td>
+          <td>2.9% failure rate for crowdfunded companies vs. 60%+ traditionally funded (KingsCrowd)</td>
+          <td><a href="https://kingscrowd.com/2025-investment-crowdfunding-annual-report/" target="_blank" rel="noopener">KingsCrowd 2025 Report</a></td>
+        </tr>
+        <tr>
+          <td>Community capital reduces CAC</td>
+          <td>Community acquisition: $40/customer vs. $85 traditional (FeverBee). 53% reduction.</td>
+          <td><a href="https://www.dealmaker.tech/content/from-200m-in-vc-to-72-5m-in-retail-why-pacaso-opened-their-cap-table-to-17-500-investors" target="_blank" rel="noopener">Pacaso article</a></td>
+        </tr>
+        <tr>
+          <td>Dual-purpose capital + marketing</td>
+          <td>17,500 investors = 17,500 brand ambassadors. WOM drives 20&ndash;50% of purchasing decisions (McKinsey).</td>
+          <td>McKinsey</td>
+        </tr>
+        <tr>
+          <td>Successful crowdfunding attracts VC</td>
+          <td>35% of successful campaigns raise follow-on institutional funding</td>
+          <td><a href="https://kingscrowd.com/2025-investment-crowdfunding-annual-report/" target="_blank" rel="noopener">KingsCrowd</a></td>
+        </tr>
+        <tr>
+          <td>Retail de-risks institutional raise</td>
+          <td>Institutional participation in equity crowdfunding grew from 8% to 49% (Cambridge)</td>
+          <td>Cambridge Centre for Alternative Finance</td>
+        </tr>
+      </table>
+      <p style="margin-top: 12px;"><strong>Pacaso as the flagship comp:</strong> Raised $200M VC first, then $72.5M from 17,500 retail investors via Reg A+. CEO Austin Allison: <em>"It's like knocking out two birds with one stone when you can raise from a large audience like this."</em> Investor-customers convert at 3&ndash;5x higher rates.</p>
+    </div>
+
+    <!-- THE BEAR CASE -->
+    <div class="card" style="border-left: 4px solid var(--red);">
+      <h3 style="margin-bottom: 12px;">The Bear Case: The Hunterbrook Investigation</h3>
+      <p>In 2025, investigative firm <a href="https://hntrbrk.com/shark-tank/" target="_blank" rel="noopener">Hunterbrook Media published a detailed investigation</a> of DealMaker's practices and client outcomes. Key findings:</p>
+
+      <h4 style="margin-top: 16px; margin-bottom: 8px;">Exit Track Record</h4>
+      <table class="data-table">
+        <tr><th>Company</th><th>Outcome</th></tr>
+        <tr><td>Sky Quarry</td><td style="color: var(--red);"><strong>&darr; 87.7%</strong></td></tr>
+        <tr><td>Autonomix</td><td style="color: var(--red);"><strong>&darr; 99.6%</strong></td></tr>
+        <tr><td>Knightscope</td><td style="color: var(--red);"><strong>&darr; 99%+</strong></td></tr>
+        <tr><td>Trust Stamp</td><td style="color: var(--red);"><strong>&darr; 99%+</strong></td></tr>
+        <tr><td>Monogram (acquired by Zimmer Biomet)</td><td style="color: var(--red);"><strong>&darr; 44.3%</strong></td></tr>
+        <tr><td>Newsmax</td><td style="color: var(--red);"><strong>&darr; 40.5%</strong></td></tr>
+      </table>
+      <p style="margin-top: 8px;"><strong>Only 1.2% of crowdfunding issuers achieved exits</strong> (IPO or acquisition) as of April 2024.</p>
+
+      <h4 style="margin-top: 16px; margin-bottom: 8px;">Specific Client Issues Documented</h4>
+      <ul>
+        <li><strong>Boxabl:</strong> $3.5B offered valuation on $3.4M revenue (66.6x book). Claimed 190,000 reservations; only 7,732 backed by deposits. 8 units delivered in 9 months.</li>
+        <li><strong>Pacaso:</strong> Despite $126.5M revenue, accumulated $214.8M in net losses. $1M cash burn every 8 days. "Record 2024" claim used cumulative gross profit ($110M) instead of actual 2024 figure ($21.5M).</li>
+        <li><strong>EnergyX:</strong> $385K revenue, $2.1B offered valuation. Claimed lithium extraction "300% better" than conventional &mdash; mathematically impossible.</li>
+        <li><strong>Miso Robotics:</strong> $384K revenue, $282M offered valuation. Claimed "sold out" production when only 3 units deployed.</li>
+        <li><strong>RAD Intel:</strong> Lost $6.2M on $1M revenue. Misattributed quotes to Rolling Stone from paid advertorials.</li>
+      </ul>
+
+      <h4 style="margin-top: 16px; margin-bottom: 8px;">Structural Concerns</h4>
+      <ul>
+        <li><strong>Adverse selection:</strong> SEC lawyer Andrew Stoltmann: <em>"Ninety-nine percent of these deals will prove to be unprofitable."</em> Healthy companies avoid crowdfunding; struggling companies use it as a bailout.</li>
+        <li><strong>Marketing control:</strong> DealMaker acquired Ridge Growth Agency and runs in-house marketing. All seven investigated companies used DealMaker Marketing Services. DealMaker "tweaks" content to optimize investor conversion.</li>
+        <li><strong>CEO Rebecca Kacaba acknowledged:</strong> <em>"We're not an investor-focused platform"</em> &mdash; DealMaker serves issuers, not investors.</li>
+        <li><strong>Misleading ads:</strong> Reg CF ads frequently violated disclosure rules. Reg A+ ads contained statements Hunterbrook alleges violate Section 17(a) of the Securities Act.</li>
+        <li><strong>Retail investors can't easily sell:</strong> Shares typically locked until IPO or acquisition. No secondary market for most offerings.</li>
+      </ul>
+      <p style="margin-top: 12px; font-size: 13px; color: var(--text-muted);">Source: <a href="https://hntrbrk.com/shark-tank/" target="_blank" rel="noopener">Hunterbrook Media, "Shark Tank: How DealMaker Uses Morning Brew and Robinhood to Lure Retail Investors Into Predatory Waters"</a></p>
+    </div>
+
+    <!-- TSK + DEALMAKER RELATIONSHIP -->
+    <div class="card" style="border-left: 4px solid var(--gold); background: var(--amber-bg);">
+      <h3 style="margin-bottom: 12px;">What DealMaker Is Doing for TSK</h3>
+      <h4>What We Know</h4>
+      <table class="data-table" style="margin-top: 8px;">
+        <tr><th style="width:200px;">Data Point</th><th>Detail</th><th>Source</th></tr>
+        <tr>
+          <td>Onboarding call</td>
+          <td>January 8, 2026. Recording (56MB .mov) + 2 PDFs in Drive.</td>
+          <td><a href="https://drive.google.com/drive/folders/1iJgDTPbVjm1m1Vkz8hgh401BeAUlF5V0" target="_blank" rel="noopener">Drive: 1/8/26 Onboarding Call folder</a></td>
+        </tr>
+        <tr>
+          <td>TSK contact at DealMaker</td>
+          <td><strong>Riley Stanton</strong> (riley.stanton@dealmaker.tech)</td>
+          <td><a href="https://drive.google.com/drive/folders/1uoG-KorUagdHf_Vl0OmnX1vnvPMMQKjG" target="_blank" rel="noopener">Calendar invite, Mar 2</a></td>
+        </tr>
+        <tr>
+          <td>DealMaker meeting</td>
+          <td>Mar 2, 2026 &mdash; 2:30&ndash;3:00 PM ET. Attendees: Riley Stanton, K (CEO), Robert (CRO), Axel (CFO), Steve (COO). Axel declined.</td>
+          <td>Google Calendar</td>
+        </tr>
+        <tr>
+          <td>Riley's deliverables</td>
+          <td>Steve emailed Allison Feb 27 asking if Riley's deliverables arrived. <strong>No response found.</strong></td>
+          <td>Gmail thread</td>
+        </tr>
+        <tr>
+          <td>K's framing</td>
+          <td>Welcome email (Feb 25): <em>"upcoming institutional launch with DealMaker"</em></td>
+          <td>Gmail: CEO welcome email</td>
+        </tr>
+        <tr>
+          <td>Drive artifacts</td>
+          <td>"Deal Maker" folder in TSK Drive, subfolder "Meetings to Share with the rest of the team" &rarr; "1_8_26 Onboarding Call" containing 2 PDFs + 1 .mov</td>
+          <td><a href="https://drive.google.com/drive/folders/1uoG-KorUagdHf_Vl0OmnX1vnvPMMQKjG" target="_blank" rel="noopener">Google Drive</a></td>
+        </tr>
+        <tr>
+          <td>Onboarding PDFs</td>
+          <td>TSK-DealMaker-Onboarding-Kickoff-9d73fa91-3c82.pdf (191KB) + TSK _ DealMaker_ Onboarding Kickoff Jan 8, 2026.pdf (47KB). <strong>Binary PDFs &mdash; not readable via API.</strong> Must download and review manually.</td>
+          <td><a href="https://drive.google.com/file/d/1myQPsGJYt0GUy_YAh031OnmbX1om0KFu/view" target="_blank" rel="noopener">PDF 1</a>, <a href="https://drive.google.com/file/d/1KWrVPNEs8IcY8JOJIArufa6aPGak4qNi/view" target="_blank" rel="noopener">PDF 2</a></td>
+        </tr>
+        <tr>
+          <td>SEC filings</td>
+          <td><strong>Zero.</strong> No Form 1-A, Form D, or Form C for TSK anywhere in EDGAR.</td>
+          <td><a href="https://efts.sec.gov/LATEST/search-index" target="_blank" rel="noopener">SEC EDGAR full-text search</a></td>
+        </tr>
+        <tr>
+          <td style="color: var(--red); font-weight: 700;">Onboarding plan status</td>
+          <td><strong style="color: var(--red);">2 of 35 tasks complete (6%).</strong> 4-phase plan started Dec 10. Week 1 compliance (financials, corporate docs, escrow, IDs) due Feb 24 &mdash; all overdue. Campaign Brief not submitted (blocks all creative production). Target launch: Apr 14. At current pace, April launch is not achievable. <a href="dealmaker-tracker.html" target="_blank" rel="noopener"><strong>Full task-by-task tracker &rarr;</strong></a></td>
+          <td><a href="https://start.dealmaker.tech/plans/faa32663" target="_blank" rel="noopener">DealMaker onboarding portal</a></td>
+        </tr>
+      </table>
+
+      <h4 style="margin-top: 20px;">What We Don't Know</h4>
+      <ul>
+        <li><s>Which regulation TSK is targeting</s> &mdash; <strong>ANSWERED:</strong> Reg CF (Form C), $5M max. Confirmed on Jan 8 onboarding call.</li>
+        <li><s>Whether DealMaker has been formally engaged</s> &mdash; <strong>ANSWERED:</strong> Yes. Onboarding kickoff Jan 8, 2026. 4-phase process underway.</li>
+        <li>What DealMaker's fee structure is for TSK (typically includes platform fee + marketing services)</li>
+        <li>What Riley's deliverables were and whether they ever arrived (Steve asked Feb 27 &mdash; no response)</li>
+        <li>What the onboarding PDFs contain (binary &mdash; can't read via API)</li>
+        <li><s>What was discussed on the Jan 8 onboarding call</s> &mdash; <strong>ANSWERED:</strong> See Onboarding Call Intelligence above. Team assignments, 4-phase process, SPV decision, legal counsel, marketing plan.</li>
+        <li><s>TSK's target raise amount via DealMaker</s> &mdash; <strong>ANSWERED:</strong> $5M via Reg CF first, then <strong>roll into Reg A+</strong> for larger raise. Two-phase strategy confirmed by K on Feb 25 intro call. K's "$20M" target would come from the Reg A+ phase.</li>
+        <li><s>Timeline to SEC filing</s> &mdash; <strong>PARTIALLY ANSWERED:</strong> 60-day target from Jan 8 = ~Mar 9. No Form C filed as of Mar 2. Behind schedule.</li>
+        <li>Whether K understands the difference between retail capital and institutional capital (her "institutional launch" language post-dates the Reg CF onboarding call)</li>
+        <li>What valuation TSK is using for the offering &mdash; undisclosed</li>
+        <li>SPV decision status &mdash; was pending as of Jan 8, adding mid-process would cause "significant delays"</li>
+        <li>Whether "Hess and Set Apart" has been formally engaged (was "expected next week" on Jan 8)</li>
+      </ul>
+    </div>
+
+    <!-- LANGUAGE MISMATCH -->
+    <div class="callout callout-red" style="margin-top: 16px;">
+      <div class="callout-title">Language Mismatch: "Institutional Launch" vs. $5M Reg CF Crowdfunding</div>
+      <p>K's Feb 25 welcome email describes DealMaker as TSK's <em>"upcoming institutional launch."</em> This is factually incorrect on two levels:</p>
+      <ol style="margin-top: 8px;">
+        <li><strong>DealMaker is a retail platform, not institutional.</strong> CEO Rebecca Kacaba: <em>"We're not an investor-focused platform."</em></li>
+        <li><strong>TSK is filing a Form C (Reg CF) &mdash; the smallest retail regulation.</strong> Max $5M from everyday individual investors. This is the opposite of an institutional launch.</li>
+      </ol>
+      <p style="margin-top: 8px;">The "institutional launch" email was sent <strong>7 weeks after</strong> the Jan 8 onboarding call where Reg CF was confirmed. K was present on that call (referred to as "Kate"). This means she either:</p>
+      <ul>
+        <li>Doesn't understand the distinction between retail crowdfunding and institutional capital, or</li>
+        <li>Is intentionally reframing a $5M crowdfunding raise as "institutional" for the team's perception</li>
+      </ul>
+      <p style="margin-top: 8px;">Either way, <strong>Steve should not use or repeat the "institutional launch" language.</strong> If it appears in any materials Steve is asked to sign or present, it needs correction.</p>
+    </div>
+
+    <!-- NET ASSESSMENT -->
+    <div class="card" style="border-left: 4px solid var(--amber); background: var(--amber-bg); margin-top: 16px;">
+      <h3 style="margin-bottom: 12px;">Net Assessment</h3>
+      <table class="data-table">
+        <tr><th style="width:180px;">Factor</th><th>Assessment</th></tr>
+        <tr>
+          <td>DealMaker as a platform</td>
+          <td><strong>Legitimate and market-leading.</strong> $2.3B processed, 50%+ Reg A+ market share, $20M in own funding. Real company with real clients.</td>
+        </tr>
+        <tr>
+          <td>DealMaker's client outcomes</td>
+          <td><strong>Mixed to poor.</strong> Great at raising money; investor returns are dismal (every tracked exit is negative). 1.2% exit rate. <a href="https://hntrbrk.com/shark-tank/" target="_blank" rel="noopener">Hunterbrook investigation</a> documents systemic issues.</td>
+        </tr>
+        <tr>
+          <td>Fit for TSK</td>
+          <td><strong>Plausible but premature.</strong> TSK is pre-revenue with no product, no bookings, no team traction. K's plan is a two-phase raise (Reg CF &rarr; Reg A+), which is a known DealMaker playbook. But DealMaker's most successful phased raises (EnergyX, LiquidPiston) had real products or institutional backing <em>before</em> going to retail.</td>
+        </tr>
+        <tr>
+          <td>Timeline risk</td>
+          <td><strong>Extreme.</strong> DealMaker onboarding portal shows <strong>2/35 tasks complete (6%)</strong> with 43 days to April 14 launch. Week 1 compliance items (due Feb 24) are all overdue. Campaign Brief &mdash; which blocks all creative production &mdash; has not been submitted. Reviewed financials take 1+ months from CPA engagement. At current pace, April launch is mathematically impossible. Realistic earliest: <strong>late May to mid-June 2026.</strong> Even after launch, Reg CF raises take months to reach $5M. Effective Date unlikely before Q3-Q4 2026. <a href="dealmaker-tracker.html" target="_blank" rel="noopener">Full tracker</a></td>
+        </tr>
+        <tr>
+          <td>Marketing risk</td>
+          <td><strong>Moderate-to-High.</strong> DealMaker controls messaging and optimizes for conversion. Morning Brew and 1440 newsletter partnerships (per onboarding call) are the same channels <a href="https://hntrbrk.com/shark-tank/" target="_blank" rel="noopener">Hunterbrook flagged</a> for problematic crowdfunding ads. Any claims in offering materials become Steve's exposure if he's named as COO.</td>
+        </tr>
+        <tr>
+          <td>Steve's exposure</td>
+          <td><strong>Elevated.</strong> If Steve is publicly listed as COO in a Form C filing, he is associated with every claim in that document. Agreement is <em>still not countersigned</em>. He has no protection yet. External legal counsel ("Hess and Set Apart") &mdash; not TSK's GC or IP Counsel &mdash; is drafting the offering documents.</td>
+        </tr>
+      </table>
+
+      <div style="margin-top: 16px; padding: 12px; background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 6px;">
+        <strong style="color: var(--red);">Bottom Line:</strong> DealMaker is the real deal as a platform &mdash; they're the dominant player in retail capital raising. But being a good platform doesn't make every company on it a good investment. TSK is filing <strong>Reg CF (Form C, $5M cap)</strong> &mdash; the smallest possible retail regulation. The DealMaker onboarding plan shows <strong>2 of 35 tasks complete (6%)</strong> after 83 days, with Week 1 compliance items overdue and the Campaign Brief (which blocks all creative production) not yet submitted. April 14 launch target is not achievable at current pace &mdash; realistic earliest launch is late May/June. TSK has no product, no revenue, no SEC filing, and an unsigned COO agreement. The DealMaker engagement is evidence that K is actively pursuing a raise, but the gap between "onboarding call" and "money raised" is enormous. <strong>Steve should not agree to be named in any Form C filing or marketing materials until the agreement is countersigned and he has reviewed the offering documents.</strong>
+      </div>
+    </div>
+
+    <!-- OUTSTANDING QUESTIONS -->
+    <div class="card" style="border-left: 4px solid var(--accent); margin-top: 16px;">
+      <h3 style="margin-bottom: 12px;">Outstanding Questions for DealMaker / Next Steps</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Originally prepared for Mar 2 meeting. Updated with answers from onboarding call intelligence.</p>
+      <table class="data-table">
+        <tr><th style="width:50%;">Question</th><th>Status</th></tr>
+        <tr>
+          <td>Which regulation is TSK targeting?</td>
+          <td><span class="badge badge-green">ANSWERED</span> Reg CF (Form C), $5M max. Source: Jan 8 onboarding call.</td>
+        </tr>
+        <tr>
+          <td>Timeline to SEC filing?</td>
+          <td><span class="badge badge-amber">PARTIAL</span> 60-day target from Jan 8 = ~Mar 9. No Form C filed yet. Behind schedule. Need current status from Riley.</td>
+        </tr>
+        <tr>
+          <td>DealMaker's fee structure for TSK?</td>
+          <td><span class="badge badge-red">OPEN</span> Not disclosed in onboarding call notes.</td>
+        </tr>
+        <tr>
+          <td>What valuation is TSK using for the offering?</td>
+          <td><span class="badge badge-red">OPEN</span> Undisclosed. Critical for Steve's equity terms.</td>
+        </tr>
+        <tr>
+          <td>Marketing materials &mdash; who reviews/approves?</td>
+          <td><span class="badge badge-green">ANSWERED</span> Jake Wall (CMO) is TSK's marketing POC. DealMaker creates landing page, email campaigns, paid ads, newsletter partnerships.</td>
+        </tr>
+        <tr>
+          <td>Will COO be named in Form C?</td>
+          <td><span class="badge badge-red">OPEN</span> Steve's name/bio exposure depends on this. Must review draft Form C before filing.</td>
+        </tr>
+        <tr>
+          <td>Riley's deliverables?</td>
+          <td><span class="badge badge-red">OPEN</span> Steve asked Feb 27, no response from Allison.</td>
+        </tr>
+        <tr>
+          <td>Target raise amount via DealMaker?</td>
+          <td><span class="badge badge-green">ANSWERED</span> $5M via Reg CF. K's $20M target would require a second offering (Reg A+ or Reg D).</td>
+        </tr>
+        <tr>
+          <td>SPV decision?</td>
+          <td><span class="badge badge-red">OPEN</span> Counsel advised unnecessary but beneficial. Adding mid-process causes "significant delays." Decision was pending as of Jan 8.</td>
+        </tr>
+        <tr>
+          <td>Legal counsel engagement status?</td>
+          <td><span class="badge badge-amber">PARTIAL</span> "Hess and Set Apart" was expected to engage by Jan 15. No confirmation of engagement.</td>
+        </tr>
+      </table>
+      <p style="margin-top: 12px;"><strong>Steve's posture:</strong> Do NOT agree to be named in any Form C filing, marketing materials, or investor-facing content until the agreement is countersigned and he has reviewed the offering documents.</p>
+    </div>
+
+    <!-- SOURCES -->
+    <div style="margin-top: 20px; padding: 16px; background: var(--surface-2); border-radius: 8px; font-size: 13px; color: var(--text-muted);">
+      <strong>All Sources Evaluated for This Section:</strong>
+      <ol style="margin-top: 8px;">
+        <li><a href="https://www.dealmaker.tech" target="_blank" rel="noopener">DealMaker.tech</a> &mdash; Platform homepage, capabilities, client statistics</li>
+        <li><a href="https://www.dealmaker.tech/about-us" target="_blank" rel="noopener">DealMaker About Us</a> &mdash; Leadership team, company history</li>
+        <li><a href="https://www.dealmaker.tech/content/from-200m-in-vc-to-72-5m-in-retail-why-pacaso-opened-their-cap-table-to-17-500-investors" target="_blank" rel="noopener">Pacaso Case Study</a> &mdash; $72.5M raise, Bain/McKinsey/KingsCrowd data, CEO Austin Allison quotes</li>
+        <li><a href="https://www.dealmaker.tech/content/top-crowdfunding-raises-of-2024-dealmaker-successes-industry-lessons-winning-strategies" target="_blank" rel="noopener">DealMaker 2024 Top Raises</a> &mdash; Client results, industry breakdown, performance metrics</li>
+        <li><a href="https://www.newsfilecorp.com/release/273295/DealMaker-Raises-20M-To-Drive-Growth-And-Transform-Capital-Raising" target="_blank" rel="noopener">Newsfilecorp: DealMaker $20M Raise</a> &mdash; Funding round details, investor profiles, strategic plans</li>
+        <li><a href="https://www.crowdfundinsider.com/2026/01/257588-dealmaker-2025-recap-500-million-raised/" target="_blank" rel="noopener">Crowdfund Insider: DealMaker 2025 Recap</a> &mdash; $500M raised, $292M Reg A+, 157% YoY</li>
+        <li><a href="https://hntrbrk.com/shark-tank/" target="_blank" rel="noopener">Hunterbrook Media Investigation</a> &mdash; Client outcomes, exit track record, marketing practices, adverse selection</li>
+        <li><a href="https://kingscrowd.com/2025-investment-crowdfunding-annual-report/" target="_blank" rel="noopener">KingsCrowd 2025 Annual Report</a> &mdash; 2.9% failure rate, 1,408 Reg CF launches, 69% goal achievement</li>
+        <li><a href="https://efts.sec.gov/LATEST/search-index" target="_blank" rel="noopener">SEC EDGAR</a> &mdash; Zero TSK filings (comprehensive search: company name, CEO name, domain)</li>
+        <li>TSK Google Drive: <a href="https://drive.google.com/drive/folders/1uoG-KorUagdHf_Vl0OmnX1vnvPMMQKjG" target="_blank" rel="noopener">DealMaker folder</a>, <a href="https://drive.google.com/file/d/1myQPsGJYt0GUy_YAh031OnmbX1om0KFu/view" target="_blank" rel="noopener">Onboarding PDF 1</a>, <a href="https://drive.google.com/file/d/1KWrVPNEs8IcY8JOJIArufa6aPGak4qNi/view" target="_blank" rel="noopener">Onboarding PDF 2</a>, <a href="https://drive.google.com/file/d/1IpJ-bXBN3u1XIz3QE4fsTpbGRIBYnBxb/view" target="_blank" rel="noopener">Onboarding Call Recording</a></li>
+        <li>TSK Gmail: K's welcome email (Feb 25), Steve/Allison thread re Riley deliverables (Feb 27), DealMaker meeting invite (Mar 2)</li>
+      </ol>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 11: DECISIONS NEEDED -->
+<!-- ============================================================ -->
+<div class="section" id="s11">
+  <div class="section-header">
+    <span class="section-number">11</span>
+    <span class="section-title">Decisions Steve Needs to Make</span>
+  </div>
+  <div class="section-body">
+
+    <h3>Immediate (This Week)</h3>
+    <div class="card" style="border-left: 4px solid var(--red);">
+      <div class="card-title"><span class="badge badge-red">1</span> Monthly Team Meeting (March 3, 1 PM ET)</div>
+      <p>K announced this in her welcome email. It's <strong>not on your calendar</strong>. Decision: Email Allison or K today to confirm whether it's happening and get the invite. If it is happening, this is your first impression to the full team.</p>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--red);">
+      <div class="card-title"><span class="badge badge-red">2</span> DealMaker Meeting (March 2, 2:30 PM EST)</div>
+      <p>Tomorrow. CFO declined. Riley hasn't accepted. Steve asked about Riley's deliverables Friday evening &mdash; no response from Allison. Decision: Follow up with Allison this morning about Riley's deliverables. Prepare for a meeting where DealMaker may be asking, not presenting.</p>
+      <h4>Attendees</h4>
+      <table>
+        <tr><th>Person</th><th>Role</th><th>RSVP</th></tr>
+        <tr><td>Riley Stanton</td><td>DealMaker</td><td><span class="badge badge-amber">NO RESPONSE</span></td></tr>
+        <tr><td>K (CEO)</td><td>TSK Founder</td><td><span class="badge badge-green">ACCEPTED</span></td></tr>
+        <tr><td>Robert Fitzgerald</td><td>CRO</td><td><span class="badge badge-green">ACCEPTED</span></td></tr>
+        <tr><td>Axel Reijmers</td><td>CFO</td><td><span class="badge badge-red">DECLINED</span></td></tr>
+        <tr><td>Steve Cooper</td><td>COO</td><td><span class="badge badge-green">ACCEPTED</span></td></tr>
+        <tr><td>Allison Cooper</td><td>Admin</td><td><span class="badge badge-green">ACCEPTED</span></td></tr>
+      </table>
+      <h4>DealMaker's Stated Agenda (from calendar description)</h4>
+      <p>The meeting description includes specific questions directed at Robert (CRO):</p>
+      <div class="callout callout-amber">
+        <p><strong>Revenue Model:</strong> <em>"At a high-level, we want to understand how TSK generates revenue. From our understanding, there&rsquo;s a few different streams like bookings and services, but it would be great to get more specifics on those. Such as % of revenue each stream accounts for, other revenue streams that you&rsquo;re thinking about or focusing on right now."</em></p>
+        <p style="margin-top:8px"><strong>Growth Roadmap:</strong> <em>"Ties into the revenue model a bit, but how does TSK plan to grow in the near/long term? Are there expansions or partnerships that are materializing or that you&rsquo;re targeting at the moment? Additional revenue streams or markets that you&rsquo;ve thought about or are considering in the future?"</em></p>
+      </div>
+      <h4>Critical Context: What DealMaker Actually Is</h4>
+      <div class="callout callout-red">
+        <p><strong>DealMaker is NOT an institutional capital placement firm.</strong> It is North America's largest retail capital-raising platform. TSK is filing <strong>Form C (Reg CF) &mdash; $5M max from everyday retail investors</strong>. This was confirmed on the Jan 8 onboarding call. K's Feb 25 characterization of this as an "institutional launch" is factually incorrect.</p>
+        <p style="margin-top:8px"><strong>The Reg CF raise caps at $5M</strong> &mdash; which aligns with Steve's $5M Effective Date trigger but falls far short of K's $20M target. The 60-day onboarding timeline (from Jan 8) targeted launch ~Mar 9. No Form C has been filed. Onboarding is behind schedule.</p>
+        <p style="margin-top:8px"><strong>Comparable: Pacaso.</strong> Luxury vacation home fractional ownership company. Raised $72.5M from 17,500 retail investors through DealMaker via Reg A+. BUT: Pacaso had $200M in VC backing, a working product, real customers, and proven unit economics BEFORE going to retail. TSK has $0 raised, no product, no customers. <em>(Source: <a href="https://www.dealmaker.tech/content/from-200m-in-vc-to-72-5m-in-retail-why-pacaso-opened-their-cap-table-to-17-500-investors" target="_blank" rel="noopener">DealMaker case study</a>)</em></p>
+      </div>
+      <h4>What This Tells You</h4>
+      <ul>
+        <li><strong>DealMaker is still in discovery.</strong> These are not follow-up questions &mdash; they're asking "how do you make money?" That's a Day 1 question. The retail offering is not imminent.</li>
+        <li><strong>The questions are directed at Robert, not K.</strong> DealMaker is treating the CRO as the revenue authority. Robert was introduced the same day as Steve (Feb 25) &mdash; he's a week old in this role. Can he answer these?</li>
+        <li><strong>CFO declined.</strong> The person who should own financial projections and revenue model details opted out. This is either a scheduling conflict or a red flag about engagement.</li>
+        <li><strong>No mention of specific numbers.</strong> DealMaker isn't asking to validate $84M Year 1 projections &mdash; they're asking what the revenue streams even are. There may be a gap between the deck and DealMaker's understanding.</li>
+        <li><strong>Reg CF changes the raise dynamics.</strong> Retail investors don't do institutional due diligence. They buy narratives, brands, and access. This means TSK's pitch needs to be consumer-facing and emotionally compelling &mdash; not financially rigorous. The fantasy projections in the deck may be intentional retail investor bait, not incompetence.</li>
+        <li><strong>Reg CF raises require marketing spend.</strong> DealMaker's plan for TSK includes Morning Brew and 1440 newsletter partnerships, plus paid media on Google, Facebook, and LinkedIn. These are the same channels <a href="https://hntrbrk.com/shark-tank/" target="_blank" rel="noopener">Hunterbrook flagged</a> for problematic crowdfunding ads. TSK has allocated only $2M for all Sales + Marketing. Investor acquisition campaigns typically cost $500K&ndash;$2M alone.</li>
+      </ul>
+      <h4>Steve's Role in This Meeting</h4>
+      <ul>
+        <li><strong>Listen.</strong> You're here to observe, not present. Note how K and Robert answer &mdash; are the answers grounded or aspirational?</li>
+        <li><strong>Note the gaps.</strong> If Robert can't articulate the revenue model after being introduced a week ago, that tells you something about onboarding and organizational readiness.</li>
+        <li><strong>Watch Riley.</strong> What does DealMaker's body language and follow-up questions tell you about their confidence in TSK?</li>
+        <li><strong>Do NOT volunteer operational commitments.</strong> You have no signed agreement, no budget, no authority. Don't promise timelines or deliverables.</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--green);">
+      <div class="card-title"><span class="badge badge-green">3</span> Calendar Meetings <span class="badge badge-green">RESOLVED</span></div>
+      <p>All 10 meetings confirmed on calendar (primary + transferred). No action needed re: missing meetings. <strong>Do note:</strong> GC meeting invite still shows "Nathan Johnson" as display name for coo@ &mdash; cosmetic but worth being aware of.</p>
+    </div>
+
+    <h3>This Month (March)</h3>
+    <div class="card" style="border-left: 4px solid var(--amber);">
+      <div class="card-title"><span class="badge badge-amber">4</span> Countersignature Escalation Timeline</div>
+      <p>It's been 7 days. At what point does Steve raise this directly with K? Recommendation: Wait until the March CEO meeting (when it happens), then raise it conversationally. If unsigned by Day 30 (March 22), escalate formally. If unsigned by Day 60 (April 22), invoke the escalation trigger per CLAUDE.md.</p>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--amber);">
+      <div class="card-title"><span class="badge badge-amber">5</span> 1:1 Strategy: Assessment vs. Relationship</div>
+      <p>Allison says "establish your presence and build rapport." But Steve also needs to assess whether these people are real operators or title collectors. Decision: Use first-round 1:1s as relationship + intelligence gathering. Prepare 3&ndash;5 specific questions per person. Document everything. Reserve judgment until round 2.</p>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--amber);">
+      <div class="card-title"><span class="badge badge-amber">6</span> Time Investment Calibration</div>
+      <p>How many hours per week should Steve invest in TSK pre-raise? Every hour spent on TSK is an hour not spent on his primary business. Decision: Cap at 5&ndash;8 hours/week during Phase 1. Protect primary income. Increase only when concrete milestones are hit (countersignature, raise progress).</p>
+    </div>
+
+    <h3>Within 30 Days</h3>
+    <div class="card" style="border-left: 4px solid var(--accent);">
+      <div class="card-title"><span class="badge badge-blue">7</span> Nathan Johnson: Ask or Don't Ask?</div>
+      <p>K's welcome email said "we will be formally acquainted with everyone at our next monthly team meeting." If the monthly meeting happens March 3, that's a natural venue. Decision: Ask K privately after the meeting, not in front of the team. Frame as operational continuity: "I want to make sure I'm picking up where Nathan left off. Any context on the transition?"</p>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--accent);">
+      <div class="card-title"><span class="badge badge-blue">8</span> Build Your Own Financial Model?</div>
+      <p>The projections in the deck are investor theater ($84M Year 1). The budget template is 9 months old. Decision: Don't build a model yet. Wait until (a) you've talked to the CFO and CRO, (b) you understand the DealMaker engagement, and (c) you have basic platform/product information from the CTO. Building a model without inputs is premature.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 12: RISK DASHBOARD -->
+<!-- ============================================================ -->
+<div class="section" id="s12">
+  <div class="section-header">
+    <span class="section-number">12</span>
+    <span class="section-title">Risk Dashboard</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2" style="margin-bottom: 16px;">
+      <div class="metric-box" style="border-left: 4px solid var(--red);">
+        <div class="metric-value" style="color: var(--red);">4</div>
+        <div class="metric-label">Critical Risks</div>
+      </div>
+      <div class="metric-box" style="border-left: 4px solid var(--amber);">
+        <div class="metric-value" style="color: var(--amber);">8</div>
+        <div class="metric-label">High-Impact Risks</div>
+      </div>
+    </div>
+
+    <table>
+      <tr><th style="width:8%">ID</th><th>Risk</th><th style="width:10%">Prob</th><th style="width:12%">Impact</th><th style="width:12%">Status</th></tr>
+      <tr style="background: var(--red-bg);">
+        <td>R-01</td><td><strong>$0 raised after 2.5 years</strong> &mdash; estimated &lt;15% close probability</td><td>HIGH</td><td>CRITICAL</td><td>OPEN</td>
+      </tr>
+      <tr style="background: var(--red-bg);">
+        <td>R-02</td><td><strong>Deferred compensation</strong> &mdash; $0 until $5M first tranche closes</td><td>HIGH</td><td>CRITICAL</td><td>OPEN</td>
+      </tr>
+      <tr style="background: var(--red-bg);">
+        <td>R-07</td><td><strong>TSK has not countersigned</strong> &mdash; neither Addendum nor 2AA signed by K. Protections do not legally exist.</td><td>HIGH</td><td>CRITICAL</td><td>OPEN</td>
+      </tr>
+      <tr style="background: var(--red-bg);">
+        <td>R-08</td><td><strong>IP assignment clause</strong> &mdash; blanket assignment + retroactive grab + power of attorney active. Addendum carve-out unsigned.</td><td>MEDIUM</td><td>CRITICAL</td><td>OPEN</td>
+      </tr>
+      <tr>
+        <td>R-04</td><td><strong>Equity valuation undisclosed</strong> &mdash; 1.5% profits interest with unknown hurdle, unknown valuation, no cap table</td><td>HIGH</td><td>HIGH</td><td>OPEN</td>
+      </tr>
+      <tr>
+        <td>R-06</td><td><strong>$20M undercapitalized</strong> &mdash; no acquisition budget for "flagship property acquisitions"</td><td>HIGH</td><td>HIGH</td><td>OPEN</td>
+      </tr>
+      <tr>
+        <td>R-12</td><td><strong>Fantasy projections</strong> &mdash; $84M Year 1, $13.4B Year 6 on $20M</td><td>HIGH</td><td>HIGH</td><td>OPEN</td>
+      </tr>
+      <tr>
+        <td>R-14</td><td><strong>Zero disclosed traction</strong> &mdash; no bookings, revenue, or customer data</td><td>HIGH</td><td>HIGH</td><td>OPEN</td>
+      </tr>
+      <tr>
+        <td>R-17</td><td><strong>Zero-cost social proof</strong> &mdash; TSK gets Steve's name on materials for $0</td><td>HIGH</td><td>HIGH</td><td>OPEN</td>
+      </tr>
+    </table>
+
+    <div class="callout callout-red" style="margin-top: 16px;">
+      <div class="callout-title">New Risks Identified from Google Docs <span class="badge badge-red">5 NEW</span></div>
+      <table>
+        <tr><th style="width:8%">ID</th><th>Risk</th><th style="width:10%">Prob</th><th style="width:12%">Impact</th></tr>
+        <tr>
+          <td>R-19</td><td><strong>No product exists and build estimate is $1M+ / 15 months.</strong> CTO does not code; manages one intern. Platform is on Magento (e-commerce, not travel). Even with full funding, earliest viable product is mid-2027. <a href="https://docs.google.com/document/d/165JP5NbwQ5_pjxC_Ss6XY3E5QgepHq12a5_baIy9ODw" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: CTO doc &#8599;</span></a></td><td>HIGH</td><td>CRITICAL</td>
+        </tr>
+        <tr>
+          <td>R-20</td><td><strong>GC reliability risk.</strong> John Khalil no-showed 4 of ~10 scheduled 1:1s over 6 months (July&ndash;Dec 2025). Cap table, corporate structure, policy redlines, and investor paperwork all bottlenecked through him. If he's still operating this way, Steve's agreement review and IP protection are at risk. <a href="https://docs.google.com/document/d/15MUxiarIybhxWpIeyK96BFwO6hyZn8isYNaNNUXthzw" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: GC doc &#8599;</span></a></td><td>HIGH</td><td>HIGH</td>
+        </tr>
+        <tr>
+          <td>R-21</td><td><strong>Serial C-suite turnover.</strong> Confirmed departures: Nathan (COO), Sam (CRO), Jalyn (IP Counsel), Lance (CTO), Delphine (prior IP Counsel). That's 5 officer-level exits in ~18 months. K recruited "Chad" (CEO) and "Matthew Smith" (CRO) who also appear to not have materialized. <a href="https://docs.google.com/document/d/14UK_J5rGcnrOBSR8cqwXW5n_8-lUjyGdQHz3BGBGY8Q" target="_blank" rel="noopener"><span class="badge badge-gray">Nathan&rsquo;s notes &#8599;</span></a> <a href="https://docs.google.com/document/d/1hE_kLBcvHspWxIa1wtayRG-BlSzEAOIakugZ_bOxBOM" target="_blank" rel="noopener"><span class="badge badge-gray">CRO &#8599;</span></a> <a href="https://docs.google.com/document/d/1RfPMPqHz9eSV1PCaTBLcxrnkYlIvXk-sSRd9pWI8dE4" target="_blank" rel="noopener"><span class="badge badge-gray">IP &#8599;</span></a></td><td>HIGH</td><td>HIGH</td>
+        </tr>
+        <tr>
+          <td>R-22</td><td><strong>Implied $1M valuation.</strong> "Stevan" pledged $100K for 10% undiluted equity. If that's the benchmark, Steve's 1.5% profits interest is worth ~$15K &mdash; vs. the narrative of a $20M+ company. The deck projects $84M Year 1 revenue but the only investor valued the company at $1M. <a href="https://docs.google.com/document/d/14UK_J5rGcnrOBSR8cqwXW5n_8-lUjyGdQHz3BGBGY8Q" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: Nathan&rsquo;s notes &#8599;</span></a></td><td>MEDIUM</td><td>HIGH</td>
+        </tr>
+        <tr>
+          <td>R-23</td><td><strong>Revenue model undecided.</strong> Nathan noted two competing models: (1) lead gen for UHNW travelers (licensing) vs. (2) property operator/manager. He warned "trying to be both will be extremely tough." As of Mar 2, DealMaker is still asking TSK "how do you generate revenue?" The model is not settled. <a href="https://docs.google.com/document/d/14UK_J5rGcnrOBSR8cqwXW5n_8-lUjyGdQHz3BGBGY8Q" target="_blank" rel="noopener"><span class="badge badge-gray">SOURCE: Nathan&rsquo;s notes &#8599;</span></a></td><td>HIGH</td><td>HIGH</td>
+        </tr>
+      </table>
+    </div>
+    <div class="callout callout-green" style="margin-top: 16px;">
+      <div class="callout-title">Risk Resolved</div>
+      <p><strong>CRO Role Confusion &mdash; RESOLVED.</strong> Sam Shah was CRO from June 2025 but disengaged after ~1 month (last activity July 23, 2025). Robert Fitzgerald replaced him, introduced Feb 25, 2026. Before Robert, K was also recruiting "Matthew Smith" for CRO (Jan 2026) &mdash; unclear if Matthew declined or Robert was selected instead. Sam's departure is now the 2nd confirmed CRO exit.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 13: ACTION PLAN -->
+<!-- ============================================================ -->
+<div class="section" id="s13">
+  <div class="section-header">
+    <span class="section-number">13</span>
+    <span class="section-title">Recommended Action Plan</span>
+  </div>
+  <div class="section-body">
+
+    <h3>Today / Tomorrow (Mar 1&ndash;2)</h3>
+    <ul class="checklist">
+      <li><span class="check-icon">1.</span> <strong>Email Allison:</strong> Confirm monthly team meeting for March 3. Ask for calendar invite. Mention Riley's deliverables &mdash; did they arrive?</li>
+      <li><span class="check-icon">2.</span> <strong>Prepare for DealMaker meeting (Mar 2):</strong> Review the meeting description. DealMaker is asking about revenue model and growth roadmap. Know the deck answers, but also know the gaps. You're there to listen, not present.</li>
+      <li><span class="check-icon">3.</span> <strong>Check WhatsApp:</strong> K added you to the "COO WhatsApp group." Check for historical messages and context from Nathan Johnson's era.</li>
+    </ul>
+
+    <h3>This Week (Mar 2&ndash;6)</h3>
+    <ul class="checklist">
+      <li><span class="check-icon">4.</span> <strong>Calendar meetings:</strong> <span class="badge badge-green">RESOLVED</span> &mdash; all 10 exist on the transferred calendar. No action needed. GC invite still shows "Nathan Johnson" for coo@ display name.</li>
+      <li><span class="check-icon">5.</span> <strong>CTO 1:1 (Mar 3):</strong> Key questions &mdash; (a) You know the platform is on Magento and no product is built &mdash; ask what has changed since Jan 2026. (b) Has any dev budget been approved? (c) Where are the Fiverr prototypes? (d) Is the intern still active? (e) What's the realistic timeline to a working MVP?</li>
+      <li><span class="check-icon">6.</span> <strong>If monthly meeting happens (Mar 3):</strong> Introduce yourself. Listen more than you talk. Note who shows up and who doesn't. After the meeting, ask K privately about Nathan Johnson and reporting structure.</li>
+      <li><span class="check-icon">7.</span> <strong>Collect contact info:</strong> Per Allison's advice, get direct phone and personal email for each C-suite member this week.</li>
+    </ul>
+
+    <h3>This Month (March)</h3>
+    <ul class="checklist">
+      <li><span class="check-icon">8.</span> <strong>Complete first round of all 1:1s.</strong> Assess each person: What are they working on? What have they delivered? Are they full-time on TSK? Document everything in meeting notes.</li>
+      <li><span class="check-icon">9.</span> <strong>Review remaining Drive documents:</strong> <span class="badge badge-green">Role docs &amp; COO notes: DONE</span> (converted to Google Docs and reviewed). Still need: budget template (XLSX, July 2025), projections (XLSX, June 2025), DealMaker onboarding docs (PDF), partnership spreadsheets (XLSX). Budget and projections are 9 months old &mdash; prioritize asking Axel for current versions.</li>
+      <li><span class="check-icon">10.</span> <strong>Track countersignature.</strong> If unsigned by March 22 (30 days), raise with K. If unsigned by April 22 (60 days), formal escalation.</li>
+      <li><span class="check-icon">11.</span> <strong>CRO situation: RESOLVED.</strong> <span class="badge badge-green">DONE</span> Sam Shah disengaged after ~1 month (July 2025). Robert Fitzgerald is his replacement (Feb 2026). K also tried to recruit "Matthew Smith" for CRO in Jan 2026. Confirm with Robert: does he know about Sam's work? Is there anything to hand off?</li>
+      <li><span class="check-icon">12.</span> <strong>Maintain the operating boundary.</strong> Cap TSK time at 5&ndash;8 hours/week. Protect primary business. Don't create investor-facing materials until agreement is countersigned.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 14: PROTECTION STATUS -->
+<!-- ============================================================ -->
+<div class="section" id="s14">
+  <div class="section-header">
+    <span class="section-number">14</span>
+    <span class="section-title">Protection Status</span>
+  </div>
+  <div class="section-body">
+    <h3>Agreement Protection</h3>
+    <table>
+      <tr><th>Protection</th><th>Status</th><th>Enforceable?</th></tr>
+      <tr>
+        <td>Primary business carved out from IP/conflict</td>
+        <td>In Addendum &mdash; <strong>unsigned by TSK</strong></td>
+        <td><span class="badge badge-red">NO</span></td>
+      </tr>
+      <tr>
+        <td>Power of attorney limitations</td>
+        <td>In Addendum &mdash; <strong>unsigned by TSK</strong></td>
+        <td><span class="badge badge-red">NO</span></td>
+      </tr>
+      <tr>
+        <td>Equity transparency disclosure</td>
+        <td>In Addendum &mdash; <strong>unsigned by TSK</strong></td>
+        <td><span class="badge badge-red">NO</span></td>
+      </tr>
+      <tr>
+        <td>Payment start confirmation</td>
+        <td>In Addendum &mdash; <strong>unsigned by TSK</strong></td>
+        <td><span class="badge badge-red">NO</span></td>
+      </tr>
+      <tr>
+        <td>Non-solicitation reduced to 12 months</td>
+        <td>In 2nd Amended &mdash; <strong>unsigned by TSK</strong></td>
+        <td><span class="badge badge-amber">PARTIALLY</span></td>
+      </tr>
+      <tr>
+        <td>Steve's confidentiality obligation</td>
+        <td>In 2nd Amended &mdash; signed by Steve</td>
+        <td><span class="badge badge-green">YES (against Steve)</span></td>
+      </tr>
+      <tr>
+        <td>Steve's IP assignment</td>
+        <td>In 2nd Amended &mdash; signed by Steve</td>
+        <td><span class="badge badge-green">YES (against Steve)</span></td>
+      </tr>
+    </table>
+
+    <div class="callout callout-red" style="margin-top: 16px;">
+      <div class="callout-title">Standing Guardrails</div>
+      <ul>
+        <li>Do NOT create investor-facing materials until agreement is countersigned</li>
+        <li>Do NOT authorize use of Steve's name/bio on TSK materials until signed</li>
+        <li>Do NOT conduct TSK business from personal email addresses</li>
+        <li>Do NOT share any primary business IP, code, contacts, or systems with TSK</li>
+        <li>Document everything &mdash; if TSK email access is revoked, Steve needs his own records</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<div class="footer">
+  <p><strong>Data Sources:</strong> Gmail (coo@thesovereignkingdom.com, 20 substantive emails), Google Calendar (6 events, Feb&ndash;Mar 2026), Google Drive (80+ files), <strong>Google Docs &mdash; Nathan Johnson's meeting notes</strong> (10 documents, June 2025 &ndash; Jan 2026, converted from DOCX and read via MCP): CEO/Nathan master notes, CTO doc (Taiwo), CFO doc (Axel), CRO doc (Sam), CMO doc (Jake), CCO doc (Kamrul), GC doc (John), IP Counsel doc (Jalyn), bi-weekly meeting notes. TSK Intelligence Database (7 entries), local research files, deal terms analysis, risk register (23 risks), <a href="https://www.dealmaker.tech" target="_blank" rel="noopener">DealMaker.tech</a> (platform research, case studies, 2025 data), <a href="https://hntrbrk.com/shark-tank/" target="_blank" rel="noopener">Hunterbrook Media investigation</a>, <a href="https://www.newsfilecorp.com/release/273295/" target="_blank" rel="noopener">DealMaker $20M funding announcement</a>, <a href="https://efts.sec.gov/LATEST/search-index" target="_blank" rel="noopener">SEC EDGAR</a> (zero TSK filings confirmed), <a href="https://kingscrowd.com/2025-investment-crowdfunding-annual-report/" target="_blank" rel="noopener">KingsCrowd 2025 Report</a>.</p>
+  <p style="margin-top: 12px;"><strong>Documents Now Accessible:</strong> <span class="badge badge-green">C-suite role docs (10 files) &mdash; READ AND ANALYZED</span>. These turned out to be Nathan's 1:1 meeting notes with each officer, not formal job descriptions. 8 months of operational intelligence extracted.</p>
+  <p style="margin-top: 12px;"><strong>Documents Still Not Accessible:</strong> Budget template (XLSX, July 2025), projections (XLSX, June 2025), DealMaker onboarding docs (PDF), partnership spreadsheets (XLSX), investor deck (PDF). Manual download or conversion to Google format recommended.</p>
+  <p style="margin-top: 12px;"><strong>Zero Fabrication Attestation:</strong> Every fact, date, quote, and number in this report is traceable to a named data source. Intel sourced from Nathan's notes is tagged with <span class="badge badge-gray">SOURCE</span> badges throughout. Where information is unavailable, it is marked as "unknown" or "unverified." No gaps have been filled with assumptions or inferences presented as facts.</p>
+  <p style="margin-top: 12px; color: var(--text-dim); font-size: 12px;">Generated March 1, 2026 &bull; Updated March 2, 2026 with Google Docs intelligence &bull; Updated March 2, 2026 with DealMaker Platform Evaluation (Section 10) &bull; Confidential &mdash; Steve Cooper Only</p>
+</div>
+
+</div>
+<script>
+(function() {
+  var nav = document.getElementById('sectionNav');
+  var links = nav.querySelectorAll('a');
+  var sections = [];
+  links.forEach(function(link) {
+    var id = link.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        var match = sections.find(function(s) { return s.id === entry.target.id; });
+        if (match) match.link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-10% 0px -80% 0px' });
+
+  sections.forEach(function(s) { observer.observe(s.el); });
+
+  // Close mobile nav when a link is clicked
+  links.forEach(function(link) {
+    link.addEventListener('click', function() {
+      nav.classList.remove('open');
+    });
+  });
+})();
+</script>
+<script src="interactive.js"></script>
+<script>(function(){var t=document.querySelector('body>.tsk-toolbar'),s=document.getElementById('header-toolbar-slot');if(t&&s){t.style.cssText='';s.appendChild(t)}})()</script>
+</body>
+</html>

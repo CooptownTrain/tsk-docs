@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Action Tracker | TSK</title>
+<style>
+  :root {
+    --bg:#f8f7f4;--surface:#fff;--surface-2:#f0efec;--surface-3:#e8e7e3;
+    --border:#d8d6d0;--border-light:#eae8e4;
+    --text:#1a1a1a;--text-2:#5c5c5c;--text-3:#8a8a8a;
+    --accent:#2c5282;--accent-bg:#ebf2fa;
+    --red:#c53030;--red-bg:#fff5f5;--red-border:#fcc;
+    --amber:#b7791f;--amber-bg:#fefcf3;--amber-border:#f0e0a0;
+    --green:#276749;--green-bg:#f0fff4;--green-border:#b2e0c0;
+    --purple:#553c9a;--purple-bg:#f3f0ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+  a:hover{color:#1a3a5c}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px 80px}
+
+  .hdr{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:2px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .hdr-in{max-width:960px;margin:0 auto;padding:14px 24px 12px}
+  .hdr-row{display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .hdr-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-3)}
+  .hdr h1{font-size:22px;font-weight:700;letter-spacing:-.4px;margin-top:2px}
+
+  /* KPI */
+  .kpi-row{display:flex;gap:10px;margin:16px 0}
+  .kpi{background:var(--surface);border:1px solid var(--border-light);border-radius:10px;padding:14px 18px;text-align:center;flex:1}
+  .kpi-val{font-size:26px;font-weight:700;letter-spacing:-1px}
+  .kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-3);margin-top:2px}
+  .c-red{color:var(--red)}.c-amber{color:var(--amber)}.c-green{color:var(--green)}.c-blue{color:var(--accent)}.c-gray{color:var(--text-3)}
+
+  /* FILTERS */
+  .filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .filter-bar select,.filter-bar input{font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:5px;background:var(--surface);font-family:inherit}
+  .filter-bar input{flex:1;min-width:150px}
+  .row-count{font-size:11px;color:var(--text-3);margin-left:auto}
+
+  /* TABLE */
+  .act-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--surface);border:1px solid var(--border-light);border-radius:10px;overflow:hidden}
+  .act-table th{text-align:left;padding:8px 10px;background:var(--surface-2);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);border-bottom:2px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+  .act-table th:hover{color:var(--accent)}
+  .act-table th .arr{font-size:9px;margin-left:2px;opacity:.4}
+  .act-table th.sorted .arr{opacity:1;color:var(--accent)}
+  .act-table td{padding:8px 10px;border-bottom:1px solid var(--border-light);vertical-align:top}
+  .act-table tr:last-child td{border-bottom:none}
+  .act-table tr.done-row td{opacity:.5;text-decoration:line-through}
+
+  .tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+  .tag-overdue{background:var(--red-bg);color:var(--red)}
+  .tag-due-soon{background:var(--amber-bg);color:var(--amber)}
+  .tag-open{background:var(--accent-bg);color:var(--accent)}
+  .tag-done{background:var(--green-bg);color:var(--green)}
+  .tag-no-date{background:var(--surface-2);color:var(--text-3)}
+
+  .check{width:16px;height:16px;border:2px solid var(--border);border-radius:3px;cursor:pointer;transition:all .15s;flex-shrink:0}
+  .check:hover{border-color:var(--green)}
+  .check.checked{background:var(--green-bg);border-color:var(--green)}
+  .check.checked::after{content:'\2713';color:var(--green);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;height:100%}
+
+  .meeting-link{font-size:11px;color:var(--accent);white-space:nowrap}
+  .owner-pill{font-size:10px;font-weight:700;padding:1px 7px;border-radius:3px;background:var(--accent-bg);color:var(--accent);white-space:nowrap}
+  .due-pill{font-size:10px;font-weight:600;white-space:nowrap}
+
+  .empty-state{text-align:center;padding:60px 20px;color:var(--text-3)}
+  .empty-state h3{font-size:16px;margin-bottom:8px;color:var(--text-2)}
+  .empty-state p{font-size:13px}
+
+  .footer{margin-top:28px;padding-top:10px;border-top:1px solid var(--border);font-size:10px;color:var(--text-3);text-align:center}
+
+  @media(max-width:700px){.kpi-row{flex-wrap:wrap}.kpi{min-width:calc(50% - 5px)}.filter-bar{flex-direction:column;align-items:stretch}.row-count{margin-left:0}}
+  @media print{body{background:#fff}.hdr{position:static;box-shadow:none}.filter-bar,.toolbar{display:none}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-in">
+    <div class="hdr-row">
+      <div>
+        <div class="hdr-label">TSK Operations</div>
+        <h1>Action Tracker</h1>
+      </div>
+      <div style="font-size:12px;color:var(--text-3)" id="last-updated"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="kpi-row" id="kpis"></div>
+  <div class="filter-bar" id="filters"></div>
+  <div id="table-container"></div>
+  <div class="footer">TSK Action Tracker &middot; Updates automatically from meeting notes</div>
+</div>
+
+<!-- Doc Toolbar -->
+<div class="toolbar" style="position:fixed;top:12px;right:16px;z-index:9999;display:flex;gap:8px;opacity:.45;transition:opacity .2s" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.45'">
+  <button onclick="navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([document.querySelector('.wrap').innerHTML],{type:'text/html'}),'text/plain':new Blob([document.querySelector('.wrap').innerText],{type:'text/plain'})})]).then(function(){event.target.textContent='Copied!';setTimeout(function(){event.target.textContent='Copy'},1500)})" style="padding:5px 12px;font-size:11px;font-weight:600;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer">Copy</button>
+  <button onclick="window.print()" style="padding:5px 12px;font-size:11px;font-weight:600;border:1px solid #27272a;border-radius:6px;background:#27272a;color:#fff;cursor:pointer">PDF</button>
+</div>
+<style media="print">.toolbar{display:none!important}</style>
+
+<script>
+// ============================================================
+// ACTION DATA
+// Inline actions array. Updated by /meeting-notes command.
+// Each meeting note also writes to localStorage for live sync.
+// ============================================================
+
+var ACTIONS = [
+  // Joy Discovery Call - Mar 16, 2026
+  { id: 'joy-1', meeting: 'Joy Discovery Call', meetingDate: '2026-03-16', meetingFile: '2026-03-16-joy-discovery-call.html', text: 'Follow up with Richie on distribution agreement (committed Mar 15-16, not received)', owner: 'Steve', due: '2026-03-17', status: 'open', priority: 'high' },
+  { id: 'joy-2', meeting: 'Joy Discovery Call', meetingDate: '2026-03-16', meetingFile: '2026-03-16-joy-discovery-call.html', text: 'Review and redline agreement once received; align internally on rev-share terms', owner: 'Steve + K', due: '', status: 'open', priority: 'medium' },
+  { id: 'joy-3', meeting: 'Joy Discovery Call', meetingDate: '2026-03-16', meetingFile: '2026-03-16-joy-discovery-call.html', text: 'Validate: run SimilarWeb on withjoy.com; request investor documentation from Richie', owner: 'Steve', due: '', status: 'open', priority: 'medium' },
+  { id: 'joy-4', meeting: 'Joy Discovery Call', meetingDate: '2026-03-16', meetingFile: '2026-03-16-joy-discovery-call.html', text: 'Clarify with Richie: actual supplier integration layer, customer budget breakdown by tier, AI technology ownership', owner: 'Steve', due: '', status: 'open', priority: 'medium' },
+  { id: 'joy-5', meeting: 'Joy Discovery Call', meetingDate: '2026-03-16', meetingFile: '2026-03-16-joy-discovery-call.html', text: 'Brief Robert on call outcomes and potential distribution value for CRO perspective', owner: 'Steve', due: '', status: 'open', priority: 'low' },
+  { id: 'joy-6', meeting: 'Joy Discovery Call', meetingDate: '2026-03-16', meetingFile: '2026-03-16-joy-discovery-call.html', text: 'Schedule follow-up call to discuss AI partnership terms once distribution agreement is reviewed', owner: 'Steve / Allison', due: '', status: 'open', priority: 'low' }
+];
+
+
+// ============================================================
+// SYNC: merge localStorage overrides (checkbox state from meeting notes)
+// ============================================================
+
+function loadOverrides() {
+  try {
+    var overrides = JSON.parse(localStorage.getItem('tsk:actions:overrides') || '{}');
+    ACTIONS.forEach(function(a) {
+      if (overrides[a.id]) a.status = overrides[a.id];
+    });
+  } catch(e) {}
+  // Also check individual meeting note checkbox state
+  try {
+    var joy = JSON.parse(localStorage.getItem('tsk:joy2:a') || '{}');
+    var joyMap = { '1': 'joy-1', '2': 'joy-2', '3': 'joy-3', '4': 'joy-4', '5': 'joy-5', '6': 'joy-6' };
+    Object.keys(joy).forEach(function(k) {
+      if (joyMap[k]) {
+        var act = ACTIONS.find(function(a) { return a.id === joyMap[k]; });
+        if (act) act.status = 'done';
+      }
+    });
+  } catch(e) {}
+}
+
+function saveOverride(id, status) {
+  try {
+    var overrides = JSON.parse(localStorage.getItem('tsk:actions:overrides') || '{}');
+    overrides[id] = status;
+    localStorage.setItem('tsk:actions:overrides', JSON.stringify(overrides));
+  } catch(e) {}
+}
+
+
+// ============================================================
+// DERIVE STATUS
+// ============================================================
+
+function deriveDisplayStatus(a) {
+  if (a.status === 'done') return 'done';
+  if (!a.due) return 'open';
+  var today = new Date();
+  var due = new Date(a.due + 'T23:59:59');
+  if (due < today) return 'overdue';
+  var diff = (due - today) / 86400000;
+  if (diff <= 3) return 'due-soon';
+  return 'open';
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  var dt = new Date(d + 'T00:00:00');
+  var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return m[dt.getMonth()] + ' ' + dt.getDate();
+}
+
+
+// ============================================================
+// RENDER
+// ============================================================
+
+function render() {
+  loadOverrides();
+
+  var counts = { overdue: 0, 'due-soon': 0, open: 0, done: 0, total: ACTIONS.length };
+  ACTIONS.forEach(function(a) {
+    a._display = deriveDisplayStatus(a);
+    counts[a._display] = (counts[a._display] || 0) + 1;
+  });
+
+  // KPIs
+  document.getElementById('kpis').innerHTML =
+    '<div class="kpi"><div class="kpi-val c-red">' + counts.overdue + '</div><div class="kpi-label">Overdue</div></div>' +
+    '<div class="kpi"><div class="kpi-val c-amber">' + counts['due-soon'] + '</div><div class="kpi-label">Due Soon</div></div>' +
+    '<div class="kpi"><div class="kpi-val c-blue">' + counts.open + '</div><div class="kpi-label">Open</div></div>' +
+    '<div class="kpi"><div class="kpi-val c-green">' + counts.done + '</div><div class="kpi-label">Done</div></div>' +
+    '<div class="kpi"><div class="kpi-val c-gray">' + counts.total + '</div><div class="kpi-label">Total</div></div>';
+
+  // Filters
+  var owners = [];
+  var meetings = [];
+  ACTIONS.forEach(function(a) {
+    if (owners.indexOf(a.owner) === -1) owners.push(a.owner);
+    if (meetings.indexOf(a.meeting) === -1) meetings.push(a.meeting);
+  });
+
+  var fHtml = '<select id="f-status"><option value="">All Statuses</option><option value="overdue">Overdue</option><option value="due-soon">Due Soon</option><option value="open">Open</option><option value="done">Done</option></select>';
+  fHtml += '<select id="f-owner"><option value="">All Owners</option>';
+  owners.forEach(function(o) { fHtml += '<option>' + o + '</option>'; });
+  fHtml += '</select>';
+  fHtml += '<select id="f-meeting"><option value="">All Meetings</option>';
+  meetings.forEach(function(m) { fHtml += '<option>' + m + '</option>'; });
+  fHtml += '</select>';
+  fHtml += '<input type="text" id="f-search" placeholder="Search...">';
+  fHtml += '<span class="row-count" id="row-count"></span>';
+  document.getElementById('filters').innerHTML = fHtml;
+
+  // Table
+  if (ACTIONS.length === 0) {
+    document.getElementById('table-container').innerHTML = '<div class="empty-state"><h3>No actions yet</h3><p>Run <code>/meeting-notes</code> after your next meeting to populate this tracker.</p></div>';
+    return;
+  }
+
+  var tHtml = '<table class="act-table"><thead><tr>';
+  tHtml += '<th style="width:3%"></th>';
+  tHtml += '<th data-sort="text" style="width:32%">Action <span class="arr">&#9650;</span></th>';
+  tHtml += '<th data-sort="owner" style="width:12%">Owner <span class="arr">&#9650;</span></th>';
+  tHtml += '<th data-sort="due" style="width:10%">Due <span class="arr">&#9650;</span></th>';
+  tHtml += '<th data-sort="_display" style="width:10%">Status <span class="arr">&#9650;</span></th>';
+  tHtml += '<th data-sort="priority" style="width:8%">Priority <span class="arr">&#9650;</span></th>';
+  tHtml += '<th data-sort="meeting" style="width:15%">Meeting <span class="arr">&#9650;</span></th>';
+  tHtml += '</tr></thead><tbody id="act-tbody">';
+
+  ACTIONS.forEach(function(a) {
+    var statusTag = '<span class="tag tag-' + a._display + '">' + (a._display === 'due-soon' ? 'Due Soon' : a._display.charAt(0).toUpperCase() + a._display.slice(1)) + '</span>';
+    var isDone = a._display === 'done';
+    tHtml += '<tr data-id="' + a.id + '" data-status="' + a._display + '" data-owner="' + a.owner + '" data-meeting="' + a.meeting + '" class="' + (isDone ? 'done-row' : '') + '">';
+    tHtml += '<td><div class="check' + (isDone ? ' checked' : '') + '" data-action-id="' + a.id + '"></div></td>';
+    tHtml += '<td>' + a.text + '</td>';
+    tHtml += '<td><span class="owner-pill">' + a.owner + '</span></td>';
+    tHtml += '<td><span class="due-pill">' + (a.due ? formatDate(a.due) : '<span style="color:var(--text-3)">TBD</span>') + '</span></td>';
+    tHtml += '<td>' + statusTag + '</td>';
+    tHtml += '<td><span class="tag tag-' + (a.priority === 'high' ? 'overdue' : a.priority === 'medium' ? 'due-soon' : 'open') + '">' + a.priority + '</span></td>';
+    tHtml += '<td><a class="meeting-link" href="' + a.meetingFile + '">' + a.meeting + '<br><span style="font-size:10px;color:var(--text-3)">' + formatDate(a.meetingDate) + '</span></a></td>';
+    tHtml += '</tr>';
+  });
+
+  tHtml += '</tbody></table>';
+  document.getElementById('table-container').innerHTML = tHtml;
+
+  // Wire checkboxes
+  document.querySelectorAll('.check[data-action-id]').forEach(function(c) {
+    c.addEventListener('click', function() {
+      var id = c.dataset.actionId;
+      var act = ACTIONS.find(function(a) { return a.id === id; });
+      if (!act) return;
+      var isDone = c.classList.toggle('checked');
+      act.status = isDone ? 'done' : 'open';
+      saveOverride(id, act.status);
+      var row = c.closest('tr');
+      if (isDone) row.classList.add('done-row');
+      else row.classList.remove('done-row');
+      // Re-render KPIs
+      var cts = { overdue: 0, 'due-soon': 0, open: 0, done: 0, total: ACTIONS.length };
+      ACTIONS.forEach(function(a) { a._display = deriveDisplayStatus(a); cts[a._display] = (cts[a._display] || 0) + 1; });
+      document.getElementById('kpis').innerHTML =
+        '<div class="kpi"><div class="kpi-val c-red">' + cts.overdue + '</div><div class="kpi-label">Overdue</div></div>' +
+        '<div class="kpi"><div class="kpi-val c-amber">' + cts['due-soon'] + '</div><div class="kpi-label">Due Soon</div></div>' +
+        '<div class="kpi"><div class="kpi-val c-blue">' + cts.open + '</div><div class="kpi-label">Open</div></div>' +
+        '<div class="kpi"><div class="kpi-val c-green">' + cts.done + '</div><div class="kpi-label">Done</div></div>' +
+        '<div class="kpi"><div class="kpi-val c-gray">' + cts.total + '</div><div class="kpi-label">Total</div></div>';
+      // Update status tag in row
+      var statusCell = row.querySelector('td:nth-child(5)');
+      var ds = deriveDisplayStatus(act);
+      statusCell.innerHTML = '<span class="tag tag-' + ds + '">' + (ds === 'due-soon' ? 'Due Soon' : ds.charAt(0).toUpperCase() + ds.slice(1)) + '</span>';
+    });
+  });
+
+  // Wire filters
+  function applyFilters() {
+    var status = document.getElementById('f-status').value;
+    var owner = document.getElementById('f-owner').value;
+    var meeting = document.getElementById('f-meeting').value;
+    var search = document.getElementById('f-search').value.toLowerCase();
+    var rows = document.querySelectorAll('#act-tbody tr');
+    var shown = 0;
+    rows.forEach(function(r) {
+      var show = true;
+      if (status && r.dataset.status !== status) show = false;
+      if (owner && r.dataset.owner !== owner) show = false;
+      if (meeting && r.dataset.meeting !== meeting) show = false;
+      if (search && r.textContent.toLowerCase().indexOf(search) === -1) show = false;
+      r.style.display = show ? '' : 'none';
+      if (show) shown++;
+    });
+    document.getElementById('row-count').textContent = 'Showing ' + shown + ' of ' + ACTIONS.length;
+  }
+
+  ['f-status','f-owner','f-meeting','f-search'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', applyFilters);
+    document.getElementById(id).addEventListener('change', applyFilters);
+  });
+  applyFilters();
+
+  // Wire sorting
+  var sortState = { col: null, asc: true };
+  document.querySelectorAll('.act-table th[data-sort]').forEach(function(th) {
+    th.addEventListener('click', function() {
+      var key = th.dataset.sort;
+      if (sortState.col === key) sortState.asc = !sortState.asc;
+      else { sortState.col = key; sortState.asc = true; }
+      document.querySelectorAll('.act-table th').forEach(function(h) { h.classList.remove('sorted'); h.querySelector('.arr').innerHTML = '&#9650;'; });
+      th.classList.add('sorted');
+      th.querySelector('.arr').innerHTML = sortState.asc ? '&#9650;' : '&#9660;';
+      var tbody = document.getElementById('act-tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var po = { high: 0, medium: 1, low: 2 };
+      var so = { overdue: 0, 'due-soon': 1, open: 2, done: 3 };
+      rows.sort(function(a, b) {
+        var aa = ACTIONS.find(function(x) { return x.id === a.dataset.id; });
+        var bb = ACTIONS.find(function(x) { return x.id === b.dataset.id; });
+        var va, vb;
+        if (key === 'priority') { va = po[aa.priority]; vb = po[bb.priority]; }
+        else if (key === '_display') { va = so[aa._display]; vb = so[bb._display]; }
+        else if (key === 'due') { va = aa.due || 'zzzz'; vb = bb.due || 'zzzz'; }
+        else { va = (aa[key] || '').toLowerCase(); vb = (bb[key] || '').toLowerCase(); }
+        if (va < vb) return sortState.asc ? -1 : 1;
+        if (va > vb) return sortState.asc ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+
+  document.getElementById('last-updated').textContent = 'Updated: ' + new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+render();
+
+// Listen for localStorage changes from other tabs (meeting notes)
+window.addEventListener('storage', function(e) {
+  if (e.key && (e.key.indexOf('tsk:') === 0)) render();
+});
+
+// All links open in new tab
+document.querySelectorAll('a[href]').forEach(function(a) {
+  if (!a.getAttribute('href').startsWith('#')) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+});
+</script>
+</body>
+</html>
